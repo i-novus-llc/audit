@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="NNOP-7" author="ekrasulina" dbms="postgresql">
+        <sql>
+            INSERT INTO audit.audit(
+                id, event_date, event_type, object_type, object_id, object_name, user_id, username, source_application, source_workstation, context, creation_date)
+            VALUES ('9264b032-ff05-11e8-8eb2-f2801f1b9fd1', 'now()', 'EventType', 'ObjectType', 'ObjectId', 'ObjectName',
+                'UserId', 'Username', 'SourceApplication', 'SourceWorkstation', '{"field": "name", "value": "Значение"}', 'now()');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
