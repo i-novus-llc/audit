@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan("ru.i_novus.ms.audit.service")
+@ComponentScan("ru.i_novus.ms.audit")
 @EnableJpaRepositories("ru.i_novus.ms.audit.repository")
 @EntityScan(basePackages = "ru.i_novus.ms.audit.entity")
 public class Application extends SpringBootServletInitializer {

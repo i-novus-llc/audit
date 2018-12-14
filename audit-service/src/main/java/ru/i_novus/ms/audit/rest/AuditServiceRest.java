@@ -1,4 +1,4 @@
-package ru.i_novus.ms.audit.service;
+package ru.i_novus.ms.audit.rest;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
@@ -7,16 +7,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import ru.i_novus.ms.audit.entity.AuditEntity;
 import ru.i_novus.ms.audit.exception.NotFoundException;
-import ru.i_novus.ms.audit.repository.AuditRepository;
-import ru.i_novus.ms.audit.service.api.AuditService;
 import ru.i_novus.ms.audit.model.Audit;
 import ru.i_novus.ms.audit.model.AuditCriteria;
 import ru.i_novus.ms.audit.model.AuditRequest;
+import ru.i_novus.ms.audit.repository.AuditRepository;
+import ru.i_novus.ms.audit.service.api.AuditService;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +27,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static ru.i_novus.ms.audit.repository.AuditPredicates.*;
 
-@Service
+@Controller
 public class AuditServiceRest implements AuditService {
 
     @Autowired
