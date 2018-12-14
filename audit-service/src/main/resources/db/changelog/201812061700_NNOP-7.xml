@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="NNOP-7-01" author="ekrasulina" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="audit" schemaName="public"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE audit (
+                id                  UUID,
+                event_date          timestamp with time zone NOT NULL,
+                event_type          varchar NOT NULL,
+                object_type         varchar NOT NULL,
+                object_id           varchar,
+                object_name         varchar,
+                user_id             varchar NOT NULL,
+                username            varchar NOT NULL,
+                source_application  varchar,
+                source_workstation  varchar,
+                context             jsonb,
+                creation_date       timestamp NOT NULL,
+
+                CONSTRAINT audit_pk PRIMARY KEY (id)
+            );
+
+            COMMENT ON TABLE audit                      IS 'Аудит';
+            COMMENT ON COLUMN audit.id                  IS 'Идентификатор';
+            COMMENT ON COLUMN audit.event_date          IS 'Дата';
+            COMMENT ON COLUMN audit.event_type          IS 'Тип события';
+            COMMENT ON COLUMN audit.object_type         IS 'Тип объекта';
+            COMMENT ON COLUMN audit.object_id           IS 'Идентификатор объекта';
+            COMMENT ON COLUMN audit.object_name         IS 'Наименование объекта';
+            COMMENT ON COLUMN audit.user_id             IS 'Идентификатор пользователя';
+            COMMENT ON COLUMN audit.username            IS 'Имя пользователя';
+            COMMENT ON COLUMN audit.source_application  IS 'Имя программы';
+            COMMENT ON COLUMN audit.source_workstation  IS 'Рабочая станция';
+            COMMENT ON COLUMN audit.context             IS 'Контекст';
+            COMMENT ON COLUMN audit.creation_date       IS 'Дата создания';
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-02" author="ekrasulina">
+        <sql>
+            CREATE INDEX audit_event_date_ix ON audit USING btree (event_date);
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-03" author="ekrasulina">
+        <sql>
+            CREATE INDEX audit_event_type_ix ON audit USING btree (event_type);
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-04" author="ekrasulina">
+        <sql>
+            CREATE INDEX audit_object_type_ix ON audit USING btree (object_type);
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-05" author="ekrasulina">
+        <sql>
+            CREATE INDEX audit_object_id_ix ON audit USING btree (object_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-06" author="ekrasulina">
+        <sql>
+            CREATE INDEX audit_object_name_ix ON audit USING btree (object_name);
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-07" author="ekrasulina">
+        <sql>
+            CREATE INDEX audit_user_id_ix ON audit USING btree (user_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-08" author="ekrasulina">
+        <sql>
+            CREATE INDEX audit_username_ix ON audit USING btree (username);
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-09" author="ekrasulina">
+        <sql>
+            CREATE INDEX audit_source_application_ix ON audit USING btree (source_application);
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-10" author="ekrasulina">
+        <sql>
+            CREATE INDEX audit_source_workstation_ix ON audit USING btree (source_workstation);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
