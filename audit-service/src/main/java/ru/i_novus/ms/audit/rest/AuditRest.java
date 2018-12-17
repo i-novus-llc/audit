@@ -28,7 +28,7 @@ import static java.util.Objects.nonNull;
 import static ru.i_novus.ms.audit.repository.AuditPredicates.*;
 
 @Controller
-public class AuditServiceRest implements AuditService {
+public class AuditRest implements AuditService {
 
     @Autowired
     private AuditRepository repository;
