@@ -14,7 +14,7 @@
     <changeSet id="NNOP-7-02" author="ekrasulina" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="audit" schemaName="public"/>
+                <tableExists tableName="audit" schemaName="audit"/>
             </not>
         </preConditions>
         <sql>
