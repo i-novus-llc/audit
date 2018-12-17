@@ -4,23 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ru.inovus.ms.audit</groupId>
+    <groupId>ru.i-novus.ms.audit</groupId>
     <artifactId>audit</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.1.RELEASE</version>
+        <groupId>net.n2oapp.platform</groupId>
+        <artifactId>n2o-platform-parent</artifactId>
+        <version>2.0-SNAPSHOT</version>
     </parent>
-
-    <properties>
-        <java.version>11</java.version>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
-        <encoding>UTF-8</encoding>
-    </properties>
 
     <modules>
         <module>audit-api</module>
@@ -29,6 +22,12 @@
 
     <dependencyManagement>
         <dependencies>
+            <!--todo обновить, когда выйдет версия с багфиксом, удалить, когда выйдет boot с этой версией-->
+            <dependency>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-core</artifactId>
+                <version>3.6.3-SNAPSHOT</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
