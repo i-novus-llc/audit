@@ -101,12 +101,7 @@ public class AuditRest implements AuditService {
         List<Sort.Order> orders = criteria.getOrders();
         if (CollectionUtils.isEmpty(orders))
             orders = Collections.singletonList(new Sort.Order(Sort.Direction.DESC, "eventDate"));
-
-        Sort sort = null;
-        for (Sort.Order order : orders)
-            if (sort == null) sort = sort(order);
-            else sort.and(sort(order));
-        return sort;
+        return Sort.by(orders);
     }
 
     private static Sort sort(Sort.Order order) {
