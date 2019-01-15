@@ -18,6 +18,7 @@
     <modules>
         <module>audit-api</module>
         <module>audit-service</module>
+        <module>audit-client</module>
     </modules>
 
     <dependencyManagement>

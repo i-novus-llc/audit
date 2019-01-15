@@ -2,9 +2,10 @@ package ru.i_novus.ms.audit.model;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public abstract class AbstractAudit {
+public abstract class AbstractAudit implements Serializable {
 
     @ApiModelProperty("Дата события")
     private LocalDateTime eventDate;
@@ -114,5 +115,21 @@ public abstract class AbstractAudit {
 
     public void setContext(String context) {
         this.context = context;
+    }
+
+    @Override
+    public String toString() {
+        return "AbstractAudit{" +
+                "eventDate=" + eventDate +
+                ", eventType='" + eventType + '\'' +
+                ", objectType='" + objectType + '\'' +
+                ", objectId='" + objectId + '\'' +
+                ", objectName='" + objectName + '\'' +
+                ", userId='" + userId + '\'' +
+                ", username='" + username + '\'' +
+                ", sourceApplication='" + sourceApplication + '\'' +
+                ", sourceWorkstation='" + sourceWorkstation + '\'' +
+                ", context='" + context + '\'' +
+                '}';
     }
 }
