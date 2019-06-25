@@ -1,0 +1,10 @@
+<simple-page xmlns="http://n2oapp.net/framework/config/schema/page-2.0" name="Audit">
+    <list object-id="audit" query-id="audit">
+       <content>
+           <left-top text-field-id="hostname">
+               <text/>
+                <!--<body text-field-id="hostname"/>-->
+           </left-top>
+       </content>
+    </list>
+</simple-page>

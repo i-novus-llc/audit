@@ -70,9 +70,9 @@ public class AuditClientRequest implements Serializable {
         return "AuditClientRequest{" +
                 "eventDate=" + eventDate +
                 ", eventType='" + eventType + '\'' +
-                ", objectType='" + objectType + '\'' +
-                ", objectId='" + objectId + '\'' +
-                ", objectName='" + objectName + '\'' +
+                ", auditObjectTypes='" + objectType + '\'' +
+                ", auditObjectId='" + objectId + '\'' +
+                ", auditObjectNames='" + objectName + '\'' +
                 ", context='" + context + '\'' +
                 '}';
     }

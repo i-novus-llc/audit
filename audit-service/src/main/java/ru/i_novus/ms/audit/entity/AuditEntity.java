@@ -8,9 +8,9 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity
-@Table(name = "audit", schema = "audit" )
-@TypeDef(name = "JsonbType", typeClass = JsonbType.class)
+//@Entity
+//@Table(name = "audit", schema = "audit" )
+//@TypeDef(name = "JsonbType", typeClass = JsonbType.class)
 public class AuditEntity {
 
     @Id

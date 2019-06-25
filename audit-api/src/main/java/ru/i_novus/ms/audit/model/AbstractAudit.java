@@ -1,41 +1,58 @@
 package ru.i_novus.ms.audit.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public abstract class AbstractAudit implements Serializable {
 
-    @ApiModelProperty("Дата события")
+    @ApiModelProperty(value = "Дата события", required = true)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime eventDate;
 
-    @ApiModelProperty("Тип события")
+    @ApiModelProperty(value = "Тип события", required = true)
     private String eventType;
 
-    @ApiModelProperty("Тип объекта")
+    @ApiModelProperty(value = "Тип объекта", required = true)
     private String objectType;
 
-    @ApiModelProperty("Идентификатор объекта")
+    @ApiModelProperty(value = "Идентификатор объекта", required = true)
     private String objectId;
 
-    @ApiModelProperty("Наименование объекта")
+    @ApiModelProperty(value = "Наименование объекта", required = true)
     private String objectName;
 
-    @ApiModelProperty("Идентификатор пользователя")
+    @ApiModelProperty(value = "Идентификатор пользователя", required = true)
     private String userId;
 
-    @ApiModelProperty("Имя пользователя")
+    @ApiModelProperty(value = "Имя пользователя", required = true)
     private String username;
 
-    @ApiModelProperty("Имя программы")
+    @ApiModelProperty(value = "Имя программы", required = true)
     private String sourceApplication;
 
-    @ApiModelProperty("Рабочая станция")
+    @ApiModelProperty(value = "Рабочая станция")
     private String sourceWorkstation;
 
-    @ApiModelProperty("Контекст")
+    @ApiModelProperty(value = "Контекст", required = true, example = " \'{\'id\':4735,\'request_id\':5741,\'file_name\':\'protocol (2).zip\'," +
+            "\'attachment_id\':\'df87052d-dc10-11e7-80b9-005056b1595b\',\'study_id\':null," +
+            "\'created_on_base\':false}\' ")
     private String context;
+
+    @ApiModelProperty(value = "Сервер")
+    private String hostname;
 
     public LocalDateTime getEventDate() {
         return eventDate;
@@ -122,13 +139,13 @@ public abstract class AbstractAudit implements Serializable {
         return "AbstractAudit{" +
                 "eventDate=" + eventDate +
                 ", eventType='" + eventType + '\'' +
-                ", objectType='" + objectType + '\'' +
-                ", objectId='" + objectId + '\'' +
-                ", objectName='" + objectName + '\'' +
+                ", auditObjectTypes='" + objectType + '\'' +
+                ", auditObjectId='" + objectId + '\'' +
+                ", auditObjectNames='" + objectName + '\'' +
                 ", userId='" + userId + '\'' +
                 ", username='" + username + '\'' +
-                ", sourceApplication='" + sourceApplication + '\'' +
-                ", sourceWorkstation='" + sourceWorkstation + '\'' +
+                ", auditSourceApplication='" + sourceApplication + '\'' +
+                ", auditSourceWorkstations='" + sourceWorkstation + '\'' +
                 ", context='" + context + '\'' +
                 '}';
     }

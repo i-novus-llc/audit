@@ -6,6 +6,6 @@ public class SimpleAuditClientImpl extends AbstractAuditService {
 
     @Override
     public void add(AuditClientRequest request) {
-        auditService.add(requestConverter.toAuditRequest(request));
+        auditControllerApi.add(requestConverter.toAuditRequest(request));
     }
 }
