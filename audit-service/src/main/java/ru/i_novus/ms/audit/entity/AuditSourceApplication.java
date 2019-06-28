@@ -25,7 +25,7 @@ public class AuditSourceApplication {
 
     @OneToMany(mappedBy = "auditSourceApplication")
     @JsonIgnore
-    private Set<AuditEnt> auditEntities;
+    private Set<AuditEntity> auditEntities;
 
     @PrePersist
     public void prePersist() {

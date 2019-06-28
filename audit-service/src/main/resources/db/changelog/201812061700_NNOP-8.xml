@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <!--<changeSet id="NNOP-7-01" author="zamaliev" dbms="postgresql">-->
+    <!--<createTable tableName="audit" schemaName="public">-->
+    <!--<column name="id" type="uuid" autoIncrement="false">-->
+    <!--<constraints primaryKey="true"/>-->
+    <!--</column>-->
+    <!--<column name="context" type="json"/>-->
+    <!--<column name="creation_date" type="datetime"/>-->
+    <!--<column name="event_date" type="datetime"/>-->
+    <!--<column name="event_type" type="varchar"/>-->
+    <!--<column name="hostname" type="varchar"/>-->
+    <!--<column name="object_id" type="varchar"/>-->
+    <!--<column name="source_workstation" type="varchar"/>-->
+    <!--<column name="user_id" type="varchar"/>-->
+    <!--<column name="username" type="varchar"/>-->
+    <!--<column name="object_name_id" type="uuid"/>-->
+    <!--<column name="object_type_id" type="uuid"/>-->
+    <!--<column name="source_application_id" type="uuid"/>-->
+    <!--</createTable>-->
+    <!--<addNotNullConstraint tableName="audit" columnName="event_date"/>-->
+    <!--<addNotNullConstraint tableName="audit" columnName="event_type"/>-->
+    <!--<addNotNullConstraint tableName="audit" columnName="object_type_id"/>-->
+    <!--<addNotNullConstraint tableName="audit" columnName="object_name_id"/>-->
+    <!--<addNotNullConstraint tableName="audit" columnName="user_id"/>-->
+    <!--<addNotNullConstraint tableName="audit" columnName="username"/>-->
+    <!--<addNotNullConstraint tableName="audit" columnName="source_application_id"/>-->
+    <!--<addNotNullConstraint tableName="audit" columnName="creation_date"/>-->
+
+    <!--</changeSet>-->
+    <property name="uuid_type" value="uuid" dbms="postgresql"/>
+    <property name="uuid_function" value="gen_random_uuid()" dbms="postgresql"/>
+
+    <changeSet id="NNOP-7-12" author="zamaliev">
+        <addColumn tableName="audit" schemaName="audit">
+            <column name="hostname" type="varchar"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="NNOP-7-13" author="zamaliev" dbms="postgresql">
+        <sql>
+            CREATE EXTENSION IF NOT EXISTS pgcrypto;
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-14" author="zamaliev" dbms="postgresql">
+        <createTable tableName="audit_object_name" schemaName="audit">
+            <column name="id" type="${uuid_type}" defaultValueComputed="${uuid_function}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="NNOP-7-15" author="zamaliev" dbms="postgresql">
+        <createTable tableName="audit_object_type" schemaName="audit">
+            <column name="id" type="uuid" autoIncrement="false" defaultValueComputed="${uuid_function}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="NNOP-7-16" author="zamaliev" dbms="postgresql">
+        <createTable tableName="audit_source_application" schemaName="audit">
+            <column name="id" type="uuid" autoIncrement="false" defaultValueComputed="${uuid_function}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="NNOP-17" author="zamaliev">
+        <sql>
+            INSERT INTO audit.audit_object_name (name) (select distinct object_name from audit.audit)
+        </sql>
+        <sql>
+            INSERT INTO audit.audit_object_type (name) (select distinct object_type from audit.audit)
+        </sql>
+        <sql>
+            INSERT INTO audit.audit_source_application (name) (select distinct source_application from audit.audit)
+        </sql>
+        <!--<update tableName="audit_object_name" schemaName="audit">-->
+            <!--<column name="name" valueComputed="select object_name from audit.audit where 1=1"/>-->
+        <!--</update>-->
+    </changeSet>
+
+    <!--<changeSet id="NNOP-18" author="zamaliev">-->
+        <!--<sql>-->
+            <!--INSERT INTO audit.audit_object_type (name) (select distinct object_type from audit.audit)-->
+        <!--</sql>-->
+    <!--</changeSet>-->
+
+    <!--<changeSet id="NNOP-19" author="zamaliev">-->
+        <!--<sql>-->
+            <!--INSERT INTO audit.audit_source_application (name) (select distinct source_application from audit.audit)-->
+        <!--</sql>-->
+    <!--</changeSet>-->
+
+    <changeSet id="NNOP-7-20" author="zamaliev" dbms="postgresql">
+        <preConditions onFail="CONTINUE">
+            <!--<not>-->
+            <tableExists tableName="audit" schemaName="audit"/>
+            <!--</not>-->
+        </preConditions>
+        <createProcedure dbms="postgresql"
+                         encoding="utf8"
+                         path="./procedure.sql"
+                         procedureName="create_partition_and_insert"
+                         relativeToChangelogFile="true"
+                         schemaName="public">
+        </createProcedure>
+    </changeSet>
+
+    <!--<changeSet id="NNOP-21" author="zamaliev">-->
+        <!--<addColumn tableName="audit" schemaName="audit">-->
+            <!--<column name="object_name_id" type="${uuid_type}">-->
+                <!--<constraints foreignKeyName="object_name_fk" referencedTableName="audit.audit_object_name" referencedColumnNames="id"/>-->
+            <!--</column>-->
+        <!--</addColumn>-->
+    <!--</changeSet>-->
+
+    <changeSet id="NNOP-22" author="zamaliev">
+        <addColumn tableName="audit" schemaName="audit">
+            <column name="object_type_id" type="${uuid_type}">
+                <constraints foreignKeyName="object_type_fk" referencedTableName="audit.audit_object_type" referencedColumnNames="id"/>
+            </column>
+            <column name="source_application_id" type="${uuid_type}">
+                <constraints foreignKeyName="source_application_fk" referencedTableName="audit.audit_source_application" referencedColumnNames="id"/>
+            </column>
+            <column name="object_name_id" type="${uuid_type}">
+                <constraints foreignKeyName="object_name_fk" referencedTableName="audit.audit_object_name" referencedColumnNames="id"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <!--<changeSet id="NNOP-23" author="zamaliev">-->
+        <!--<addColumn tableName="audit" schemaName="audit">-->
+            <!--<column name="source_application_id" type="${uuid_type}">-->
+                <!--<constraints foreignKeyName="source_application_fk" referencedTableName="audit.audit_source_application" referencedColumnNames="id"/>-->
+            <!--</column>-->
+        <!--</addColumn>-->
+    <!--</changeSet>-->
+
+
+    <changeSet id="NNOP-25" author="zamaliev">
+        <update tableName="audit" schemaName="audit">
+            <column name="object_type_id"
+                    valueComputed="(select ot.id from audit.audit_object_type ot where object_type=ot.name)"/>
+            <column name="object_name_id"
+                    valueComputed="(select obn.id from audit.audit_object_name obn where object_name=obn.name)"/>
+            <column name="source_application_id"
+                    valueComputed="(select sw.id from audit.audit_source_application sw where source_application=sw.name)"/>
+        </update>
+
+    </changeSet>
+
+    <changeSet id="NNOP-26" author="zamaliev">
+
+    </changeSet>
+
+    <changeSet id="NNOP-27" author="zamaliev">
+        <dropColumn tableName="audit" schemaName="audit" columnName="object_name"/>
+        <dropColumn tableName="audit" schemaName="audit" columnName="object_type"/>
+        <dropColumn tableName="audit" schemaName="audit" columnName="source_application"/>
+    </changeSet>
+
+    <changeSet id="NNOP-28" author="zamaliev" dbms="postgresql">
+        <sql>
+            CREATE TRIGGER partition_trigger
+            BEFORE INSERT
+            on audit.audit
+            FOR EACH ROW
+            EXECUTE PROCEDURE create_partition_and_insert();
+
+            CREATE TRIGGER after_insert_row_trigger
+            AFTER INSERT ON audit.audit
+            FOR EACH ROW EXECUTE PROCEDURE delete_parent_row();
+        </sql>
+    </changeSet>
+
+
+</databaseChangeLog>

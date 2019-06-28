@@ -3,10 +3,10 @@
         object-id="audit" name="Audit">
 
     <list count-mapping="[count]" result-mapping="[collection]">
-        <rest filters-separator="&amp;">${url}/auditN20?{filters}&amp;page={page}</rest>
+        <rest filters-separator="&amp;">${url}/auditN20?{filters}&amp;{sorting}&amp;page={page}</rest>
     </list>
-    <unique>
-        <rest>${url}/audit/{id}</rest>
+    <unique filters="id">
+        <rest>${url}/auditN20/{id}</rest>
     </unique>
 
 
@@ -15,23 +15,35 @@
 
         <field id="id" domain="string">
             <select/>
-            <sorting>sortingColumn=id&amp;sortingOrder=:direction</sorting>
+            <sorting mapping="['direction']">sortingColumn=id&amp;sortingOrder={direction}</sorting>
             <filters>
-                <eq filter-id="id" mapping="id"/>
+                <eq filter-id="id"/>
             </filters>
         </field>
 
         <field id="eventDate" domain="localdatetime">
             <select/>
-            <sorting>sortingColumn=eventDate&amp;sortingOrder=:direction</sorting>
+            <sorting mapping="['direction']">sortingColumn=eventDate&amp;sortingOrder={direction}</sorting>
             <filters>
                 <more filter-id="period.begin">eventDateFrom={period.begin}</more>
                 <less filter-id="period.end">eventDateTo={period.end}</less>
             </filters>
         </field>
 
+        <field id="eventType" domain="string">
+            <sorting/>
+            <select/>
+            <sorting/>
+        </field>
+
+        <field id="context" domain="string">
+            <sorting/>
+            <select/>
+            <sorting/>
+        </field>
+
         <field id="auditSourceApplication.name" domain="string">
-            <sorting>sortingColumn=auditSourceApplication.name&amp;sortingOrder=:direction</sorting>
+            <sorting mapping="['direction']">sortingColumn=auditSourceApplication.name&amp;sortingOrder={direction}</sorting>
             <select/>
             <sorting/>
         </field>
@@ -48,7 +60,7 @@
         </field>
 
         <field id="auditObjectType.name" domain="string">
-            <sorting>sortingColumn=auditObjectType.name&amp;sortingOrder=:direction</sorting>
+            <sorting mapping="['direction']">sortingColumn=auditObjectType.name&amp;sortingOrder={direction}</sorting>
             <select/>
             <sorting/>
             <filters>
@@ -65,7 +77,7 @@
         </field>
 
         <field id="auditObjectName.name" domain="string">
-            <sorting>sortingColumn=auditObjectName.name&amp;sortingOrder=:direction</sorting>
+            <sorting mapping="['direction']">sortingColumn=auditObjectName.name&amp;sortingOrder={direction}</sorting>
             <select/>
             <sorting/>
             <filters>
@@ -84,20 +96,20 @@
 
         <field id="hostname" domain="string">
             <select/>
-            <sorting>sortingColumn=hostname&amp;sortingOrder=:direction</sorting>
+            <sorting mapping="['direction']">sortingColumn=hostname&amp;sortingOrder={direction}</sorting>
             <filters/>
         </field>
 
         <field id="sourceWorkstation" domain="string">
             <select/>
-            <sorting>sortingColumn=sourceWorkstation&amp;sortingOrder=:direction</sorting>
+            <sorting mapping="['direction']">sortingColumn=sourceWorkstation&amp;sortingOrder={direction}</sorting>
             <filters/>
         </field>
 
 
         <field id="objectId" domain="string">
             <select/>
-            <sorting>sortingColumn=objectId&amp;sortingOrder=:direction</sorting>
+            <sorting mapping="['direction']">sortingColumn=objectId&amp;sortingOrder={direction}</sorting>
             <filters>
                 <like filter-id="objectId">objectId={objectId}</like>
             </filters>
@@ -105,7 +117,7 @@
 
         <field id="username" domain="string">
             <select/>
-            <sorting>sortingColumn=username&amp;sortingOrder=:direction</sorting>
+            <sorting mapping="['direction']">sortingColumn=username&amp;sortingOrder={direction}</sorting>
             <filters>
                 <like filter-id="username">username={username}</like>>
             </filters>

@@ -1,6 +1,5 @@
 package ru.i_novus.ms.audit.service;
 
-import com.querydsl.core.types.Predicate;
 import net.n2oapp.criteria.api.CollectionPage;
 import net.n2oapp.criteria.api.CollectionPageService;
 import net.n2oapp.criteria.api.Criteria;
@@ -9,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.i_novus.ms.audit.entity.AuditEnt;
+import ru.i_novus.ms.audit.entity.AuditEntity;
 import ru.i_novus.ms.audit.entity.AuditObjectName;
 import ru.i_novus.ms.audit.entity.AuditObjectType;
 import ru.i_novus.ms.audit.entity.AuditSourceApplication;
@@ -21,7 +20,7 @@ import ru.i_novus.ms.audit.repository.AuditRepository;
 import java.util.*;
 
 @Service
-public class AuditService implements CollectionPageService<Criteria, AuditEnt> {
+public class AuditService implements CollectionPageService<Criteria, AuditEntity> {
 
     @Autowired
     private AuditRepository auditRepository;
@@ -36,14 +35,14 @@ public class AuditService implements CollectionPageService<Criteria, AuditEnt> {
     private SourceApplicationService sourceApplicationService;
 
     @Override
-    public CollectionPage<AuditEnt> getCollectionPage(Criteria criteria) {
+    public CollectionPage<AuditEntity> getCollectionPage(Criteria criteria) {
 
-        List<AuditEnt> auditEntList = auditRepository.findAll();
+        List<AuditEntity> auditEntityList = auditRepository.findAll();
 
         return null;
     }
 
-    public Optional<AuditEnt> getById(UUID id){
+    public Optional<AuditEntity> getById(UUID id){
         return this.auditRepository.findById(id);
     }
 
@@ -52,20 +51,20 @@ public class AuditService implements CollectionPageService<Criteria, AuditEnt> {
         return (searchEntity(criteria)).map(AuditService::getAuditByEntity);
     }
 
-    public Page<AuditEnt> searchEntity(AuditCriteria criteria){
+    public Page<AuditEntity> searchEntity(AuditCriteria criteria){
         Pageable pageable = PageRequest.of(criteria.getPageNumber() - 1, criteria.getPageSize(), QueryService.toSort(criteria));
-        Page<AuditEnt> page = auditRepository.findAll(QueryService.toPredicate(criteria), pageable);
+        Page<AuditEntity> page = auditRepository.findAll(QueryService.toPredicate(criteria), pageable);
         return page;
     }
 
 
-    public AuditEnt create(AuditForm request){
+    public AuditEntity create(AuditForm request){
 
         AuditObjectName auditObjectName = objectNameService.getOrCreate(request.getObjectName());
         AuditObjectType auditObjectType = objectTypeService.getOrCreate(request.getObjectType());
         AuditSourceApplication auditSourceApplication = sourceApplicationService.getOrCreate(request.getSourceApplication());
 
-        AuditEnt entity = AuditEnt.builder()
+        AuditEntity entity = AuditEntity.builder()
                 .auditObjectName(auditObjectName)
                 .auditObjectType(auditObjectType)
                 .auditSourceApplication(auditSourceApplication)
@@ -78,12 +77,12 @@ public class AuditService implements CollectionPageService<Criteria, AuditEnt> {
                 .sourceWorkstation(request.getSourceWorkstation())
                 .hostname(request.getHostname())
                 .build();
-
+        System.out.println(auditRepository.save(entity));
         return auditRepository.save(entity);
     }
 
 
-    public static Audit getAuditByEntity(AuditEnt entity){
+    public static Audit getAuditByEntity(AuditEntity entity){
         Audit audit = Audit.builder()
                     .creationDate(entity.getCreationDate())
                     .id(entity.getId())

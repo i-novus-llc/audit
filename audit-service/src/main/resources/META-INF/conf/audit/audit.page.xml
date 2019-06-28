@@ -29,13 +29,13 @@
                     <column text-field-id="eventDate" label="Дата и время"/>
                     <column text-field-id="auditSourceApplication.name" label="Система/Модуль"/>
                     <column text-field-id="sourceWorkstation" label="Рабочая станция"/>
-                    <column text-field-id="hostname" label="Имя сервера"/>
+                    <column text-field-id="hostname" sorting-field-id="hostname" sorting-direction="desc" label="Имя сервера"/>
                     <column text-field-id="objectId" label="Идентификатор объекта"/>
                     <column text-field-id="auditObjectName.name" label="Объект"/>
                     <column text-field-id="username" label="Пользователь"/>
                     <column text-field-id="auditObjectType.name" label="Тип события">
                         <link>
-                            <show-modal page-id="auditFull">
+                            <show-modal page-id="auditFull" route="{url}/audit/{id}">
                                 <pre-filters>
                                     <eq field-id="id" value="{id}"/>
                                 </pre-filters>
