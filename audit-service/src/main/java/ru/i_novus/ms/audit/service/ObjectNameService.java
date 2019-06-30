@@ -2,7 +2,7 @@ package ru.i_novus.ms.audit.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.i_novus.ms.audit.entity.AuditObjectName;
+import ru.i_novus.ms.audit.entity.AuditObjectNameEntity;
 import ru.i_novus.ms.audit.repository.AuditObjectNameRepository;
 
 import java.util.Collection;
@@ -15,20 +15,20 @@ public class ObjectNameService {
     @Autowired
     private AuditObjectNameRepository auditObjectNameRepository;
 
-    public Collection<AuditObjectName> getAll(){
+    public Collection<AuditObjectNameEntity> getAll(){
         return auditObjectNameRepository.findAll();
     }
 
-    public AuditObjectName getOrCreate(String name){
-        Optional<AuditObjectName> optional = auditObjectNameRepository.findByName(name);
+    public AuditObjectNameEntity getOrCreate(String name){
+        Optional<AuditObjectNameEntity> optional = auditObjectNameRepository.findByName(name);
 
-        return optional.orElseGet(() -> auditObjectNameRepository.save(AuditObjectName
+        return optional.orElseGet(() -> auditObjectNameRepository.save(AuditObjectNameEntity
                 .builder()
                 .name(name)
                 .build()));
     }
 
-    public AuditObjectName getById(UUID id){
+    public AuditObjectNameEntity getById(UUID id){
         return auditObjectNameRepository.getOne(id);
     }
 }

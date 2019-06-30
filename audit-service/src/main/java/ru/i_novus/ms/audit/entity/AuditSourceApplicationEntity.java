@@ -1,6 +1,5 @@
 package ru.i_novus.ms.audit.entity;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -9,23 +8,22 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "audit_object_type")
+@Table(name = "audit_source_application")
 @Getter
 @Setter
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class AuditObjectType {
+public class AuditSourceApplicationEntity {
 
     @Id
     @Access(AccessType.PROPERTY)
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(length = 60)
     private String name;
 
-    @OneToMany(mappedBy = "auditObjectType")
+    @OneToMany(mappedBy = "auditSourceApplication")
     @JsonIgnore
     private Set<AuditEntity> auditEntities;
 

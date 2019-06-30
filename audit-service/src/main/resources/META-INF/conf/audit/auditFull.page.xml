@@ -1,29 +1,56 @@
-<simple-page xmlns="http://n2oapp.net/framework/config/schema/page-2.0" name="Audit">
+<simple-page xmlns="http://n2oapp.net/framework/config/schema/page-2.0" name="Просмотр события">
     <form object-id="audit" query-id="audit">
         <fields>
             <set>
-                <text label="Система/Модуль" id="auditSourceApplication">Система/Модуль:{auditSourceApplication.name}</text>
-                <text label="Идентификатор объекта" id="id">Идентификатор объекта:{id}</text>
-                <text label="Наименование объекта" id="objectName">Наименование объекта:{auditObjectName.name}</text>
-                <text label="Тип события" id="objectType">Тип события:{auditObjectType.name}</text>
-                <text label="Дата и время" id="eventDate">Дата и время:{eventDate}</text>
-                <text label="Имя пользователя" id="userName">Имя пользователя:{username}</text>
-                <text label="Рабочая станция" id="auditSourceWorkstation">Рабочая станция:{sourceWorkstation}</text>
-                <text label="Имя сервера" id="hostname">Имя сервера:{hostname}</text>
-                <line expand="false" collapsible="true" label="Данные" field-label-location="left">
-                    <text id="context" visible="false">{context}</text>
-                    <code-editor id="context_json" label="context" language="javascript" rows="10">
-                        <dependencies>
-                            <set-value on="context">
-                                str = context;
-                                str = str.split("'").join("\"");
-                                str = str.replace("{", "{\n\t");
-                                str = str.replace("}", "\n}");
-                                return str.split(",").join(",\n\t");
-                            </set-value>
-                        </dependencies>
-                    </code-editor>
-                </line>
+                <row>
+                    <text id="auditSourceApplication_label">Система/Модуль:</text>
+                    <text id="auditSourceApplication">{auditSourceApplication.name}</text>
+                </row>
+                <row>
+                    <text label="Идентификатор объекта" id="id_label">Идентификатор объекта:</text>
+                    <text label="Идентификатор объекта" id="id">{objectId}</text>
+                </row>
+                <row>
+                    <text label="Наименование объекта" id="objectName_label">Наименование объекта:</text>
+                    <text id="objectName">{auditObjectName.name}</text>
+                </row>
+                <row>
+                    <text label="Тип события" id="objectType_label">Тип события:</text>
+                    <text id="objectType">{auditObjectType.name}</text>
+                </row>
+                <row>
+                    <text label="Дата и время" id="eventDate_label">Дата и время:</text>
+                    <text id="eventDate">{eventDate}</text>
+                </row>
+                <row>
+                    <text label="Имя пользователя" id="userName_label">Имя пользователя:</text>
+                    <text  id="userName">{username}</text>
+                </row>
+                <row>
+                    <text label="Рабочая станция" id="auditSourceWorkstation_label">Рабочая станция:</text>
+                    <text id="auditSourceWorkstation">{sourceWorkstation}</text>
+                </row>
+                <row>
+                    <text label="Имя сервера" id="hostname_label">Имя сервера:</text>
+                    <text id="hostname">{hostname}</text>
+                </row>
+                <row>
+                    <text label="Данные" id="context_label">Данные:</text>
+                    <line collapsible="true">
+                        <text id="context" visible="false">{context}</text>
+                        <code-editor id="context_json" label="context" language="javascript" rows="10">
+                            <dependencies>
+                                <set-value on="context">
+                                    str = context;
+                                    str = str.split("'").join("\"");
+                                    str = str.replace("{", "{\n\t");
+                                    str = str.replace("}", "\n}");
+                                    return str.split(",").join(",\n\t");
+                                </set-value>
+                            </dependencies>
+                        </code-editor>
+                    </line>
+                </row>
             </set>
         </fields>
     </form>

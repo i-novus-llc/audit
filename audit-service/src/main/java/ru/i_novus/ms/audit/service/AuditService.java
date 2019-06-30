@@ -9,9 +9,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.i_novus.ms.audit.entity.AuditEntity;
-import ru.i_novus.ms.audit.entity.AuditObjectName;
-import ru.i_novus.ms.audit.entity.AuditObjectType;
-import ru.i_novus.ms.audit.entity.AuditSourceApplication;
+import ru.i_novus.ms.audit.entity.AuditObjectNameEntity;
+import ru.i_novus.ms.audit.entity.AuditObjectTypeEntity;
+import ru.i_novus.ms.audit.entity.AuditSourceApplicationEntity;
 import ru.i_novus.ms.audit.model.Audit;
 import ru.i_novus.ms.audit.model.AuditCriteria;
 import ru.i_novus.ms.audit.model.AuditForm;
@@ -20,7 +20,7 @@ import ru.i_novus.ms.audit.repository.AuditRepository;
 import java.util.*;
 
 @Service
-public class AuditService implements CollectionPageService<Criteria, AuditEntity> {
+public class AuditService {
 
     @Autowired
     private AuditRepository auditRepository;
@@ -34,16 +34,9 @@ public class AuditService implements CollectionPageService<Criteria, AuditEntity
     @Autowired
     private SourceApplicationService sourceApplicationService;
 
-    @Override
-    public CollectionPage<AuditEntity> getCollectionPage(Criteria criteria) {
-
-        List<AuditEntity> auditEntityList = auditRepository.findAll();
-
-        return null;
-    }
-
     public Optional<AuditEntity> getById(UUID id){
-        return this.auditRepository.findById(id);
+        Optional<AuditEntity> optional = auditRepository.searchEntityBylastMonth(id);
+        return optional.isEmpty() ? auditRepository.findById(id) : optional;
     }
 
 
@@ -57,12 +50,11 @@ public class AuditService implements CollectionPageService<Criteria, AuditEntity
         return page;
     }
 
-
     public AuditEntity create(AuditForm request){
 
-        AuditObjectName auditObjectName = objectNameService.getOrCreate(request.getObjectName());
-        AuditObjectType auditObjectType = objectTypeService.getOrCreate(request.getObjectType());
-        AuditSourceApplication auditSourceApplication = sourceApplicationService.getOrCreate(request.getSourceApplication());
+        AuditObjectNameEntity auditObjectName = objectNameService.getOrCreate(request.getObjectName());
+        AuditObjectTypeEntity auditObjectType = objectTypeService.getOrCreate(request.getObjectType());
+        AuditSourceApplicationEntity auditSourceApplication = sourceApplicationService.getOrCreate(request.getSourceApplication());
 
         AuditEntity entity = AuditEntity.builder()
                 .auditObjectName(auditObjectName)
@@ -77,7 +69,6 @@ public class AuditService implements CollectionPageService<Criteria, AuditEntity
                 .sourceWorkstation(request.getSourceWorkstation())
                 .hostname(request.getHostname())
                 .build();
-        System.out.println(auditRepository.save(entity));
         return auditRepository.save(entity);
     }
 

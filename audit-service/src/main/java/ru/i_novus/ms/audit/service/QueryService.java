@@ -29,16 +29,6 @@ public class QueryService {
         if (nonNull(criteria.getEventType()))
             where.and(isEventTypeEquals(criteria.getEventType()));
 
-//        if (nonNull(criteria.getAuditObjectTypes())) {
-//            List<UUID> ids = Arrays.stream(criteria.getAuditObjectTypes()).map(UUID::fromString).collect(Collectors.toList());
-//            where.and(inObjectTypeIds(ids));
-//        }
-//
-//        if (nonNull(criteria.getAuditObjectNames())) {
-//            List<UUID> ids = Arrays.stream(criteria.getAuditObjectNames()).map(UUID::fromString).collect(Collectors.toList());
-//            where.and(inObjectNameIds(ids));
-//        }
-
         if (nonNull(criteria.getAuditObjectTypes())) {
             where.and(inObjectTypeNames(criteria.getAuditObjectTypes()));
         }
@@ -64,11 +54,6 @@ public class QueryService {
 
         if (nonNull(criteria.getHostname()))
             where.and(isHostnameContains(criteria.getHostname()));
-
-//        if(nonNull(criteria.getAuditSourceApplications())){
-//            List<UUID> ids = Arrays.stream(criteria.getAuditSourceApplications()).map(UUID::fromString).collect(Collectors.toList());
-//            where.and(inSourceApplicationIds(ids));
-//        }
 
         if(nonNull(criteria.getAuditSourceApplications())){
             where.and(inSourceApplicationNames(criteria.getAuditSourceApplications()));

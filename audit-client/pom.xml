@@ -24,6 +24,12 @@
         </dependency>
 
         <dependency>
+            <groupId>ru.i-novus.ms.audit</groupId>
+            <artifactId>audit-service</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-activemq</artifactId>
         </dependency>

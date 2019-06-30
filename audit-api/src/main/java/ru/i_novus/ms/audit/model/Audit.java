@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -12,6 +14,8 @@ import java.util.UUID;
 @ApiModel("Событие")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
+@Setter
+@NoArgsConstructor
 public class Audit extends AbstractAudit {
 
     @ApiModelProperty("Идентификатор события")

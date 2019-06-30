@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
 public class AuditCriteriaDTO {
 
     @ApiModelProperty("Дата события (от)")

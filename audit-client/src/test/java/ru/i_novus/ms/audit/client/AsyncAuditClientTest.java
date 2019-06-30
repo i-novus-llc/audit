@@ -27,8 +27,8 @@ public class AsyncAuditClientTest {
     @MockBean(name = "auditServiceJaxRsProxyClient")
     private AuditControllerApi auditControllerApi;
 
-//    @Autowired
-//    private AuditClient asyncAuditClient;
+    @Autowired
+    private AuditClient asyncAuditClient;
 
     @Test
     @Ignore

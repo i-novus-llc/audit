@@ -88,9 +88,6 @@
         <field id="auditObjectName.id" domain="string">
             <select/>
             <sorting/>
-            <!--<filters>-->
-                <!--<in filter-id="auditObjectNames*.id">auditObjectNames={auditObjectNames*.id}</in>-->
-            <!--</filters>-->
         </field>
 
 

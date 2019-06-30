@@ -5,11 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @ApiModel("Запрос на добавление события")
 @Getter
+@Setter
 @NoArgsConstructor
 public class AuditForm extends AbstractAudit {
 

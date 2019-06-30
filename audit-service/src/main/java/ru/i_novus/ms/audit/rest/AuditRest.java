@@ -6,6 +6,7 @@ import net.n2oapp.criteria.api.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import ru.i_novus.ms.audit.entity.AuditEntity;
 import ru.i_novus.ms.audit.exception.NotFoundException;
@@ -22,6 +23,7 @@ import static java.util.Objects.isNull;
 
 
 @RestController
+@Component("auditServiceJaxRsProxyClient")
 public class AuditRest implements AuditControllerApi {
 
     @Autowired
@@ -46,7 +48,7 @@ public class AuditRest implements AuditControllerApi {
     @Override
     @GetMapping("/audits")
     public Page<Audit> search(AuditCriteriaDTO criteria) {
-       return auditService.search(new AuditCriteria(criteria));
+        return auditService.search(new AuditCriteria(criteria));
     }
 
     @Override
@@ -59,33 +61,23 @@ public class AuditRest implements AuditControllerApi {
     }
 
 
-
     @RequestMapping(method = RequestMethod.GET, value = "/auditN20")
     public CollectionPage<AuditEntity> getAudits(
             @RequestParam(value = "size", required = false, defaultValue = "10") int size,
-//                                              @RequestParam Map<String,String> allRequestParams
-                                              @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-                                              @RequestParam(value = "sortingColumn", required = false, defaultValue = "eventDate") String sortingColumn,
-                                              @RequestParam(value = "sortingOrder", required = false, defaultValue = "desc") String sortingOrder,
-                                              AuditCriteria auditCriteria
-        ){
-//        for(Map.Entry entry: allRequestParams.entrySet()){
-//            System.out.println(entry.getKey() + " " + entry.getValue());
-//        }
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "sortingColumn", required = false, defaultValue = "eventDate") String sortingColumn,
+            @RequestParam(value = "sortingOrder", required = false, defaultValue = "desc") String sortingOrder,
+            AuditCriteria auditCriteria) {
+
         auditCriteria.setPageNumber(page);
         auditCriteria.setPageSize(size);
-        System.out.println(sortingColumn + " " + sortingOrder + " ");
-        if (sortingColumn!=null && sortingOrder!=null) {
+        if (sortingColumn != null && sortingOrder != null) {
             Sort.Order order = new Sort.Order(Sort.Direction.fromString(sortingOrder), sortingColumn);
             auditCriteria.setOrders(Lists.newArrayList(order));
         }
         Page<AuditEntity> auditPage = auditService.searchEntity(auditCriteria);
-        System.out.println(auditCriteria);
-        return new CollectionPage((int)auditPage.getTotalElements(), auditPage.getContent(), new Criteria());
-//        return null;
+        return new CollectionPage((int) auditPage.getTotalElements(), auditPage.getContent(), new Criteria());
     }
-
-
 
 
 }
