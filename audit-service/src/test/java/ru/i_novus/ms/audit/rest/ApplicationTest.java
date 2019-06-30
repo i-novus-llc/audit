@@ -2,6 +2,7 @@ package ru.i_novus.ms.audit.rest;
 
 import net.n2oapp.platform.test.autoconfigure.DefinePort;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ import static org.junit.Assert.*;
         })
 @DefinePort
 @Import(BackendConfiguration.class)
+@Ignore
 public class ApplicationTest {
 
     private static final String TEST = "RANOSDADAFAFAGAGSKENGkngskl;fhlksfgnhklsfgnhklsfgnhfgkls";
