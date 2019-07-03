@@ -1,4 +1,4 @@
-FROM openjdk:11-slim
+FROM gcr.io/distroless/java:11
 
 EXPOSE 8080
 
