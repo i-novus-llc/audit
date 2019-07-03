@@ -1,8 +1,5 @@
 package ru.i_novus.ms.audit.service;
 
-import net.n2oapp.criteria.api.CollectionPage;
-import net.n2oapp.criteria.api.CollectionPageService;
-import net.n2oapp.criteria.api.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +14,8 @@ import ru.i_novus.ms.audit.model.AuditCriteria;
 import ru.i_novus.ms.audit.model.AuditForm;
 import ru.i_novus.ms.audit.repository.AuditRepository;
 
-import java.util.*;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AuditService {

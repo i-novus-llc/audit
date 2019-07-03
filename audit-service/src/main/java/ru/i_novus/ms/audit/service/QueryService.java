@@ -6,11 +6,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.util.CollectionUtils;
 import ru.i_novus.ms.audit.model.AuditCriteria;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
 import static ru.i_novus.ms.audit.repository.AuditPredicates.*;
