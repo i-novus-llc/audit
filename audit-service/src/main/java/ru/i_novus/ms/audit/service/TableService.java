@@ -17,8 +17,8 @@ public class TableService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    private static final SimpleDateFormat TABLE_NAME_FORMAT = new SimpleDateFormat("yyyy_MM");
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private final SimpleDateFormat TABLE_NAME_FORMAT = new SimpleDateFormat("yyyy_MM");
+    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     //    language=SQL
     private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS %s PARTITION OF audit.audit FOR VALUES FROM ('%s') TO ('%s')";
