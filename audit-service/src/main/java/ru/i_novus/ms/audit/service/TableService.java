@@ -17,11 +17,10 @@ public class TableService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    private final SimpleDateFormat tableNameFormat = new SimpleDateFormat("yyyy_MM");
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
     //    language=SQL
     private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS %s PARTITION OF audit.audit FOR VALUES FROM ('%s') TO ('%s')";
+    private final static String TABLE_NAME_FORMAT_STRING = "yyyy_MM";
+    private final static String DATE_NAME_FORMAT_STRING = "yyyy-MM-dd";
 
     @Scheduled(cron = "0 0 0 20 1/1 *")
     private void createTableForNextMonth(){
@@ -47,6 +46,9 @@ public class TableService {
     }
 
     private void createByCalendar(Calendar cal){
+        SimpleDateFormat tableNameFormat = new SimpleDateFormat(TABLE_NAME_FORMAT_STRING);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_NAME_FORMAT_STRING);
+
         String tableName = "audit.audit_"+ tableNameFormat.format(cal.getTime());
         cal.set(Calendar.DAY_OF_MONTH, 1);
         String from = dateFormat.format(cal.getTime());
