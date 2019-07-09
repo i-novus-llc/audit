@@ -19,8 +19,8 @@ public class TableService {
     private JdbcTemplate jdbcTemplate;
     //    language=SQL
     private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS %s PARTITION OF audit.audit FOR VALUES FROM ('%s') TO ('%s')";
-    private final static String TABLE_NAME_FORMAT_STRING = "yyyy_MM";
-    private final static String DATE_NAME_FORMAT_STRING = "yyyy-MM-dd";
+    private static final String TABLE_NAME_FORMAT_STRING = "yyyy_MM";
+    private static final String DATE_NAME_FORMAT_STRING = "yyyy-MM-dd";
 
     @Scheduled(cron = "0 0 0 20 1/1 *")
     private void createTableForNextMonth(){
