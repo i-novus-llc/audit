@@ -17,8 +17,8 @@ public class TableService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    private final SimpleDateFormat TABLE_NAME_FORMAT = new SimpleDateFormat("yyyy_MM");
-    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private final SimpleDateFormat tableNameFormat = new SimpleDateFormat("yyyy_MM");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     //    language=SQL
     private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS %s PARTITION OF audit.audit FOR VALUES FROM ('%s') TO ('%s')";
@@ -47,11 +47,11 @@ public class TableService {
     }
 
     private void createByCalendar(Calendar cal){
-        String tableName = "audit.audit_"+ TABLE_NAME_FORMAT.format(cal.getTime());
+        String tableName = "audit.audit_"+ tableNameFormat.format(cal.getTime());
         cal.set(Calendar.DAY_OF_MONTH, 1);
-        String from = DATE_FORMAT.format(cal.getTime());
+        String from = dateFormat.format(cal.getTime());
         cal.add(Calendar.MONTH, 1);
-        String to = DATE_FORMAT.format(cal.getTime());
+        String to = dateFormat.format(cal.getTime());
         createTable(tableName, from, to);
 
     }
