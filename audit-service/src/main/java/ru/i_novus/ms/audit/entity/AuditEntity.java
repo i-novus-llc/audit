@@ -1,5 +1,7 @@
 package ru.i_novus.ms.audit.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
@@ -8,9 +10,15 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity
-@Table(name = "audit", schema = "audit" )
 @TypeDef(name = "JsonbType", typeClass = JsonbType.class)
+@Getter
+@Setter
+@Builder
+@Table(name = "audit")
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(exclude = {"auditObjectTypes", "auditObjectNames", "auditSourceApplication"})
 public class AuditEntity {
 
     @Id
@@ -24,23 +32,27 @@ public class AuditEntity {
     @Column(name = "event_type", nullable = false)
     private String eventType;
 
-    @Column(name = "object_type", nullable = false)
-    private String objectType;
+    @ManyToOne
+    @JoinColumn(name = "object_type_id", nullable = false)
+    private AuditObjectTypeEntity auditObjectType;
+
+    @ManyToOne
+    @JoinColumn(name = "object_name_id", nullable = false)
+    private AuditObjectNameEntity auditObjectName;
 
     @Column(name = "object_id")
     private String objectId;
-
-    @Column(name = "object_name")
-    private String objectName;
 
     @Column(name = "user_id", nullable = false)
     private String userId;
 
     @Column(name = "username", nullable = false)
+    @JsonProperty("username")
     private String username;
 
-    @Column(name = "source_application")
-    private String sourceApplication;
+    @ManyToOne
+    @JoinColumn(name = "source_application_id", nullable = false)
+    private AuditSourceApplicationEntity auditSourceApplication;
 
     @Column(name = "source_workstation")
     private String sourceWorkstation;
@@ -52,112 +64,14 @@ public class AuditEntity {
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getEventDate() {
-        return eventDate;
-    }
-
-    public void setEventDate(LocalDateTime eventDate) {
-        this.eventDate = eventDate;
-    }
-
-    public String getEventType() {
-        return eventType;
-    }
-
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
-    }
-
-    public String getObjectType() {
-        return objectType;
-    }
-
-    public void setObjectType(String objectType) {
-        this.objectType = objectType;
-    }
-
-    public String getObjectId() {
-        return objectId;
-    }
-
-    public void setObjectId(String objectId) {
-        this.objectId = objectId;
-    }
-
-    public String getObjectName() {
-        return objectName;
-    }
-
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String userName) {
-        this.username = userName;
-    }
-
-    public String getSourceApplication() {
-        return sourceApplication;
-    }
-
-    public void setSourceApplication(String sourceApplication) {
-        this.sourceApplication = sourceApplication;
-    }
-
-    public String getSourceWorkstation() {
-        return sourceWorkstation;
-    }
-
-    public void setSourceWorkstation(String sourceWorkstation) {
-        this.sourceWorkstation = sourceWorkstation;
-    }
-
-    public String getContext() {
-        return context;
-    }
-
-    public void setContext(String context) {
-        this.context = context;
-    }
-
-    public LocalDateTime getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
-    }
+    @Column(name = "hostname")
+    @JsonProperty("hostname")
+    private String hostname;
 
     @PrePersist
     public void prePersist() {
-        if (id == null) {
-            id = UUID.randomUUID();
-        }
-        LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
-
-        // todo
-        if (creationDate == null) {
-            creationDate = now;
-        }
+        id = id == null? UUID.randomUUID(): id;
+        creationDate = creationDate == null? LocalDateTime.now(Clock.systemUTC()) : creationDate;
     }
+
 }

@@ -1,0 +1,23 @@
+version: '3.6'
+
+services:
+
+  postgres:
+    image: postgres:11.4-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=dREAM1cACAO
+      - POSTGRES_DB=audit
+    networks:
+      - audit
+
+  audit-service:
+    build:
+      context: audit-service
+      args:
+        JAR_FILE: target/audit-service.jar
+    networks:
+      - audit
+
+networks:
+  audit:

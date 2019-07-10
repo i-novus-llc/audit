@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.JmsException;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
-import ru.i_novus.ms.audit.model.AuditRequest;
+import ru.i_novus.ms.audit.model.AuditForm;
 
 @Component
 public class Producer {
@@ -20,7 +20,7 @@ public class Producer {
         this.jmsTemplate = jmsTemplate;
     }
 
-    public void send(String queueName, AuditRequest request) {
+    public void send(String queueName, AuditForm request) {
         try {
             jmsTemplate.convertAndSend(queueName, request);
         } catch (JmsException e) {

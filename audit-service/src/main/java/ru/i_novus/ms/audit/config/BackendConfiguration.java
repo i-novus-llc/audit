@@ -1,4 +1,4 @@
-package ru.i_novus.ms.audit;
+package ru.i_novus.ms.audit.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,4 +12,5 @@ public class BackendConfiguration {
     AuditParamConverterProvider auditParamConverterProvider() {
         return new AuditParamConverterProvider();
     }
+
 }

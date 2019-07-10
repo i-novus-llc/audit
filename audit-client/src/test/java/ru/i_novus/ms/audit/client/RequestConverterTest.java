@@ -6,7 +6,7 @@ import ru.i_novus.ms.audit.client.impl.converter.RequestConverter;
 import ru.i_novus.ms.audit.client.model.AuditClientRequest;
 import ru.i_novus.ms.audit.client.model.User;
 import ru.i_novus.ms.audit.exception.AuditException;
-import ru.i_novus.ms.audit.model.AuditRequest;
+import ru.i_novus.ms.audit.model.AuditForm;
 
 import java.time.LocalDateTime;
 
@@ -40,18 +40,18 @@ public class RequestConverterTest {
                 () -> SOURCE_WORKSTATION
         );
 
-        AuditRequest auditRequest = requestConverter.toAuditRequest(auditClientRequest);
+        AuditForm auditForm = requestConverter.toAuditRequest(auditClientRequest);
 
-        assertEquals(auditRequest.getEventDate(), auditRequest.getEventDate());
-        assertEquals(auditRequest.getEventType(), auditRequest.getEventType());
-        assertEquals(auditRequest.getObjectType(), auditRequest.getObjectType());
-        assertEquals(auditRequest.getObjectId(), auditRequest.getObjectId());
-        assertEquals(auditRequest.getObjectName(), auditRequest.getObjectName());
-        assertEquals(auditRequest.getUserId(), USER_ID);
-        assertEquals(auditRequest.getUsername(), USERNAME);
-        assertEquals(auditRequest.getSourceWorkstation(), SOURCE_WORKSTATION);
-        assertEquals(auditRequest.getSourceApplication(), SOURCE_APPLICATION);
-        assertEquals(auditRequest.getContext(), auditClientRequest.getContext());
+        assertEquals(auditForm.getEventDate(), auditForm.getEventDate());
+        assertEquals(auditForm.getEventType(), auditForm.getEventType());
+        assertEquals(auditForm.getObjectType(), auditForm.getObjectType());
+        assertEquals(auditForm.getObjectId(), auditForm.getObjectId());
+        assertEquals(auditForm.getObjectName(), auditForm.getObjectName());
+        assertEquals(auditForm.getUserId(), USER_ID);
+        assertEquals(auditForm.getUsername(), USERNAME);
+        assertEquals(auditForm.getSourceWorkstation(), SOURCE_WORKSTATION);
+        assertEquals(auditForm.getSourceApplication(), SOURCE_APPLICATION);
+        assertEquals(auditForm.getContext(), auditClientRequest.getContext());
     }
 
     @Test(expected = AuditException.class)

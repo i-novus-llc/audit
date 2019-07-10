@@ -10,7 +10,7 @@ import ru.i_novus.ms.audit.client.UserAccessor;
 import ru.i_novus.ms.audit.client.model.AuditClientRequest;
 import ru.i_novus.ms.audit.client.model.User;
 import ru.i_novus.ms.audit.exception.AuditException;
-import ru.i_novus.ms.audit.model.AuditRequest;
+import ru.i_novus.ms.audit.model.AuditForm;
 
 import java.time.LocalDateTime;
 
@@ -36,21 +36,21 @@ public class RequestConverter {
         this.workstationAccessor = workstationAccessor;
     }
 
-    public AuditRequest toAuditRequest(AuditClientRequest request) {
-        AuditRequest auditRequest = new AuditRequest();
+    public AuditForm toAuditRequest(AuditClientRequest request) {
+        AuditForm auditForm = new AuditForm();
         
-        auditRequest.setEventDate(isNull(request.getEventDate()) ? LocalDateTime.now() : request.getEventDate());
-        auditRequest.setEventType(request.getEventType());
-        auditRequest.setObjectType(request.getObjectType());
-        auditRequest.setObjectId(request.getObjectId());
-        auditRequest.setObjectName(request.getObjectName());
-        auditRequest.setContext(request.getContext());
+        auditForm.setEventDate(isNull(request.getEventDate()) ? LocalDateTime.now() : request.getEventDate());
+        auditForm.setEventType(request.getEventType());
+        auditForm.setObjectType(request.getObjectType());
+        auditForm.setObjectId(request.getObjectId());
+        auditForm.setObjectName(request.getObjectName());
+        auditForm.setContext(request.getContext());
 
         if (nonNull(applicationAccessor))
-            auditRequest.setSourceApplication(applicationAccessor.get());
+            auditForm.setSourceApplication(applicationAccessor.get());
 
         if (nonNull(workstationAccessor))
-            auditRequest.setSourceWorkstation(workstationAccessor.get());
+            auditForm.setSourceWorkstation(workstationAccessor.get());
 
         if (isNull(userAccessor)) {
             throw new AuditException("UserAccessor is undefined");
@@ -72,9 +72,9 @@ public class RequestConverter {
             throw new AuditException("Invalid username (null or blank)");
         }
 
-        auditRequest.setUserId(user.getUserId());
-        auditRequest.setUsername(user.getUsername());
+        auditForm.setUserId(user.getUserId());
+        auditForm.setUsername(user.getUsername());
 
-        return auditRequest;
+        return auditForm;
     }
 }

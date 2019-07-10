@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<query xmlns="http://n2oapp.net/framework/config/schema/query-4.0"
+        object-id="audit" name="Audit">
+
+    <list count-mapping="[count]" result-mapping="[collection]">
+        <rest filters-separator="&amp;">${url}/auditN20?{filters}&amp;{sorting}&amp;page={page}</rest>
+    </list>
+    <unique filters="id">
+        <rest>${url}/auditN20/{id}</rest>
+    </unique>
+
+
+
+    <fields>
+
+        <field id="id" domain="string">
+            <select/>
+            <sorting mapping="['direction']">sortingColumn=id&amp;sortingOrder={direction}</sorting>
+            <filters>
+                <eq filter-id="id"/>
+            </filters>
+        </field>
+
+        <field id="eventDate" domain="localdatetime">
+            <select/>
+            <sorting mapping="['direction']">sortingColumn=eventDate&amp;sortingOrder={direction}</sorting>
+            <filters>
+                <more filter-id="period.begin">eventDateFrom={period.begin}</more>
+                <less filter-id="period.end">eventDateTo={period.end}</less>
+            </filters>
+        </field>
+
+        <field id="eventType" domain="string">
+            <sorting/>
+            <select/>
+            <sorting/>
+        </field>
+
+        <field id="context" domain="string">
+            <sorting/>
+            <select/>
+            <sorting/>
+        </field>
+
+        <field id="auditSourceApplication.name" domain="string">
+            <sorting mapping="['direction']">sortingColumn=auditSourceApplication.name&amp;sortingOrder={direction}</sorting>
+            <select/>
+            <sorting/>
+        </field>
+
+        <field id="auditSourceApplication.id" domain="string">
+            <select/>
+            <sorting/>
+            <!--<filters>-->
+                <!--<in filter-id="auditSourceApplications*.id">auditSourceApplications={auditSourceApplications*.id}</in>-->
+            <!--</filters>-->
+            <filters>
+                <in filter-id="auditSourceApplications*.name">auditSourceApplications={auditSourceApplications*.name}</in>
+            </filters>
+        </field>
+
+        <field id="auditObjectType.name" domain="string">
+            <sorting mapping="['direction']">sortingColumn=auditObjectType.name&amp;sortingOrder={direction}</sorting>
+            <select/>
+            <sorting/>
+            <filters>
+                <in filter-id="auditObjectTypes*.name">auditObjectTypes={auditObjectTypes*.name}</in>
+            </filters>
+        </field>
+
+        <field id="auditObjectType.id" domain="string">
+            <select/>
+            <sorting/>
+            <!--<filters>-->
+                <!--<in filter-id="auditObjectTypes*.id">auditObjectTypes={auditObjectTypes*.id}</in>-->
+            <!--</filters>-->
+        </field>
+
+        <field id="auditObjectName.name" domain="string">
+            <sorting mapping="['direction']">sortingColumn=auditObjectName.name&amp;sortingOrder={direction}</sorting>
+            <select/>
+            <sorting/>
+            <filters>
+                <in filter-id="auditObjectNames*.name">auditObjectNames={auditObjectNames*.name}</in>
+            </filters>
+        </field>
+
+        <field id="auditObjectName.id" domain="string">
+            <select/>
+            <sorting/>
+        </field>
+
+
+        <field id="hostname" domain="string">
+            <select/>
+            <sorting mapping="['direction']">sortingColumn=hostname&amp;sortingOrder={direction}</sorting>
+            <filters/>
+        </field>
+
+        <field id="sourceWorkstation" domain="string">
+            <select/>
+            <sorting mapping="['direction']">sortingColumn=sourceWorkstation&amp;sortingOrder={direction}</sorting>
+            <filters/>
+        </field>
+
+
+        <field id="objectId" domain="string">
+            <select/>
+            <sorting mapping="['direction']">sortingColumn=objectId&amp;sortingOrder={direction}</sorting>
+            <filters>
+                <like filter-id="objectId">objectId={objectId}</like>
+            </filters>
+        </field>
+
+        <field id="username" domain="string">
+            <select/>
+            <sorting mapping="['direction']">sortingColumn=username&amp;sortingOrder={direction}</sorting>
+            <filters>
+                <like filter-id="username">username={username}</like>>
+            </filters>
+        </field>
+
+    </fields>
+
+</query>

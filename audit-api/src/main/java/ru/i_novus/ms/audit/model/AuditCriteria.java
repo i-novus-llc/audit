@@ -1,65 +1,62 @@
 package ru.i_novus.ms.audit.model;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import lombok.*;
 import net.n2oapp.platform.jaxrs.RestCriteria;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.ws.rs.QueryParam;
 import java.time.LocalDateTime;
 
-@ApiModel("Критерии поиска событий")
+@Getter
+@Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class AuditCriteria extends RestCriteria {
 
     private static final int DAFAULT_PAGE = 1;
     private static final int DAFAULT_PAGE_SIZE = 10;
     private static final int MAX_SIZE = Integer.MAX_VALUE;
 
-    @ApiModelProperty("Дата события (от)")
-    @QueryParam("eventDateFrom")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime eventDateFrom;
-
-    @ApiModelProperty("Дата события (до)")
-    @QueryParam("eventDateTo")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime eventDateTo;
-
-    @ApiModelProperty("Тип события")
-    @QueryParam("eventType")
     private String eventType;
-
-    @ApiModelProperty("Тип объекта")
-    @QueryParam("objectType")
-    private String objectType;
-
-    @ApiModelProperty("Идентификатор объекта")
-    @QueryParam("objectId")
+    private String[] auditObjectTypes;
     private String objectId;
-
-    @ApiModelProperty("Наименование объекта")
-    @QueryParam("objectName")
-    private String objectName;
-
-    @ApiModelProperty("Идентификатор пользователя")
-    @QueryParam("userId")
+    private String[] auditObjectNames;
     private String userId;
-
-    @ApiModelProperty("Имя пользователя")
-    @QueryParam("username")
     private String username;
-
-    @ApiModelProperty("Имя программы")
-    @QueryParam("sourceApplication")
-    private String sourceApplication;
-
-    @ApiModelProperty("Рабочая станция")
-    @QueryParam("sourceWorkstation")
-    private String sourceWorkstation;
-
-    @ApiModelProperty("Контекст")
-    @QueryParam("context")
+    private String[] auditSourceApplications;
+    private String auditSourceWorkstation;
     private String context;
+    private String hostname;
 
-    public AuditCriteria() {
-        super(DAFAULT_PAGE, DAFAULT_PAGE_SIZE);
+    public AuditCriteria(AuditCriteriaDTO criteria) {
+        this.context = criteria.getContext();
+        this.eventDateFrom = criteria.getEventDateFrom();
+        this.eventDateTo = criteria.getEventDateTo();
+        this.eventType = criteria.getEventType();
+        this.hostname = criteria.getHostname();
+        this.objectId = criteria.getObjectId();
+        this.auditObjectNames = criteria.getObjectName();
+        this.auditObjectTypes = criteria.getObjectType();
+        this.auditSourceApplications = criteria.getSourceApplication();
+        this.auditSourceWorkstation = criteria.getSourceWorkstation();
+        this.userId = criteria.getUserId();
+        this.username = criteria.getUsername();
+        this.setPageSize(criteria.getSize()==null ? DAFAULT_PAGE_SIZE : criteria.getSize());
+        this.setPageNumber(criteria.getPage()==null ? DAFAULT_PAGE : criteria.getPage());
     }
 
     public void noPagination() {
@@ -67,91 +64,5 @@ public class AuditCriteria extends RestCriteria {
         setPageNumber(DAFAULT_PAGE);
     }
 
-    public LocalDateTime getEventDateFrom() {
-        return eventDateFrom;
-    }
 
-    public void setEventDateFrom(LocalDateTime eventDateFrom) {
-        this.eventDateFrom = eventDateFrom;
-    }
-
-    public LocalDateTime getEventDateTo() {
-        return eventDateTo;
-    }
-
-    public void setEventDateTo(LocalDateTime eventDateTo) {
-        this.eventDateTo = eventDateTo;
-    }
-
-    public String getEventType() {
-        return eventType;
-    }
-
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
-    }
-
-    public String getObjectType() {
-        return objectType;
-    }
-
-    public void setObjectType(String objectType) {
-        this.objectType = objectType;
-    }
-
-    public String getObjectId() {
-        return objectId;
-    }
-
-    public void setObjectId(String objectId) {
-        this.objectId = objectId;
-    }
-
-    public String getObjectName() {
-        return objectName;
-    }
-
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getSourceApplication() {
-        return sourceApplication;
-    }
-
-    public void setSourceApplication(String sourceApplication) {
-        this.sourceApplication = sourceApplication;
-    }
-
-    public String getSourceWorkstation() {
-        return sourceWorkstation;
-    }
-
-    public void setSourceWorkstation(String sourceWorkstation) {
-        this.sourceWorkstation = sourceWorkstation;
-    }
-
-    public String getContext() {
-        return context;
-    }
-
-    public void setContext(String context) {
-        this.context = context;
-    }
 }
