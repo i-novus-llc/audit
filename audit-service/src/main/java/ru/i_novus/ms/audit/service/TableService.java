@@ -23,7 +23,7 @@ public class TableService {
     private static final String DATE_NAME_FORMAT_STRING = "yyyy-MM-dd";
 
     @Scheduled(cron = "0 0 0 20 1/1 *")
-    private void createTableForNextMonth(){
+    void createTableForNextMonth(){
         Date now = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(now);
