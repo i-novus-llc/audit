@@ -21,7 +21,6 @@
         <aws.accountId>538721144237</aws.accountId>
     </properties>
 
-
     <modules>
         <module>audit-api</module>
         <module>audit-service</module>
