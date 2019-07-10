@@ -12,6 +12,8 @@ services:
       - audit
 
   audit-service:
+    environment:
+      URL: http://audit-service:8080
     build:
       context: audit-service
       args:
