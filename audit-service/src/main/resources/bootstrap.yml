@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: lkb-audit-service
+  cloud:
+    consul:
+      config:
+        enabled: ${config.server.enable}
