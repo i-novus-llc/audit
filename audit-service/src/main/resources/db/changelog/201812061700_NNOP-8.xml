@@ -97,24 +97,38 @@
 
     <changeSet id="NNOP-8-9" author="zamaliev" dbms="postgresql">
         <sql>
-            INSERT INTO audit.audit_object_name (name) (select distinct object_name from audit.audit)
+            <![CDATA[
+            INSERT INTO audit.audit_object_name (name) (select distinct object_name from audit.audit where object_name <> ''  )
+            ]]>
         </sql>
     </changeSet>
 
     <changeSet id="NNOP-8-10" author="zamaliev" dbms="postgresql">
         <sql>
-            INSERT INTO audit.audit_object_type (name) (select distinct object_type from audit.audit)
+            <![CDATA[
+            INSERT INTO audit.audit_object_type (name) (select distinct object_type from audit.audit where object_type <> '' )
+            ]]>
         </sql>
     </changeSet>
 
     <changeSet id="NNOP-8-11" author="zamaliev" dbms="postgresql">
         <sql>
-            INSERT INTO audit.audit_source_application (name) (select distinct source_application from audit.audit)
+            <![CDATA[
+            INSERT INTO audit.audit_source_application (name) (select distinct source_application from audit.audit where source_application <> '')
+            ]]>
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-8-12" author="zamaliev" dbms="postgresql">
+        <sql>
+            <![CDATA[
+            DELETE FROM audit.audit WHERE not audit.object_name <> '' or not audit.object_type <> '' or not audit.source_application <> ''
+            ]]>
         </sql>
     </changeSet>
 
 
-    <changeSet id="NNOP-8-12" author="zamaliev">
+    <changeSet id="NNOP-8-13" author="zamaliev">
         <addColumn tableName="audit" schemaName="audit">
             <column name="object_name_id" type="${uuid_type}">
                 <constraints foreignKeyName="object_name_fk" referencedTableName="audit.audit_object_name"
@@ -123,7 +137,7 @@
         </addColumn>
     </changeSet>
 
-    <changeSet id="NNOP-8-13" author="zamaliev">
+    <changeSet id="NNOP-8-14" author="zamaliev">
         <addColumn tableName="audit" schemaName="audit">
             <column name="object_type_id" type="${uuid_type}">
                 <constraints foreignKeyName="object_type_fk" referencedTableName="audit.audit_object_type"
@@ -132,7 +146,7 @@
         </addColumn>
     </changeSet>
 
-    <changeSet id="NNOP-8-14" author="zamaliev">
+    <changeSet id="NNOP-8-15" author="zamaliev">
         <addColumn tableName="audit" schemaName="audit">
             <column name="source_application_id" type="${uuid_type}">
                 <constraints foreignKeyName="source_application_fk" referencedTableName="audit.audit_source_application"
@@ -142,7 +156,7 @@
     </changeSet>
 
 
-    <changeSet id="NNOP-8-15" author="zamaliev">
+    <changeSet id="NNOP-8-16" author="zamaliev">
         <update tableName="audit" schemaName="audit">
             <column name="object_type_id"
                     valueComputed="(select ot.id from audit.audit_object_type ot where object_type=ot.name)"/>
@@ -150,7 +164,7 @@
 
     </changeSet>
 
-    <changeSet id="NNOP-8-16" author="zamaliev">
+    <changeSet id="NNOP-8-17" author="zamaliev">
         <update tableName="audit" schemaName="audit">
             <column name="object_name_id"
                     valueComputed="(select obn.id from audit.audit_object_name obn where object_name=obn.name)"/>
@@ -158,7 +172,7 @@
 
     </changeSet>
 
-    <changeSet id="NNOP-8-17" author="zamaliev">
+    <changeSet id="NNOP-8-18" author="zamaliev">
         <update tableName="audit" schemaName="audit">
             <column name="source_application_id"
                     valueComputed="(select sw.id from audit.audit_source_application sw where source_application=sw.name)"/>
@@ -167,15 +181,15 @@
     </changeSet>
 
 
-    <changeSet id="NNOP-8-18" author="zamaliev">
+    <changeSet id="NNOP-8-19" author="zamaliev">
         <dropColumn tableName="audit" schemaName="audit" columnName="object_name"/>
     </changeSet>
 
-    <changeSet id="NNOP-8-19" author="zamaliev">
+    <changeSet id="NNOP-8-20" author="zamaliev">
         <dropColumn tableName="audit" schemaName="audit" columnName="object_type"/>
     </changeSet>
 
-    <changeSet id="NNOP-8-20" author="zamaliev">
+    <changeSet id="NNOP-8-21" author="zamaliev">
         <dropColumn tableName="audit" schemaName="audit" columnName="source_application"/>
     </changeSet>
 
