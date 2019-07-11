@@ -13,7 +13,7 @@ services:
 
   audit-service:
     environment:
-      URL: http://audit-service:8080
+      AUDIT_BACKEND_URL: http://audit-service:8080
     build:
       context: audit-service
       args:

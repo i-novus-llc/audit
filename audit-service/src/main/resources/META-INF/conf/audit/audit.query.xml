@@ -3,10 +3,10 @@
         object-id="audit" name="Audit">
 
     <list count-mapping="[count]" result-mapping="[collection]">
-        <rest filters-separator="&amp;">${url}/auditN20?{filters}&amp;{sorting}&amp;page={page}</rest>
+        <rest filters-separator="&amp;">${audit.backend.url}/auditN20?{filters}&amp;{sorting}&amp;page={page}</rest>
     </list>
     <unique filters="id">
-        <rest>${url}/auditN20/{id}</rest>
+        <rest>${audit.backend.url}/auditN20/{id}</rest>
     </unique>
 
 
