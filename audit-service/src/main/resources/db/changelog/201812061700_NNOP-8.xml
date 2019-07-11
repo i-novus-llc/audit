@@ -19,6 +19,11 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="NNOP-8-1.1" author="esadykov" dbms="postgresql">
+        <sql>
+            DELETE FROM audit.audit WHERE audit.object_name is null or audit.object_type is null or audit.source_application is null;
+        </sql>
+    </changeSet>
     <changeSet id="NNOP-8-2" author="zamaliev" dbms="postgresql">
         <sql>
             BEGIN;
