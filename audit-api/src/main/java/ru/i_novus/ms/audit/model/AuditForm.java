@@ -18,14 +18,14 @@ public class AuditForm extends AbstractAudit {
     @JsonCreator
     public AuditForm(@JsonProperty(required = true, value = "eventDate") LocalDateTime eventDate,
                      @JsonProperty(required = true, value = "eventType") String eventType,
-                     @JsonProperty(required = true, value = "auditObjectTypes") String objectType,
-                     @JsonProperty(required = true, value = "auditObjectId") String objectId,
-                     @JsonProperty(required = true, value = "auditObjectNames") String objectName,
+                     @JsonProperty(required = true, value = "objectType") String objectType,
+                     @JsonProperty(required = true, value = "objectId") String objectId,
+                     @JsonProperty(required = true, value = "objectName") String objectName,
                      @JsonProperty(required = true, value = "userId") String userId,
                      @JsonProperty(required = true, value = "username") String username,
-                     @JsonProperty(required = true, value = "auditSourceApplication") String sourceApplication,
+                     @JsonProperty(required = true, value = "sourceApplication") String sourceApplication,
                      @JsonProperty(required = true, value = "context") String context,
-                     @JsonProperty("auditSourceWorkstations") String sourceWorkstation,
+                     @JsonProperty("sourceWorkstation") String sourceWorkstation,
                      @JsonProperty("hostname") String hostname) {
 
         super(eventDate, eventType, objectType, objectId, objectName, userId, username,
