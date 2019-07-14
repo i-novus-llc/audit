@@ -1,68 +1,82 @@
 package ru.i_novus.ms.audit.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import lombok.*;
+import io.swagger.annotations.ApiParam;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import net.n2oapp.platform.jaxrs.RestCriteria;
-import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.ws.rs.QueryParam;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
-@JsonIgnoreProperties(ignoreUnknown = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@Setter
 public class AuditCriteria extends RestCriteria {
 
-    private static final int DAFAULT_PAGE = 1;
-    private static final int DAFAULT_PAGE_SIZE = 10;
-    private static final int MAX_SIZE = Integer.MAX_VALUE;
-
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @ApiParam(value = "Дата события (от)", format = "dd.MM.yyyy HH:mm:ss")
+    @QueryParam("eventDateFrom")
     private LocalDateTime eventDateFrom;
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+
+    @ApiParam(value = "Дата события (до)", format = "dd.MM.yyyy HH:mm:ss")
+    @QueryParam("eventDateTo")
     private LocalDateTime eventDateTo;
+
+    @ApiParam("Тип события")
+    @QueryParam("eventType")
     private String eventType;
-    private String[] auditObjectTypes;
+
+    @ApiParam(value = "Тип объекта")
+    @QueryParam("auditObjectTypes")
+    private String[] objectType;
+
+    @ApiParam("Идентификатор объекта")
+    @QueryParam("auditObjectId")
     private String objectId;
-    private String[] auditObjectNames;
+
+    @ApiParam("Наименование объекта")
+    @QueryParam("auditObjectNames")
+    private String[] objectName;
+
+    @ApiParam("Идентификатор пользователя")
+    @QueryParam("userId")
     private String userId;
+
+    @ApiParam("Имя пользователя")
+    @QueryParam("username")
     private String username;
-    private String[] auditSourceApplications;
-    private String auditSourceWorkstation;
+
+    @ApiParam("Имя программы")
+    @QueryParam("auditSourceApplication")
+    private String[] sourceApplication;
+
+    @ApiParam("Рабочая станция")
+    @QueryParam("auditSourceWorkstations")
+    private String sourceWorkstation;
+
+    @ApiParam("Контекст")
+    @QueryParam("context")
     private String context;
+
+    @ApiParam("Имя хоста")
+    @QueryParam("hostname")
     private String hostname;
 
-    public AuditCriteria(AuditCriteriaDTO criteria) {
-        this.context = criteria.getContext();
-        this.eventDateFrom = criteria.getEventDateFrom();
-        this.eventDateTo = criteria.getEventDateTo();
-        this.eventType = criteria.getEventType();
-        this.hostname = criteria.getHostname();
-        this.objectId = criteria.getObjectId();
-        this.auditObjectNames = criteria.getObjectName();
-        this.auditObjectTypes = criteria.getObjectType();
-        this.auditSourceApplications = criteria.getSourceApplication();
-        this.auditSourceWorkstation = criteria.getSourceWorkstation();
-        this.userId = criteria.getUserId();
-        this.username = criteria.getUsername();
-        this.setPageSize(criteria.getSize()==null ? DAFAULT_PAGE_SIZE : criteria.getSize());
-        this.setPageNumber(criteria.getPage()==null ? DAFAULT_PAGE : criteria.getPage());
-    }
+//    @ApiParam("Страница")
+//    @QueryParam("page")
+//    private Integer page;
+//
+//    @ApiParam("Размер")
+//    @QueryParam("size")
+//    private Integer size;
 
-    public void noPagination() {
-        setPageSize(MAX_SIZE);
-        setPageNumber(DAFAULT_PAGE);
-    }
+    @ApiParam("Поле сортировки")
+    @QueryParam("sortingColumn")
+    private String sortingColumn;
 
-
+    @ApiParam(value = "Порядок сортировки", allowableValues = "DESC, ASC")
+    @QueryParam("sortingOrder")
+    private String sortingOrder;
 }

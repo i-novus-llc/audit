@@ -10,11 +10,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.i_novus.ms.audit.client.app.AuditClientApp;
 import ru.i_novus.ms.audit.client.model.AuditClientRequest;
-import ru.i_novus.ms.audit.service.api.AuditControllerApi;
+import ru.i_novus.ms.audit.service.api.AuditRest;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 
 @RunWith(SpringRunner.class)
@@ -24,8 +26,8 @@ public class AsyncAuditClientTest {
 
     private static AuditClientRequest auditClientRequest = new AuditClientRequest();
 
-    @MockBean(name = "auditServiceJaxRsProxyClient")
-    private AuditControllerApi auditControllerApi;
+    @MockBean(name = "auditRestJaxRsProxyClient")
+    private AuditRest auditRest;
 
     @Autowired
     private AuditClient asyncAuditClient;
@@ -33,8 +35,8 @@ public class AsyncAuditClientTest {
     @Test
     @Ignore
     public void asyncAddTest() throws InterruptedException {
-//        asyncAuditClient.add(auditClientRequest);
+        asyncAuditClient.add(auditClientRequest);
         TimeUnit.SECONDS.sleep(3);
-//        verify(auditControllerApi, times(1)).add(any());
+        verify(auditRest, times(1)).add(any());
     }
 }

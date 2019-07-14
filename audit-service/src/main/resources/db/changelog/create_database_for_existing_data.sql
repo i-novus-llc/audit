@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION migration() RETURNS integer AS $$
+CREATE OR REPLACE FUNCTION create_database_for_existing_data() RETURNS integer AS $$
 declare
   date record;
   sql TEXT;

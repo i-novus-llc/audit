@@ -4,12 +4,30 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="NNOP-7" author="ekrasulina" dbms="postgresql">
+    <changeSet id="NNOP-7-1" author="zamaliev" dbms="postgresql">
+        <sql>
+            INSERT INTO audit.audit_object_type (id, name) VALUES ('03912eee-a667-11e9-a2a3-2a2ae2dbcce4', 'Object_type')
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-2" author="zamaliev" dbms="postgresql">
+        <sql>
+            INSERT INTO audit.audit_object_name (id, name) VALUES ('039131aa-a667-11e9-a2a3-2a2ae2dbcce4', 'Object_name')
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-3" author="zamaliev" dbms="postgresql">
+        <sql>
+            INSERT INTO audit.audit_source_application (id, name) VALUES ('03913538-a667-11e9-a2a3-2a2ae2dbcce4', 'Source_application')
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-4" author="zamaliev" dbms="postgresql">
         <sql>
             INSERT INTO audit.audit(
-                id, event_date, event_type, object_type, object_id, object_name, user_id, username, source_application, source_workstation, context, creation_date)
-            VALUES ('9264b032-ff05-11e8-8eb2-f2801f1b9fd1', 'now()', 'EventType', 'ObjectType', 'ObjectId', 'ObjectName',
-                'UserId', 'Username', 'SourceApplication', 'SourceWorkstation', '{"field": "name", "value": "Значение"}', 'now()');
+                id, event_date, event_type, object_type_id, object_id, object_name_id, user_id, username, source_application_id, source_workstation, context, creation_date)
+            VALUES ('9264b032-ff05-11e8-8eb2-f2801f1b9fd1', 'now()', 'EventType', '03912eee-a667-11e9-a2a3-2a2ae2dbcce4', 'ObjectId', '039131aa-a667-11e9-a2a3-2a2ae2dbcce4',
+                'UserId', 'Username', '03913538-a667-11e9-a2a3-2a2ae2dbcce4', 'SourceWorkstation', '{"field": "name", "value": "Значение"}', 'now()');
         </sql>
     </changeSet>
 

@@ -8,27 +8,27 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jms.annotation.EnableJms;
 import ru.i_novus.ms.audit.client.impl.AsyncAuditClientImpl;
 import ru.i_novus.ms.audit.client.impl.SimpleAuditClientImpl;
-import ru.i_novus.ms.audit.service.api.AuditControllerApi;
+import ru.i_novus.ms.audit.service.api.AuditRest;
 
 @EnableJms
 @SpringBootConfiguration
 @ComponentScan("ru.i_novus.ms.audit.client")
-@EnableJaxRsProxyClient(classes = AuditControllerApi.class, address = "${audit.url}")
+@EnableJaxRsProxyClient(classes = AuditRest.class, address = "${audit.url}")
 public class AuditClientConfiguration {
 
     public static final String AUDIT_QUEUE = "audit.queue";
 
     @Bean
-    public AuditClient asyncAuditClient(@Qualifier("auditServiceJaxRsProxyClient") AuditControllerApi auditControllerApi) {
+    public AuditClient asyncAuditClient(@Qualifier("auditRestJaxRsProxyClient") AuditRest auditRest) {
         AsyncAuditClientImpl asyncAuditClient = new AsyncAuditClientImpl();
-        asyncAuditClient.setAuditControllerApi(auditControllerApi);
+        asyncAuditClient.setAuditRest(auditRest);
         return asyncAuditClient;
     }
 
     @Bean
-    public AuditClient simpleAuditClient(@Qualifier("auditServiceJaxRsProxyClient") AuditControllerApi auditControllerApi) {
+    public AuditClient simpleAuditClient(@Qualifier("auditRestJaxRsProxyClient") AuditRest auditRest) {
         SimpleAuditClientImpl simpleAuditClient = new SimpleAuditClientImpl();
-        simpleAuditClient.setAuditControllerApi(auditControllerApi);
+        simpleAuditClient.setAuditRest(auditRest);
         return simpleAuditClient;
     }
 }

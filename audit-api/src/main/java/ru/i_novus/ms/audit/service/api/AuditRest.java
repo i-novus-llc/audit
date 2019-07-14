@@ -2,11 +2,11 @@ package ru.i_novus.ms.audit.service.api;
 
 import io.swagger.annotations.*;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.RequestBody;
 import ru.i_novus.ms.audit.model.Audit;
-import ru.i_novus.ms.audit.model.AuditCriteriaDTO;
+import ru.i_novus.ms.audit.model.AuditCriteria;
 import ru.i_novus.ms.audit.model.AuditForm;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.UUID;
@@ -18,22 +18,20 @@ import java.util.UUID;
         @ApiResponse(code = 404, message = "Нет ресурса"),
         @ApiResponse(code = 500, message = "Ошибка и текст ошибки"),
 })
-public interface AuditControllerApi {
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public interface AuditRest {
 
     @GET
     @Path("/{id}")
     @ApiOperation("Поиск события по идентификатору")
-    @Produces(MediaType.APPLICATION_JSON)
     Audit getById(@ApiParam("Идентификатор события") @PathParam("id") UUID id);
 
     @GET
     @ApiOperation("Поиск событий")
-    @Produces(MediaType.APPLICATION_JSON)
-    Page<Audit> search(@ApiParam("Критерии поиска события") @BeanParam AuditCriteriaDTO criteria);
+    Page<Audit> search(@BeanParam AuditCriteria criteria);
 
     @POST
     @ApiOperation("Добавить событие")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    Audit add(@ApiParam("Событие") @RequestBody AuditForm request);
+    Audit add(@ApiParam("Событие") @Valid AuditForm request);
 }

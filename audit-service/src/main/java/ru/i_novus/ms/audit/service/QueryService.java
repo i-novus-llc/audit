@@ -26,12 +26,12 @@ public class QueryService {
         if (nonNull(criteria.getEventType()))
             where.and(isEventTypeEquals(criteria.getEventType()));
 
-        if (nonNull(criteria.getAuditObjectTypes())) {
-            where.and(inObjectTypeNames(criteria.getAuditObjectTypes()));
+        if (nonNull(criteria.getObjectType()) && criteria.getObjectType().length > 0) {
+            where.and(inObjectTypeNames(criteria.getObjectType()));
         }
 
-        if (nonNull(criteria.getAuditObjectNames())) {
-            where.and(inObjectNameNames(criteria.getAuditObjectNames()));
+        if (nonNull(criteria.getObjectName()) && criteria.getObjectName().length > 0) {
+            where.and(inObjectNameNames(criteria.getObjectName()));
         }
 
         if (nonNull(criteria.getObjectId()))
@@ -43,8 +43,8 @@ public class QueryService {
         if (nonNull(criteria.getUsername()))
             where.and(isUsernameEquals(criteria.getUsername()));
 
-        if (nonNull(criteria.getAuditSourceWorkstation()))
-            where.and(isSourceWorkstationContains(criteria.getAuditSourceWorkstation()));
+        if (nonNull(criteria.getSourceWorkstation()))
+            where.and(isSourceWorkstationContains(criteria.getSourceWorkstation()));
 
         if (nonNull(criteria.getContext()))
             where.and(isContextContains(criteria.getContext()));
@@ -52,8 +52,8 @@ public class QueryService {
         if (nonNull(criteria.getHostname()))
             where.and(isHostnameContains(criteria.getHostname()));
 
-        if(nonNull(criteria.getAuditSourceApplications())){
-            where.and(inSourceApplicationNames(criteria.getAuditSourceApplications()));
+        if (nonNull(criteria.getSourceApplication()) && criteria.getSourceApplication().length > 0) {
+            where.and(inSourceApplicationNames(criteria.getSourceApplication()));
         }
 
         return where.getValue();

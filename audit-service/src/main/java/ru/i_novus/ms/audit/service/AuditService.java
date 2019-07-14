@@ -1,9 +1,11 @@
 package ru.i_novus.ms.audit.service;
 
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.i_novus.ms.audit.entity.AuditEntity;
 import ru.i_novus.ms.audit.entity.AuditObjectNameEntity;
@@ -32,23 +34,32 @@ public class AuditService {
     @Autowired
     private SourceApplicationService sourceApplicationService;
 
-    public Optional<AuditEntity> getById(UUID id){
+    public Optional<AuditEntity> getById(UUID id) {
         Optional<AuditEntity> optional = auditRepository.searchEntityBylastMonth(id);
         return optional.isEmpty() ? auditRepository.findById(id) : optional;
     }
 
 
-    public Page<Audit> search(AuditCriteria criteria){
+    public Page<Audit> search(AuditCriteria criteria) {
+        if (criteria.getSortingColumn() != null) {
+            Sort.Order order = new Sort.Order(
+                    Sort.Direction.fromString(criteria.getSortingOrder() == null ? "DESC" : criteria.getSortingOrder()),
+                    criteria.getSortingColumn()
+            );
+            criteria.setOrders(Lists.newArrayList(order));
+        }
         return (searchEntity(criteria)).map(AuditService::getAuditByEntity);
     }
 
-    public Page<AuditEntity> searchEntity(AuditCriteria criteria){
-        Pageable pageable = PageRequest.of(criteria.getPageNumber() - 1, criteria.getPageSize(), QueryService.toSort(criteria));
+    private Page<AuditEntity> searchEntity(AuditCriteria criteria) {
+        int size = criteria.getPageSize() > 0 ? criteria.getPageSize() : 10;
+        int pageNum = criteria.getPageNumber() > 0 ? criteria.getPageNumber() - 1 : 0;
+        Pageable pageable = PageRequest.of(pageNum, size, QueryService.toSort(criteria));
         Page<AuditEntity> page = auditRepository.findAll(QueryService.toPredicate(criteria), pageable);
         return page;
     }
 
-    public AuditEntity create(AuditForm request){
+    public AuditEntity create(AuditForm request) {
 
         AuditObjectNameEntity auditObjectName = objectNameService.getOrCreate(request.getObjectName());
         AuditObjectTypeEntity auditObjectType = objectTypeService.getOrCreate(request.getObjectType());
@@ -71,21 +82,21 @@ public class AuditService {
     }
 
 
-    public static Audit getAuditByEntity(AuditEntity entity){
+    public static Audit getAuditByEntity(AuditEntity entity) {
         Audit audit = Audit.builder()
-                    .creationDate(entity.getCreationDate())
-                    .id(entity.getId())
-                    .context(entity.getContext())
-                    .eventDate(entity.getEventDate())
-                    .eventType(entity.getEventType())
-                    .objectId(entity.getObjectId())
-                    .objectName(entity.getAuditObjectName().getName())
-                    .objectType(entity.getAuditObjectType().getName())
-                    .sourceApplication(entity.getAuditSourceApplication().getName())
-                    .sourceWorkstation(entity.getSourceWorkstation())
-                    .userId(entity.getUserId())
-                    .hostname(entity.getHostname())
-                    .username(entity.getUsername())
+                .creationDate(entity.getCreationDate())
+                .id(entity.getId())
+                .context(entity.getContext())
+                .eventDate(entity.getEventDate())
+                .eventType(entity.getEventType())
+                .objectId(entity.getObjectId())
+                .objectName(entity.getAuditObjectName().getName())
+                .objectType(entity.getAuditObjectType().getName())
+                .sourceApplication(entity.getAuditSourceApplication().getName())
+                .sourceWorkstation(entity.getSourceWorkstation())
+                .userId(entity.getUserId())
+                .hostname(entity.getHostname())
+                .username(entity.getUsername())
                 .build();
 
         return audit;

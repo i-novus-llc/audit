@@ -5,18 +5,9 @@
         <field id="name" domain="string" name="Наименование"/>
         <field id="eventDate" domain="localdatetime" name="Дата события"/>
         <field id="eventType" domain="string" name="Тип события"/>
-        <reference id="auditObjectType" name="Тип объекта" object-id="auditObjectType">
-            <field id="id" mapping="id"/>
-            <field id="name" mapping="name"/>
-        </reference>
-        <reference id="auditObjectName" name="Название объекта"  object-id="auditObjectName">
-            <field id="id" mapping="id"/>
-            <field id="name" mapping="name"/>
-        </reference>
-        <reference id="auditSourceApplication" name="Название системы" object-id="auditSourceApplication">
-            <field id="id" mapping="id"/>
-            <field id="name" mapping="name"/>
-        </reference>
+        <field id="objectType" name="Тип объекта" />
+        <field id="objectName" name="Название объекта" />
+        <field id="sourceApplication" name="Название системы" />
         <field id="sourceWorkstation" domain="string" name="Рабочая станция"/>
         <field id="objectId" domain="string" name="Идентификатор объекта"/>
         <field id="userId" domain="string" name="Идентификатор пользователя"/>

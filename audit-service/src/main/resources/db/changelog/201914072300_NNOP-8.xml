@@ -5,7 +5,6 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <property name="uuid_type" value="uuid" dbms="postgresql"/>
     <property name="uuid_function" value="gen_random_uuid()" dbms="postgresql"/>
 
     <changeSet id="NNOP-8-1" author="zamaliev">
@@ -38,8 +37,8 @@
     <changeSet id="NNOP-8-3" author="zamaliev" dbms="postgresql">
         <createProcedure dbms="postgresql"
                          encoding="utf8"
-                         path="./migration.sql"
-                         procedureName="migration"
+                         path="./create_database_for_existing_data.sql"
+                         procedureName="create_database_for_existing_data"
                          relativeToChangelogFile="true"
                          schemaName="public">
         </createProcedure>
@@ -48,7 +47,7 @@
     <changeSet id="NNOP-8-4" author="zamaliev">
         <sql>
             BEGIN;
-            SELECT migration();
+            SELECT create_database_for_existing_data();
             INSERT INTO audit.audit_test (select * from audit.audit);
             DROP TABLE IF EXISTS audit.audit;
             ALTER TABLE audit.audit_test RENAME TO audit ;
@@ -58,7 +57,7 @@
 
     <changeSet id="NNOP-8-4-1" author="zamaliev">
         <sql>
-            CREATE TABLE audit_default PARTITION OF audit.audit DEFAULT;
+            CREATE TABLE audit.audit_default PARTITION OF audit.audit DEFAULT;
         </sql>
     </changeSet>
 
@@ -70,7 +69,7 @@
 
     <changeSet id="NNOP-8-6" author="zamaliev" dbms="postgresql">
         <createTable tableName="audit_object_name" schemaName="audit">
-            <column name="id" type="${uuid_type}" defaultValueComputed="${uuid_function}">
+            <column name="id" type="uuid" defaultValueComputed="${uuid_function}">
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar">
@@ -121,10 +120,9 @@
         </sql>
     </changeSet>
 
-
     <changeSet id="NNOP-8-12" author="zamaliev">
         <addColumn tableName="audit" schemaName="audit">
-            <column name="object_name_id" type="${uuid_type}">
+            <column name="object_name_id" type="uuid">
                 <constraints foreignKeyName="object_name_fk" referencedTableName="audit.audit_object_name"
                              referencedColumnNames="id"/>
             </column>
@@ -133,7 +131,7 @@
 
     <changeSet id="NNOP-8-13" author="zamaliev">
         <addColumn tableName="audit" schemaName="audit">
-            <column name="object_type_id" type="${uuid_type}">
+            <column name="object_type_id" type="uuid">
                 <constraints foreignKeyName="object_type_fk" referencedTableName="audit.audit_object_type"
                              referencedColumnNames="id"/>
             </column>
@@ -142,7 +140,7 @@
 
     <changeSet id="NNOP-8-14" author="zamaliev">
         <addColumn tableName="audit" schemaName="audit">
-            <column name="source_application_id" type="${uuid_type}">
+            <column name="source_application_id" type="uuid">
                 <constraints foreignKeyName="source_application_fk" referencedTableName="audit.audit_source_application"
                              referencedColumnNames="id"/>
             </column>
@@ -185,6 +183,12 @@
 
     <changeSet id="NNOP-8-20" author="zamaliev">
         <dropColumn tableName="audit" schemaName="audit" columnName="source_application"/>
+    </changeSet>
+
+    <changeSet id="NNOP-8-21" author="zamaliev" dbms="postgresql">
+        <sql>
+            DROP EXTENSION IF EXISTS pgcrypto CASCADE;
+        </sql>
     </changeSet>
 
 
