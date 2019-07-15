@@ -49,7 +49,7 @@ public class AuditCriteria extends RestCriteria {
     private String username;
 
     @ApiParam("Имя программы")
-    @QueryParam("auditSourceApplication")
+    @QueryParam("auditSourceApplications")
     private String[] sourceApplication;
 
     @ApiParam("Рабочая станция")
