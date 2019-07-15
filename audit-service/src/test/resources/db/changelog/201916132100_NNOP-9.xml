@@ -24,10 +24,18 @@
 
     <changeSet id="NNOP-7-4" author="zamaliev" dbms="postgresql">
         <sql>
+            CREATE TABLE IF NOT EXISTS audit.audit_2019_07
+            PARTITION OF audit.audit
+            FOR VALUES FROM ('2019-07-01') TO ('2019-08-01');
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-5" author="zamaliev" dbms="postgresql">
+        <sql>
             INSERT INTO audit.audit(
                 id, event_date, event_type, object_type_id, object_id, object_name_id, user_id, username, source_application_id, source_workstation, context, creation_date)
-            VALUES ('9264b032-ff05-11e8-8eb2-f2801f1b9fd1', 'now()', 'EventType', '03912eee-a667-11e9-a2a3-2a2ae2dbcce4', 'ObjectId', '039131aa-a667-11e9-a2a3-2a2ae2dbcce4',
-                'UserId', 'Username', '03913538-a667-11e9-a2a3-2a2ae2dbcce4', 'SourceWorkstation', '{"field": "name", "value": "Значение"}', 'now()');
+            VALUES ('9264b032-ff05-11e8-8eb2-f2801f1b9fd1', '2019-07-12', 'EventType', '03912eee-a667-11e9-a2a3-2a2ae2dbcce4', 'ObjectId', '039131aa-a667-11e9-a2a3-2a2ae2dbcce4',
+                'UserId', 'Username', '03913538-a667-11e9-a2a3-2a2ae2dbcce4', 'SourceWorkstation', '{"field": "name", "value": "Значение"}', '2019-07-12');
         </sql>
     </changeSet>
 

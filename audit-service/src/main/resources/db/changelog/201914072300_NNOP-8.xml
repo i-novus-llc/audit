@@ -55,12 +55,6 @@
         </sql>
     </changeSet>
 
-    <changeSet id="NNOP-8-4-1" author="zamaliev">
-        <sql>
-            CREATE TABLE audit.audit_default PARTITION OF audit.audit DEFAULT;
-        </sql>
-    </changeSet>
-
     <changeSet id="NNOP-8-5" author="zamaliev" dbms="postgresql">
         <sql>
             CREATE EXTENSION IF NOT EXISTS pgcrypto;
