@@ -26,15 +26,12 @@ public class AuditRestImpl implements AuditRest {
     @Override
     public Audit getById(UUID id) {
         Optional<AuditEntity> auditEntity = auditService.getById(id);
-        if (auditEntity.isEmpty())
-            throw new NotFoundException();
-        return AuditService.getAuditByEntity(auditEntity.get());
+        return AuditService.getAuditByEntity(auditEntity.orElseThrow(NotFoundException::new));
     }
 
     @Override
     public Page<Audit> search(AuditCriteria criteria) {
-        Page<Audit> auditPage = auditService.search(criteria);
-        return auditPage;
+        return auditService.search(criteria);
     }
 
     @Override

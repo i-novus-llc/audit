@@ -55,8 +55,7 @@ public class AuditService {
         int size = criteria.getPageSize() > 0 ? criteria.getPageSize() : 10;
         int pageNum = criteria.getPageNumber() > 0 ? criteria.getPageNumber() - 1 : 0;
         Pageable pageable = PageRequest.of(pageNum, size, QueryService.toSort(criteria));
-        Page<AuditEntity> page = auditRepository.findAll(QueryService.toPredicate(criteria), pageable);
-        return page;
+        return auditRepository.findAll(QueryService.toPredicate(criteria), pageable);
     }
 
     public AuditEntity create(AuditForm request) {
@@ -83,7 +82,7 @@ public class AuditService {
 
 
     public static Audit getAuditByEntity(AuditEntity entity) {
-        Audit audit = Audit.builder()
+        return Audit.builder()
                 .creationDate(entity.getCreationDate())
                 .id(entity.getId())
                 .context(entity.getContext())
@@ -98,7 +97,5 @@ public class AuditService {
                 .hostname(entity.getHostname())
                 .username(entity.getUsername())
                 .build();
-
-        return audit;
     }
 }
