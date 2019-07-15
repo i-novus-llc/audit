@@ -64,14 +64,6 @@ public class AuditCriteria extends RestCriteria {
     @QueryParam("hostname")
     private String hostname;
 
-//    @ApiParam("Страница")
-//    @QueryParam("page")
-//    private Integer page;
-//
-//    @ApiParam("Размер")
-//    @QueryParam("size")
-//    private Integer size;
-
     @ApiParam("Поле сортировки")
     @QueryParam("sortingColumn")
     private String sortingColumn;
