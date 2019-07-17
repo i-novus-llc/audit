@@ -1,8 +1,3 @@
-FROM gcr.io/distroless/java:11
+FROM 538721144237.dkr.ecr.eu-west-1.amazonaws.com/openjdk:11_jdk_v1.0
 
-EXPOSE 8080
-
-ARG JAR_FILE
-COPY ${JAR_FILE} app.jar
-
-ENTRYPOINT ["java","-jar","app.jar"]
+EXPOSE 8082
