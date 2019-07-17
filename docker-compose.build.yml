@@ -3,15 +3,13 @@ version: "3.6"
 services:
 
   audit-service:
-    image: 538721144237.dkr.ecr.eu-west-1.amazonaws.com/audit-service:${TAG:-latest}
     build:
       context: audit-service
       args:
         JAR_FILE: target/audit-service.jar
 
-  audit-ui:
-    image: 538721144237.dkr.ecr.eu-west-1.amazonaws.com/audit-ui:${TAG:-latest}
+  audit-web:
     build:
-      context: audit-ui
+      context: audit-web
       args:
-        JAR_FILE: target/audit-ui.jar
+        JAR_FILE: target/audit-web.jar

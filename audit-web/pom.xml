@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>audit-ui</artifactId>
+    <artifactId>audit-web</artifactId>
 
     <dependencies>
 
@@ -27,7 +27,7 @@
     </dependencies>
 
     <build>
-        <finalName>audit-ui</finalName>
+        <finalName>audit-web</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -35,6 +35,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>

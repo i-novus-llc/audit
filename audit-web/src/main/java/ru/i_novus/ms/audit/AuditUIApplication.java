@@ -6,9 +6,9 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 @SpringBootApplication
 
-public class UiApplication extends SpringBootServletInitializer {
+public class AuditUIApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        SpringApplication.run(UiApplication.class, args);
+        SpringApplication.run(AuditUIApplication.class, args);
     }
 }

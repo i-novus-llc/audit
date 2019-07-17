@@ -4,40 +4,15 @@ services:
 
   postgres:
     image: postgres:11.4-alpine
-#    ports:
-#      - 5432:5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=audit
-    networks:
-      - audit
 
   audit-service:
     environment:
-      - AUDIT_BACKEND_URL=http://audit-service:8080
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/audit
-#    ports:
-#      - 8082:8082
-    build:
-      context: audit-service
-      args:
-        JAR_FILE: target/audit-service.jar
-    networks:
-      - audit
 
-  audit-ui:
+  audit-web:
     environment:
       - AUDIT_BACKEND_URL=http://audit-service:8082/api
-#    ports:
-#      - 8083:8083
-    image: audi
-    build:
-      context: audit-ui
-      args:
-        JAR_FILE: target/audit-ui.jar
-    networks:
-      - audit
-
-networks:
-  audit:

@@ -25,7 +25,7 @@
         <module>audit-api</module>
         <module>audit-service</module>
         <module>audit-client</module>
-        <module>audit-ui</module>
+        <module>audit-web</module>
     </modules>
 
 </project>
