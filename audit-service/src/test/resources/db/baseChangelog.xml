@@ -7,5 +7,5 @@
 
     <include file="changelog/201812061700_NNOP-7.xml" relativeToChangelogFile="true"/>
     <include file="changelog/201914072300_NNOP-8.xml" relativeToChangelogFile="true"/>
-
+    <include file="changelog/201916132100_NNOP-9.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

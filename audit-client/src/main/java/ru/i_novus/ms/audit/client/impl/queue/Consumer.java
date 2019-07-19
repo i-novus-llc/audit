@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 import ru.i_novus.ms.audit.model.AuditForm;
-import ru.i_novus.ms.audit.service.api.AuditControllerApi;
+import ru.i_novus.ms.audit.service.api.AuditRest;
 
 import static ru.i_novus.ms.audit.client.AuditClientConfiguration.AUDIT_QUEUE;
 
@@ -12,15 +12,15 @@ import static ru.i_novus.ms.audit.client.AuditClientConfiguration.AUDIT_QUEUE;
 public class Consumer {
 
     @Autowired
-    private AuditControllerApi auditControllerApi;
+    private AuditRest auditRest;
 
     @Autowired
-    public Consumer(AuditControllerApi auditControllerApi) {
-        this.auditControllerApi = auditControllerApi;
+    public Consumer(AuditRest auditRest) {
+        this.auditRest = auditRest;
     }
 
     @JmsListener(destination = AUDIT_QUEUE)
     public void receiveMessage(AuditForm request) {
-        auditControllerApi.add(request);
+        auditRest.add(request);
     }
 }

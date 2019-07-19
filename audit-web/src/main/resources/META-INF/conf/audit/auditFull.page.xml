@@ -4,7 +4,7 @@
             <set>
                 <row>
                     <text id="auditSourceApplication_label">Система/Модуль:</text>
-                    <text id="auditSourceApplication">{auditSourceApplication.name}</text>
+                    <text id="auditSourceApplication">{sourceApplication}</text>
                 </row>
                 <row>
                     <text label="Идентификатор объекта" id="id_label">Идентификатор объекта:</text>
@@ -12,11 +12,11 @@
                 </row>
                 <row>
                     <text label="Наименование объекта" id="objectName_label">Наименование объекта:</text>
-                    <text id="objectName">{auditObjectName.name}</text>
+                    <text id="objectName">{objectName}</text>
                 </row>
                 <row>
                     <text label="Тип события" id="objectType_label">Тип события:</text>
-                    <text id="objectType">{auditObjectType.name}</text>
+                    <text id="objectType">{objectType}</text>
                 </row>
                 <row>
                     <text label="Дата и время" id="eventDate_label">Дата и время:</text>
@@ -37,10 +37,9 @@
                 <row>
                     <text label="Данные" id="context_label">Данные:</text>
                     <line collapsible="true">
-                        <text id="context" visible="false">{context}</text>
                         <code-editor id="context_json" label="context" language="javascript" rows="10">
                             <dependencies>
-                                <set-value on="context">
+                                <set-value>
                                     str = context;
                                     str = str.split("'").join("\"");
                                     str = str.replace("{", "{\n\t");

@@ -6,20 +6,13 @@ services:
     image: postgres:11.4-alpine
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=dREAM1cACAO
+      - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=audit
-    networks:
-      - audit
 
   audit-service:
     environment:
-      AUDIT_BACKEND_URL: http://audit-service:8080
-    build:
-      context: audit-service
-      args:
-        JAR_FILE: target/audit-service.jar
-    networks:
-      - audit
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/audit
 
-networks:
-  audit:
+  audit-web:
+    environment:
+      - AUDIT_BACKEND_URL=http://audit-service:8082/api

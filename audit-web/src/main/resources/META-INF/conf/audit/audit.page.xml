@@ -36,16 +36,16 @@
                 <columns>
                     <column text-field-id="eventDate" label="Дата и время">
                         <link>
-                            <show-modal page-id="auditFull" route="{url}/audit/{id}">
+                            <show-modal page-id="auditFull" route="{audit.backend.url}/audit/{id}">
                                 <pre-filters>
                                     <eq field-id="id" value="{id}"/>
                                 </pre-filters>
                             </show-modal>
                         </link>
                     </column>
-                    <column text-field-id="auditSourceApplication.name" label="Система/Модуль">
+                    <column text-field-id="sourceApplication" label="Система/Модуль">
                         <link>
-                            <show-modal page-id="auditFull" route="{url}/audit/{id}">
+                            <show-modal page-id="auditFull" route="{audit.backend.url}/audit/{id}">
                                 <pre-filters>
                                     <eq field-id="id" value="{id}"/>
                                 </pre-filters>
@@ -54,7 +54,7 @@
                     </column>
                     <column text-field-id="sourceWorkstation" label="Рабочая станция">
                         <link>
-                            <show-modal page-id="auditFull" route="{url}/audit/{id}">
+                            <show-modal page-id="auditFull" route="{audit.backend.url}/audit/{id}">
                                 <pre-filters>
                                     <eq field-id="id" value="{id}"/>
                                 </pre-filters>
@@ -63,7 +63,7 @@
                     </column>
                     <column text-field-id="hostname" sorting-field-id="hostname" sorting-direction="desc" label="Имя сервера">
                         <link>
-                            <show-modal page-id="auditFull" route="{url}/audit/{id}">
+                            <show-modal page-id="auditFull" route="{audit.backend.url}/audit/{id}">
                                 <pre-filters>
                                     <eq field-id="id" value="{id}"/>
                                 </pre-filters>
@@ -72,16 +72,16 @@
                     </column>
                     <column text-field-id="objectId" label="Идентификатор объекта">
                         <link>
-                            <show-modal page-id="auditFull" route="{url}/audit/{id}">
+                            <show-modal page-id="auditFull" route="{audit.backend.url}/audit/{id}">
                                 <pre-filters>
                                     <eq field-id="id" value="{id}"/>
                                 </pre-filters>
                             </show-modal>
                         </link>
                     </column>
-                    <column text-field-id="auditObjectName.name" label="Объект">
+                    <column text-field-id="objectName" label="Объект">
                         <link>
-                            <show-modal page-id="auditFull" route="{url}/audit/{id}">
+                            <show-modal page-id="auditFull" route="{audit.backend.url}/audit/{id}">
                                 <pre-filters>
                                     <eq field-id="id" value="{id}"/>
                                 </pre-filters>
@@ -90,16 +90,16 @@
                     </column>
                     <column text-field-id="username" label="Пользователь">
                     <link>
-                        <show-modal page-id="auditFull" route="{url}/audit/{id}">
+                        <show-modal page-id="auditFull" route="{audit.backend.url}/audit/{id}">
                             <pre-filters>
                                 <eq field-id="id" value="{id}"/>
                             </pre-filters>
                         </show-modal>
                     </link>
                     </column>
-                    <column text-field-id="auditObjectType.name" label="Тип события" >
+                    <column text-field-id="objectType" label="Тип события" >
                         <link>
-                            <show-modal page-id="auditFull" route="{url}/audit/{id}">
+                            <show-modal page-id="auditFull" route="{audit.backend.url}/audit/{id}">
                                 <pre-filters>
                                     <eq field-id="id" value="{id}"/>
                                 </pre-filters>

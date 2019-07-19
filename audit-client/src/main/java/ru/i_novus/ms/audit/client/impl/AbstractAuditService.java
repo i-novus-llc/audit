@@ -3,17 +3,17 @@ package ru.i_novus.ms.audit.client.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.i_novus.ms.audit.client.AuditClient;
 import ru.i_novus.ms.audit.client.impl.converter.RequestConverter;
-import ru.i_novus.ms.audit.service.api.AuditControllerApi;
+import ru.i_novus.ms.audit.service.api.AuditRest;
 
 public abstract class AbstractAuditService implements AuditClient {
 
-    AuditControllerApi auditControllerApi;
+    AuditRest auditRest;
 
     RequestConverter requestConverter;
 
     @Autowired
-    public void setAuditControllerApi(AuditControllerApi auditControllerApi) {
-        this.auditControllerApi = auditControllerApi;
+    public void setAuditRest(AuditRest auditRest) {
+        this.auditRest = auditRest;
     }
 
     @Autowired

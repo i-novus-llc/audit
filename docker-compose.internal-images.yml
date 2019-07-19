@@ -1,5 +1,9 @@
 version: "3.6"
 
 services:
+
   audit-service:
-    image: "538721144237.dkr.ecr.eu-west-1.amazonaws.com/audit:${TAG}"
+    image: 538721144237.dkr.ecr.eu-west-1.amazonaws.com/audit/audit-service:${TAG:-latest}
+
+  audit-web:
+    image: 538721144237.dkr.ecr.eu-west-1.amazonaws.com/audit/audit-web:${TAG:-latest}

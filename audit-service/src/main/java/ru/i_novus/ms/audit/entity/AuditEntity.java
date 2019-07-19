@@ -18,7 +18,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"auditObjectTypes", "auditObjectNames", "auditSourceApplication"})
+@ToString(exclude = {"auditObjectType", "auditObjectName", "auditSourceApplication"})
 public class AuditEntity {
 
     @Id
@@ -70,8 +70,8 @@ public class AuditEntity {
 
     @PrePersist
     public void prePersist() {
-        id = id == null? UUID.randomUUID(): id;
-        creationDate = creationDate == null? LocalDateTime.now(Clock.systemUTC()) : creationDate;
+        id = id == null ? UUID.randomUUID() : id;
+        creationDate = creationDate == null ? LocalDateTime.now(Clock.systemUTC()) : creationDate;
     }
 
 }
