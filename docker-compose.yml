@@ -15,8 +15,9 @@ services:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/audit
       - JAVA_OPTS=-Xmx200m
+      - SERVER_PORT=8080
     ports:
-      - 8082
+      - 8080
     deploy:
       resources:
         limits:
@@ -37,8 +38,9 @@ services:
     environment:
       - AUDIT_BACKEND_URL=http://audit-service:8082/api
       - JAVA_OPTS=-Xmx300m
+      - SERVER_PORT=8080
     ports:
-      - 8083
+      - 8080
     deploy:
       resources:
         limits:
