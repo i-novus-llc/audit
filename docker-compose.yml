@@ -4,6 +4,8 @@ services:
 
   postgres:
     image: postgres:11.4-alpine
+    ports:
+      - 5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -12,7 +14,43 @@ services:
   audit-service:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/audit
+      - JAVA_OPTS=-Xmx200m
+    ports:
+      - 8082
+    deploy:
+      resources:
+        limits:
+          memory: 600M
+      restart_policy:
+        max_attempts: 3
+      placement:
+        constraints:
+          - node.labels.dc == hetzner
+    healthcheck:
+      test: curl -f http://localhost:8080/monitoring/health | grep -io '^{"status":"UP"' || exit 1
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 300s
 
   audit-web:
     environment:
       - AUDIT_BACKEND_URL=http://audit-service:8082/api
+      - JAVA_OPTS=-Xmx300m
+    ports:
+      - 8083
+    deploy:
+      resources:
+        limits:
+          memory: 700M
+      restart_policy:
+        max_attempts: 3
+      placement:
+        constraints:
+          - node.labels.dc == hetzner
+    healthcheck:
+      test: curl -f http://localhost:8080/monitoring/health | grep -io '^{"status":"UP"' || exit 1
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 300s

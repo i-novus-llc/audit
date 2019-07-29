@@ -24,6 +24,11 @@
             <version>7.2.21</version>
         </dependency>
 
+        <dependency>
+            <groupId>net.n2oapp.platform</groupId>
+            <artifactId>n2o-platform-starter-ms</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
