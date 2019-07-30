@@ -10,6 +10,13 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=audit
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+      placement:
+        constraints:
+          - node.labels.type == db
 
   audit-service:
     environment:
