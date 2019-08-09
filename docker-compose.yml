@@ -28,7 +28,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 600M
+          memory: 700M
       restart_policy:
         max_attempts: 3
       placement:
@@ -51,7 +51,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 700M
+          memory: 800M
       restart_policy:
         max_attempts: 3
       placement:
