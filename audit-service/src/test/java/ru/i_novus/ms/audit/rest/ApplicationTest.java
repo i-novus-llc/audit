@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.i_novus.ms.audit.Application;
-import ru.i_novus.ms.audit.config.BackendConfiguration;
 import ru.i_novus.ms.audit.model.*;
 import ru.i_novus.ms.audit.service.api.AuditRest;
 
@@ -35,7 +34,6 @@ import static org.junit.Assert.*;
 //TODO поддержка 11 Postgres
 //@EnableEmbeddedPg
 @Ignore
-@Import(BackendConfiguration.class)
 public class ApplicationTest {
 
     private static final String TEST = "RANOSDADAFAFAGAGSKENGkngskl;fhlksfgnhklsfgnhklsfgnhfgkls";
