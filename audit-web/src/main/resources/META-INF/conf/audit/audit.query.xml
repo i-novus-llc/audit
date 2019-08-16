@@ -9,8 +9,6 @@
         <rest>${audit.backend.url}/audit/{id}</rest>
     </unique>
 
-
-
     <fields>
 
         <field id="id" domain="string">
@@ -21,7 +19,7 @@
             </filters>
         </field>
 
-        <field id="eventDate" domain="string">
+        <field id="eventDate" domain="localdatetime">
             <select/>
             <sorting mapping="['direction']">sortingColumn=eventDate&amp;sortingOrder={direction}</sorting>
             <filters>

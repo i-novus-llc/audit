@@ -16,11 +16,11 @@ import java.time.LocalDateTime;
 @Setter
 public class AuditCriteria extends RestCriteria {
 
-    @ApiParam(value = "Дата события (от)", format = "dd.MM.yyyy HH:mm:ss")
+    @ApiParam(value = "Дата события (от)", format = "yyyy-MM-ddTHH:mm:ss")
     @QueryParam("eventDateFrom")
     private LocalDateTime eventDateFrom;
 
-    @ApiParam(value = "Дата события (до)", format = "dd.MM.yyyy HH:mm:ss")
+    @ApiParam(value = "Дата события (до)", format = "yyyy-MM-ddTHH:mm:ss")
     @QueryParam("eventDateTo")
     private LocalDateTime eventDateTo;
 

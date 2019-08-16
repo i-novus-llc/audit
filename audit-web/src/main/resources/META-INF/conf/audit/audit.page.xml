@@ -1,19 +1,26 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<page xmlns="http://n2oapp.net/framework/config/schema/page-2.0" object-id="audit" layout="TopBottomLayout" route="/">
+<page xmlns="http://n2oapp.net/framework/config/schema/page-2.0"
+      object-id="audit"
+      name="Журнал аудита">
 
     <regions>
-        <panel place="top" id="main">
+        <region place="single">
             <table id="audit_table" query-id="audit" size="10" name="Аудит Данных">
                 <filters>
                     <row>
                         <date-interval id="period" label="Дата и время" required="true">
-                            <default-value begin="{moment().subtract(31, 'days').format('DD.MM.YYYY HH:mm:ss')}" end="{moment().format('DD.MM.YYYY HH:mm:ss')}"/>
+                            <default-value begin="{moment().subtract(31, 'days').format('DD.MM.YYYY HH:mm:ss')}"
+                                           end="{moment().format('DD.MM.YYYY HH:mm:ss')}"/>
                             <validations>
-                                <condition id="checkDate" client-moment="before-load" field-id="objectId" severity="danger" message="Чтобы искать записи с интервалом больше 31 дня укажите Идентификатор объекта" src="validation.js" on="period, objectId"/>
+                                <condition id="checkDate" client-moment="before-load" field-id="objectId"
+                                           severity="danger"
+                                           message="Чтобы искать записи с интервалом больше 31 дня укажите Идентификатор объекта"
+                                           src="validation.js" on="period, objectId"/>
                             </validations>
                         </date-interval>
-                        <input-select id="auditSourceApplications" label="Система/Модуль" type="multi" query-id="auditSourceApplication"
-                                       label-field-id="name">
+                        <input-select id="auditSourceApplications" label="Система/Модуль" type="multi"
+                                      query-id="auditSourceApplication"
+                                      label-field-id="name">
                         </input-select>
                         <input-select id="auditObjectTypes" label="Тип события" type="multi" query-id="auditObjectType"
                                       label-field-id="name">
@@ -26,7 +33,8 @@
 
                         <input-text id="objectId" label="Идентификатор объекта" domain="string">
                             <validations>
-                                <condition id="checkDate" client-moment="before-load" severity="danger" message="Укажите значение" src="validation.js" on="period, objectId"/>
+                                <condition id="checkDate" client-moment="before-load" severity="danger"
+                                           message="Укажите значение" src="validation.js" on="period, objectId"/>
                             </validations>
                         </input-text>
 
@@ -61,7 +69,8 @@
                             </show-modal>
                         </link>
                     </column>
-                    <column text-field-id="hostname" sorting-field-id="hostname" sorting-direction="desc" label="Имя сервера">
+                    <column text-field-id="hostname" sorting-field-id="hostname" sorting-direction="desc"
+                            label="Имя сервера">
                         <link>
                             <show-modal page-id="auditFull" route="{audit.backend.url}/audit/{id}">
                                 <pre-filters>
@@ -89,15 +98,15 @@
                         </link>
                     </column>
                     <column text-field-id="username" label="Пользователь">
-                    <link>
-                        <show-modal page-id="auditFull" route="{audit.backend.url}/audit/{id}">
-                            <pre-filters>
-                                <eq field-id="id" value="{id}"/>
-                            </pre-filters>
-                        </show-modal>
-                    </link>
+                        <link>
+                            <show-modal page-id="auditFull" route="{audit.backend.url}/audit/{id}">
+                                <pre-filters>
+                                    <eq field-id="id" value="{id}"/>
+                                </pre-filters>
+                            </show-modal>
+                        </link>
                     </column>
-                    <column text-field-id="objectType" label="Тип события" >
+                    <column text-field-id="objectType" label="Тип события">
                         <link>
                             <show-modal page-id="auditFull" route="{audit.backend.url}/audit/{id}">
                                 <pre-filters>
@@ -108,7 +117,7 @@
                     </column>
                 </columns>
             </table>
-        </panel>
+        </region>
     </regions>
 
 </page>

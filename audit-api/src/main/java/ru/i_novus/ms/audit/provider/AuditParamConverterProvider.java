@@ -9,7 +9,7 @@ import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Provider
+//@Provider
 public class AuditParamConverterProvider implements javax.ws.rs.ext.ParamConverterProvider {
 
     private LocalDateTimeParamConverter localDateParamConverter = new LocalDateTimeParamConverter();
