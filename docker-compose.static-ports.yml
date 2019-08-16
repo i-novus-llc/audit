@@ -1,0 +1,15 @@
+version: '3.6'
+
+services:
+
+  postgres:
+    ports:
+      - 8952:5432
+
+  audit-service:
+    ports:
+      - 8951:8080
+
+  audit-web:
+    ports:
+      - 8950:8080
