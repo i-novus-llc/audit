@@ -4,12 +4,12 @@ services:
 
   audit-service:
     build:
-      context: audit-service
+      context: .
       args:
-        JAR_FILE: target/audit-service.jar
+        JAR_FILE: audit-service/target/audit-service.jar
 
   audit-web:
     build:
-      context: audit-web
+      context: .
       args:
-        JAR_FILE: target/audit-web.jar
+        JAR_FILE: audit-web/target/audit-web.jar
