@@ -15,10 +15,15 @@
         <version>2.12</version>
     </parent>
 
+    <scm>
+        <connection>scm:git:https://git.i-novus.ru/microservices/audit.git</connection>
+        <url>https://git.i-novus.ru/microservices/audit</url>
+        <developerConnection>scm:git:https://git.i-novus.ru/microservices/audit.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <aws.region>eu-west-1</aws.region>
-        <aws.accountId>538721144237</aws.accountId>
         <config.server.enable>false</config.server.enable>
         <n2o.version>7.3.17</n2o.version>
     </properties>
