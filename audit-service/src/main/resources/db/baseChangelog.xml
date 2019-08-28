@@ -7,7 +7,7 @@
 
     <include file="changelog/201812061700_NNOP-7.xml" relativeToChangelogFile="true"/>
     <include file="changelog/201914072300_NNOP-8.xml" relativeToChangelogFile="true"/>
-    <include file="changelog/2019127082300_AUDIT-18_audit_object_type_table.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/201908272300_AUDIT-18_audit_object_type_table.xml" relativeToChangelogFile="true"/>
     <include file="changelog/201908271154_AUDIT-17_create_audit_type_table.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
