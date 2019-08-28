@@ -9,13 +9,13 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "audit_object_type")
+@Table(name = "audit_object")
 @Getter
 @Setter
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class AuditObjectTypeEntity {
+public class AuditObjectEntity {
 
     @Id
     @Access(AccessType.PROPERTY)
@@ -24,6 +24,9 @@ public class AuditObjectTypeEntity {
 
     @Column(length = 60)
     private String name;
+
+    @Column(length = 60)
+    private String type;
 
     @OneToMany(mappedBy = "auditObjectType")
     @JsonIgnore

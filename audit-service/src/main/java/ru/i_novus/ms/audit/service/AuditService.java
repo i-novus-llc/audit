@@ -9,7 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.i_novus.ms.audit.entity.AuditEntity;
 import ru.i_novus.ms.audit.entity.AuditObjectNameEntity;
-import ru.i_novus.ms.audit.entity.AuditObjectTypeEntity;
+import ru.i_novus.ms.audit.entity.AuditObjectEntity;
 import ru.i_novus.ms.audit.entity.AuditSourceApplicationEntity;
 import ru.i_novus.ms.audit.model.Audit;
 import ru.i_novus.ms.audit.model.AuditCriteria;
@@ -61,12 +61,12 @@ public class AuditService {
     public AuditEntity create(AuditForm request) {
 
         AuditObjectNameEntity auditObjectName = objectNameService.getOrCreate(request.getObjectName());
-        AuditObjectTypeEntity auditObjectType = objectTypeService.getOrCreate(request.getObjectType());
+        AuditObjectEntity auditObject = objectTypeService.getOrCreate(request.getObjectType());
         AuditSourceApplicationEntity auditSourceApplication = sourceApplicationService.getOrCreate(request.getSourceApplication());
 
         AuditEntity entity = AuditEntity.builder()
                 .auditObjectName(auditObjectName)
-                .auditObjectType(auditObjectType)
+                .auditObjectType(auditObject)
                 .auditSourceApplication(auditSourceApplication)
                 .context(request.getContext())
                 .eventDate(request.getEventDate())
