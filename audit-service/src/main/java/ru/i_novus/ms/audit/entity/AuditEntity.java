@@ -34,7 +34,7 @@ public class AuditEntity {
 
     @ManyToOne
     @JoinColumn(name = "object_type_id", nullable = false)
-    private AuditObjectTypeEntity auditObjectType;
+    private AuditObjectEntity auditObjectType;
 
     @ManyToOne
     @JoinColumn(name = "object_name_id", nullable = false)
