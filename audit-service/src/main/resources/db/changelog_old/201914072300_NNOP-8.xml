@@ -40,11 +40,11 @@
     </changeSet>
 
     <changeSet id="NNOP-8-3-1" author="zamaliev" dbms="postgresql">
+        <validCheckSum>8:c8989e2dcf176fab92a411c8acc3d41e</validCheckSum>
         <createProcedure dbms="postgresql"
                          encoding="utf8"
-                         path="./create_database_for_existing_data.sql"
+                         path="db/sql/create_database_for_existing_data.sql"
                          procedureName="create_database_for_existing_data"
-                         relativeToChangelogFile="true"
                          schemaName="public">
         </createProcedure>
     </changeSet>
