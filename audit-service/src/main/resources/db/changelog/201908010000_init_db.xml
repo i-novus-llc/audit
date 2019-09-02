@@ -162,7 +162,7 @@
     <changeSet id="NNOP-8-6-1" author="zamaliev" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="audit_object_type" schemaName="audit"/>
+                <tableExists tableName="audit_object_name" schemaName="audit"/>
             </not>
         </preConditions>
         <createTable tableName="audit_object_name" schemaName="audit">
