@@ -26,7 +26,6 @@ public class EventTypeEntity {
     @Column(name = "audit_type_id", nullable = false)
     private Integer auditTypeId;
 
-
     @PrePersist
     public void prePersist() {
         id = id == null ? UUID.randomUUID() : id;

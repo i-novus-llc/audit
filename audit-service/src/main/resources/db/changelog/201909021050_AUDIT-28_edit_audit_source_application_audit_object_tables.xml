@@ -212,5 +212,18 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="AUDIT-28_audit_audit_type_id_add_column" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="audit" columnName="audit_type_id" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="audit" schemaName="audit">
+            <column name="audit_type_id" type="int" remarks="Идентификатор типа журнала"/>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="audit" schemaName="audit" columnName="audit_type_id"/>
+        </rollback>
+    </changeSet>
 
 </databaseChangeLog>
