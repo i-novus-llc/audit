@@ -6,8 +6,6 @@ import com.querydsl.core.types.dsl.Expressions;
 import ru.i_novus.ms.audit.entity.QAuditEntity;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
 
 public final class AuditPredicates {
 
@@ -22,44 +20,32 @@ public final class AuditPredicates {
         return QAuditEntity.auditEntity.eventDate.before(to).or(QAuditEntity.auditEntity.eventDate.eq(to));
     }
 
-    public static BooleanExpression inSourceApplicationIds(List<UUID> ids){
-        return QAuditEntity.auditEntity.auditSourceApplication.id.in(ids);
-    }
-
-    public static BooleanExpression inObjectTypeIds(List<UUID> ids){
-        return QAuditEntity.auditEntity.auditObjectType.id.in(ids);
-    }
-
-    public static BooleanExpression inObjectNameIds(List<UUID> ids){
-        return QAuditEntity.auditEntity.auditObjectName.id.in(ids);
-    }
-
     public static BooleanExpression isEventTypeEquals(String value) {
         return QAuditEntity.auditEntity.eventType.equalsIgnoreCase(value.trim());
     }
 
     public static BooleanExpression isObjectTypeEquals(String value) {
-        return QAuditEntity.auditEntity.auditObjectType.name.equalsIgnoreCase(value.trim());
+        return QAuditEntity.auditEntity.auditObjectType.equalsIgnoreCase(value.trim());
     }
 
     public static BooleanExpression isObjectNameEquals(String value) {
-        return QAuditEntity.auditEntity.auditObjectName.name.equalsIgnoreCase(value.trim());
+        return QAuditEntity.auditEntity.auditObjectName.equalsIgnoreCase(value.trim());
     }
 
     public static BooleanExpression isObjectIdEquals(String value) {
         return QAuditEntity.auditEntity.objectId.containsIgnoreCase(value.trim());
     }
 
-    public static BooleanExpression inSourceApplicationNames(String[] names){
-        return QAuditEntity.auditEntity.auditSourceApplication.name.in(names);
+    public static BooleanExpression inSourceApplicationNames(String[] names) {
+        return QAuditEntity.auditEntity.auditSourceApplication.in(names);
     }
 
-    public static BooleanExpression inObjectTypeNames(String[] names){
-        return QAuditEntity.auditEntity.auditObjectType.name.in(names);
+    public static BooleanExpression inObjectTypeNames(String[] names) {
+        return QAuditEntity.auditEntity.auditObjectType.in(names);
     }
 
-    public static BooleanExpression inObjectNameNames(String[] names){
-        return QAuditEntity.auditEntity.auditObjectName.name.in(names);
+    public static BooleanExpression inObjectNameNames(String[] names) {
+        return QAuditEntity.auditEntity.auditObjectName.in(names);
     }
 
 
@@ -72,7 +58,7 @@ public final class AuditPredicates {
     }
 
     public static BooleanExpression isSourceApplicationContains(String value) {
-        return QAuditEntity.auditEntity.auditSourceApplication.name.equalsIgnoreCase(value.trim());
+        return QAuditEntity.auditEntity.auditSourceApplication.equalsIgnoreCase(value.trim());
     }
 
     public static BooleanExpression isSourceWorkstationContains(String value) {
@@ -86,7 +72,7 @@ public final class AuditPredicates {
                 Expressions.constant(value.trim()));
     }
 
-    public static BooleanExpression isHostnameContains(String value){
+    public static BooleanExpression isHostnameContains(String value) {
         return QAuditEntity.auditEntity.hostname.equalsIgnoreCase(value.trim());
     }
 }
