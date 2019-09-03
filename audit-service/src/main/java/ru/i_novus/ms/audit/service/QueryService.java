@@ -5,12 +5,14 @@ import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.CollectionUtils;
 import ru.i_novus.ms.audit.model.AuditCriteria;
+import ru.i_novus.ms.audit.model.EventTypeCriteria;
+import ru.i_novus.ms.audit.repository.predicates.EventTypePredicates;
 
 import java.util.Collections;
 import java.util.List;
 
 import static java.util.Objects.nonNull;
-import static ru.i_novus.ms.audit.repository.AuditPredicates.*;
+import static ru.i_novus.ms.audit.repository.predicates.AuditPredicates.*;
 
 public class QueryService {
 
@@ -28,10 +30,6 @@ public class QueryService {
 
         if (nonNull(criteria.getObjectType()) && criteria.getObjectType().length > 0) {
             where.and(inObjectTypeNames(criteria.getObjectType()));
-        }
-
-        if (nonNull(criteria.getObjectName()) && criteria.getObjectName().length > 0) {
-            where.and(inObjectNameNames(criteria.getObjectName()));
         }
 
         if (nonNull(criteria.getObjectId()))
@@ -70,5 +68,16 @@ public class QueryService {
         return new Sort(order.getDirection(), order.getProperty());
     }
 
+    static Predicate toPredicate(EventTypeCriteria criteria) {
+        BooleanBuilder where = new BooleanBuilder();
+        if (nonNull(criteria.getAuditTypeId())) {
+            where.and(EventTypePredicates.eqAuditTypeId(criteria.getAuditTypeId()));
+        }
+        if (nonNull(criteria.getName())) {
+            where.and(EventTypePredicates.containsName(criteria.getName()));
+        }
+
+        return where.getValue();
+    }
 
 }

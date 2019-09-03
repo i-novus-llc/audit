@@ -4,11 +4,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import ru.i_novus.ms.audit.model.EventTypeCriteria;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 
@@ -25,8 +23,13 @@ public interface AuditReferenceRest {
 
     @GET
     @Path("/objects")
-    @ApiOperation("Получение объектов")
+    @ApiOperation("Получение типов событий")
     Collection getObjects();
+
+    @GET
+    @Path("/eventType")
+    @ApiOperation("Получение типов событий")
+    Collection getEventType(@BeanParam EventTypeCriteria criteria);
 
     @GET
     @Path("/sourceApplications")
