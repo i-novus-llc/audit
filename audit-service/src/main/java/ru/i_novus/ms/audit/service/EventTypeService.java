@@ -2,6 +2,7 @@ package ru.i_novus.ms.audit.service;
 
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.i_novus.ms.audit.entity.EventTypeEntity;
 import ru.i_novus.ms.audit.model.EventTypeCriteria;
@@ -22,7 +23,12 @@ public class EventTypeService {
     }
 
     public Collection<EventTypeEntity> search(EventTypeCriteria criteria) {
-        return Lists.newArrayList(eventTypeRepository.findAll(QueryService.toPredicate(criteria)));
+        return Lists.newArrayList(
+                eventTypeRepository.findAll(
+                        QueryService.toPredicate(criteria),
+                        PageRequest.of(0, criteria.getPageSize())
+                )
+        );
     }
 
     public void createIfNotPresent(String name, String auditType) {

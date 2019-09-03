@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.n2oapp.platform.jaxrs.RestCriteria;
 
 import javax.ws.rs.QueryParam;
 
@@ -12,7 +13,7 @@ import javax.ws.rs.QueryParam;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventTypeCriteria {
+public class EventTypeCriteria extends RestCriteria {
 
     @ApiParam("Наименование")
     @QueryParam("name")
