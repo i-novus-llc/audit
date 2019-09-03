@@ -1,12 +1,8 @@
 package ru.i_novus.ms.audit.entity;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Table(name = "audit_object")
@@ -15,12 +11,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
+@SequenceGenerator(name = "audit.audit_object_id_seq", allocationSize = 1)
 public class AuditObjectEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "audit.audit_object_id_seq")
     @Access(AccessType.PROPERTY)
     @Column(name = "id", nullable = false)
-    private UUID id;
+    private Integer id;
 
     @Column(length = 60)
     private String name;
@@ -28,12 +26,4 @@ public class AuditObjectEntity {
     @Column(length = 60)
     private String type;
 
-    @OneToMany(mappedBy = "auditObjectType")
-    @JsonIgnore
-    private Set<AuditEntity> auditEntities;
-
-    @PrePersist
-    public void prePersist() {
-        id = id == null ? UUID.randomUUID() : id;
-    }
 }

@@ -12,5 +12,5 @@ public interface AuditSourceApplicationRepository extends JpaRepository<AuditSou
     @Query("select id from AuditSourceApplicationEntity ")
     String[] findAllSourceApplicationId();
 
-    Optional<AuditSourceApplicationEntity> findByName(String name);
+    Optional<AuditSourceApplicationEntity> findByCode(String code);
 }

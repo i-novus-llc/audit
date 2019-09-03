@@ -8,9 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.i_novus.ms.audit.entity.AuditEntity;
-import ru.i_novus.ms.audit.entity.AuditObjectNameEntity;
-import ru.i_novus.ms.audit.entity.AuditObjectEntity;
-import ru.i_novus.ms.audit.entity.AuditSourceApplicationEntity;
 import ru.i_novus.ms.audit.model.Audit;
 import ru.i_novus.ms.audit.model.AuditCriteria;
 import ru.i_novus.ms.audit.model.AuditForm;
@@ -26,10 +23,7 @@ public class AuditService {
     private AuditRepository auditRepository;
 
     @Autowired
-    private ObjectNameService objectNameService;
-
-    @Autowired
-    private ObjectTypeService objectTypeService;
+    private AuditObjectService auditObjectService;
 
     @Autowired
     private SourceApplicationService sourceApplicationService;
@@ -60,14 +54,13 @@ public class AuditService {
 
     public AuditEntity create(AuditForm request) {
 
-        AuditObjectNameEntity auditObjectName = objectNameService.getOrCreate(request.getObjectName());
-        AuditObjectEntity auditObject = objectTypeService.getOrCreate(request.getObjectType());
-        AuditSourceApplicationEntity auditSourceApplication = sourceApplicationService.getOrCreate(request.getSourceApplication());
+        auditObjectService.createIfNotPresent(request.getObjectName(), request.getObjectType());
+        sourceApplicationService.createIfNotPresent(request.getSourceApplication());
 
         AuditEntity entity = AuditEntity.builder()
-                .auditObjectName(auditObjectName)
-                .auditObjectType(auditObject)
-                .auditSourceApplication(auditSourceApplication)
+                .auditObjectName(request.getObjectName())
+                .auditObjectType(request.getObjectType())
+                .auditSourceApplication(request.getSourceApplication())
                 .context(request.getContext())
                 .eventDate(request.getEventDate())
                 .eventType(request.getEventType())
@@ -89,9 +82,9 @@ public class AuditService {
                 .eventDate(entity.getEventDate())
                 .eventType(entity.getEventType())
                 .objectId(entity.getObjectId())
-                .objectName(entity.getAuditObjectName().getName())
-                .objectType(entity.getAuditObjectType().getName())
-                .sourceApplication(entity.getAuditSourceApplication().getName())
+                .objectName(entity.getAuditObjectName())
+                .objectType(entity.getAuditObjectType())
+                .sourceApplication(entity.getAuditSourceApplication())
                 .sourceWorkstation(entity.getSourceWorkstation())
                 .userId(entity.getUserId())
                 .hostname(entity.getHostname())

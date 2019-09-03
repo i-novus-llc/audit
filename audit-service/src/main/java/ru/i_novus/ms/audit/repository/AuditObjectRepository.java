@@ -5,12 +5,11 @@ import org.springframework.data.jpa.repository.Query;
 import ru.i_novus.ms.audit.entity.AuditObjectEntity;
 
 import java.util.Optional;
-import java.util.UUID;
 
-public interface AuditObjectTypeRepository extends JpaRepository<AuditObjectEntity, UUID> {
+public interface AuditObjectRepository extends JpaRepository<AuditObjectEntity, Integer> {
 
     @Query("select id from AuditObjectEntity ")
     String[] findAllObjectTypeId();
 
-    Optional<AuditObjectEntity> findByName(String name);
+    Optional<AuditObjectEntity> findByNameAndType(String name, String type);
 }

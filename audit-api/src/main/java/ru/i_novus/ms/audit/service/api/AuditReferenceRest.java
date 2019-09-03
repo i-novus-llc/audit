@@ -24,17 +24,12 @@ import java.util.Collection;
 public interface AuditReferenceRest {
 
     @GET
-    @Path("/objectName")
-    @ApiOperation("Получение наименований объектов")
-    Collection getObjectNames();
+    @Path("/objects")
+    @ApiOperation("Получение объектов")
+    Collection getObjects();
 
     @GET
-    @Path("/objectType")
-    @ApiOperation("Получение типов событий")
-    Collection getObjectTypes();
-
-    @GET
-    @Path("/sourceApplication")
+    @Path("/sourceApplications")
     @ApiOperation("Получение наименований системы")
     Collection getSourceApplications();
 }

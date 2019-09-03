@@ -15,20 +15,21 @@ public class SourceApplicationService {
     @Autowired
     private AuditSourceApplicationRepository auditSourceApplicationRepository;
 
-    public Collection<AuditSourceApplicationEntity> getAll(){
+    public Collection<AuditSourceApplicationEntity> getAll() {
         return auditSourceApplicationRepository.findAll();
     }
 
-    public AuditSourceApplicationEntity getOrCreate(String name){
-        Optional<AuditSourceApplicationEntity> optional = auditSourceApplicationRepository.findByName(name);
-
-        return optional.orElseGet(() -> auditSourceApplicationRepository.save(AuditSourceApplicationEntity
-                .builder()
-                .name(name)
-                .build()));
+    public void createIfNotPresent(String code) {
+        Optional<AuditSourceApplicationEntity> optional = auditSourceApplicationRepository.findByCode(code);
+        if (optional.isEmpty()) {
+            auditSourceApplicationRepository.save(AuditSourceApplicationEntity
+                    .builder()
+                    .code(code)
+                    .build());
+        }
     }
 
-    public AuditSourceApplicationEntity getById(UUID id){
+    public AuditSourceApplicationEntity getById(UUID id) {
         return auditSourceApplicationRepository.getOne(id);
     }
 }
