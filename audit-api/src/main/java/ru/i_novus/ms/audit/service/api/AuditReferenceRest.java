@@ -23,7 +23,7 @@ public interface AuditReferenceRest {
 
     @GET
     @Path("/objects")
-    @ApiOperation("Получение объектов")
+    @ApiOperation("Получение типов событий")
     Collection getObjects();
 
     @GET
@@ -33,6 +33,6 @@ public interface AuditReferenceRest {
 
     @GET
     @Path("/sourceApplications")
-    @ApiOperation("Получение наименований систем")
+    @ApiOperation("Получение наименований системы")
     Collection getSourceApplications();
 }

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <query xmlns="http://n2oapp.net/framework/config/schema/query-4.0" name="Объект">
     <list>
-        <rest filters-separator="&amp;">${audit.backend.url}/audit/eventType?{filters}</rest>
+        <rest>${audit.backend.url}/audit/objectName/</rest>
     </list>
     <fields>
         <field id="id" domain="string">
@@ -14,14 +14,7 @@
             <select/>
             <sorting/>
             <filters>
-                <like filter-id="name">name={name}</like>
-            </filters>
-        </field>
-        <field id="auditTypeId" domain="integer">
-            <select/>
-            <sorting/>
-            <filters>
-                <eq filter-id="auditTypeId">auditTypeId={auditTypeId}</eq>
+                <eq filter-id="name" mapping="['name']">name={name}</eq>
             </filters>
         </field>
     </fields>
