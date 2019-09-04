@@ -69,6 +69,7 @@ public class AuditService {
                 .objectId(request.getObjectId())
                 .sourceWorkstation(request.getSourceWorkstation())
                 .hostname(request.getHostname())
+                .auditTypeId(request.getAuditTypeId())
                 .build();
         return auditRepository.save(entity);
     }
@@ -89,6 +90,7 @@ public class AuditService {
                 .userId(entity.getUserId())
                 .hostname(entity.getHostname())
                 .username(entity.getUsername())
+                .auditTypeId(entity.getAuditTypeId())
                 .build();
     }
 }

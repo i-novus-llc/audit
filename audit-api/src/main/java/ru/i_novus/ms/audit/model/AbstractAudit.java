@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
@@ -11,6 +12,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Validated
@@ -60,85 +62,9 @@ public abstract class AbstractAudit implements Serializable {
     @ApiModelProperty(value = "Сервер")
     private String hostname;
 
-    public LocalDateTime getEventDate() {
-        return eventDate;
-    }
-
-    public void setEventDate(LocalDateTime eventDate) {
-        this.eventDate = eventDate;
-    }
-
-    public String getEventType() {
-        return eventType;
-    }
-
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
-    }
-
-    public String getObjectType() {
-        return objectType;
-    }
-
-    public void setObjectType(String objectType) {
-        this.objectType = objectType;
-    }
-
-    public String getObjectId() {
-        return objectId;
-    }
-
-    public void setObjectId(String objectId) {
-        this.objectId = objectId;
-    }
-
-    public String getObjectName() {
-        return objectName;
-    }
-
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getSourceApplication() {
-        return sourceApplication;
-    }
-
-    public void setSourceApplication(String sourceApplication) {
-        this.sourceApplication = sourceApplication;
-    }
-
-    public String getSourceWorkstation() {
-        return sourceWorkstation;
-    }
-
-    public void setSourceWorkstation(String sourceWorkstation) {
-        this.sourceWorkstation = sourceWorkstation;
-    }
-
-    public String getContext() {
-        return context;
-    }
-
-    public void setContext(String context) {
-        this.context = context;
-    }
+    @ApiModelProperty(value = "Идентификатор типа журнала", required = true)
+    @NotNull
+    private Short auditTypeId;
 
     @Override
     public String toString() {
@@ -153,6 +79,7 @@ public abstract class AbstractAudit implements Serializable {
                 ", auditSourceApplication='" + sourceApplication + '\'' +
                 ", auditSourceWorkstations='" + sourceWorkstation + '\'' +
                 ", context='" + context + '\'' +
+                ", auditTypeId='" + auditTypeId + '\'' +
                 '}';
     }
 }

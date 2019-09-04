@@ -75,4 +75,9 @@ public final class AuditPredicates {
     public static BooleanExpression isHostnameContains(String value) {
         return QAuditEntity.auditEntity.hostname.equalsIgnoreCase(value.trim());
     }
+
+    public static BooleanExpression inAuditTypeIds(Short[] value) {
+        return QAuditEntity.auditEntity.auditTypeId.in(value);
+    }
+
 }
