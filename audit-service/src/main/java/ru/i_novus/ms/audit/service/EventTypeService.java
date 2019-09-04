@@ -38,7 +38,7 @@ public class EventTypeService {
             eventTypeRepository.save(EventTypeEntity
                     .builder()
                     .name(name)
-                    .auditTypeId(Integer.valueOf(auditType))
+                    .auditTypeId(Short.valueOf(auditType))
                     .build());
         }
     }
