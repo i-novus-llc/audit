@@ -24,7 +24,7 @@ public class EventTypeEntity {
     private String name;
 
     @Column(name = "audit_type_id", nullable = false)
-    private Integer auditTypeId;
+    private Short auditTypeId;
 
     @PrePersist
     public void prePersist() {

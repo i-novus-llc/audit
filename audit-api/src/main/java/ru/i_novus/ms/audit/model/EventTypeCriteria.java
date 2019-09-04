@@ -21,5 +21,5 @@ public class EventTypeCriteria extends RestCriteria {
 
     @ApiParam("Идентификатор типа журнала")
     @QueryParam("auditTypeId")
-    private Integer auditTypeId;
+    private Short auditTypeId;
 }
