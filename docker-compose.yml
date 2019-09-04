@@ -7,9 +7,9 @@ services:
     ports:
       - 5432
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=audit
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: audit
     deploy:
       resources:
         limits:
@@ -20,8 +20,8 @@ services:
 
   audit-service:
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/audit
-      - JAVA_OPTS=-Xmx200m
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/audit
+      JAVA_OPTS: -Xmx200m
     ports:
       - 8080
     deploy:
@@ -42,8 +42,8 @@ services:
 
   audit-web:
     environment:
-      - AUDIT_BACKEND_URL=http://audit-service:8080/api
-      - JAVA_OPTS=-Xmx300m
+      AUDIT_BACKEND_URL: "http://audit-service:8080/api"
+      JAVA_OPTS: -Xmx300m
     ports:
       - 8080
     deploy:
