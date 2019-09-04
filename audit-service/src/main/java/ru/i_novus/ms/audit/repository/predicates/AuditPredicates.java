@@ -1,4 +1,4 @@
-package ru.i_novus.ms.audit.repository;
+package ru.i_novus.ms.audit.repository.predicates;
 
 import com.querydsl.core.types.Ops;
 import com.querydsl.core.types.dsl.BooleanExpression;
