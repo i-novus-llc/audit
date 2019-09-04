@@ -37,10 +37,7 @@ public class QueryService {
         BooleanBuilder where = new BooleanBuilder();
 
         if (nonNull(criteria.getObjectType()) && criteria.getObjectType().length > 0)
-            where.and(inObjectTypeNames(criteria.getObjectType()));
-
-        if (nonNull(criteria.getObjectName()) && criteria.getObjectName().length > 0)
-            where.and(inObjectNameNames(criteria.getObjectName()));
+            where.and(inObjectNameNames(criteria.getObjectType()));
 
         if (nonNull(criteria.getObjectId()))
             where.and(isObjectIdEquals(criteria.getObjectId()));

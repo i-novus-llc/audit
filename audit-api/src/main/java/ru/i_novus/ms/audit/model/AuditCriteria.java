@@ -28,17 +28,17 @@ public class AuditCriteria extends RestCriteria {
     @QueryParam("eventType")
     private String eventType;
 
-    @ApiParam(value = "Тип объекта")
-    @QueryParam("auditObjectTypes")
+    @ApiParam(value = "Объект")
+    @QueryParam("auditObjects")
     private String[] objectType;
 
     @ApiParam("Идентификатор объекта")
     @QueryParam("auditObjectId")
     private String objectId;
 
-    @ApiParam("Наименование объекта")
-    @QueryParam("auditObjectNames")
-    private String[] objectName;
+    @ApiParam("Тип события")
+    @QueryParam("auditEventTypes")
+    private String[] auditEventType;
 
     @ApiParam("Идентификатор пользователя")
     @QueryParam("userId")
