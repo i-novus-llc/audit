@@ -35,4 +35,9 @@ public interface AuditReferenceRest {
     @Path("/sourceApplications")
     @ApiOperation("Получение наименований систем")
     Collection getSourceApplications();
+
+    @GET
+    @Path("/auditTypes")
+    @ApiOperation("Получение типов журналов")
+    Collection getAuditTypes();
 }
