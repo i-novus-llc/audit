@@ -58,12 +58,12 @@
             </filters>
         </field>
 
-        <field id="objectName" domain="string">
+        <field id="auditObjects" domain="string">
             <sorting mapping="['direction']">sortingColumn=auditObjectName.name&amp;sortingOrder={direction}</sorting>
             <select/>
             <sorting/>
             <filters>
-                <in filter-id="auditObjectNames*.name">auditObjectNames={auditObjectNames*.name}</in>
+                <in filter-id="auditObjects*.name">auditObjects={auditObjects*.name}</in>
             </filters>
         </field>
 
@@ -93,10 +93,16 @@
             <select/>
             <sorting mapping="['direction']">sortingColumn=username&amp;sortingOrder={direction}</sorting>
             <filters>
-                <like filter-id="username">username={username}</like>>
+                <like filter-id="username">username={username}</like>
             </filters>
         </field>
 
+        <field id="auditTypeId" domain="integer">
+            <select/>
+            <filters>
+                <eq filter-id="auditTypeId">auditTypeId={auditTypeId}</eq>
+            </filters>
+        </field>
     </fields>
 
 </query>

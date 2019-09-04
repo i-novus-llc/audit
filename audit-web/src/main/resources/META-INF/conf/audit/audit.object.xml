@@ -6,7 +6,7 @@
         <field id="eventDate" domain="localdatetime" name="Дата события"/>
         <field id="eventType" domain="string" name="Тип события"/>
         <field id="objectType" name="Тип объекта" />
-        <field id="objectName" name="Название объекта" />
+        <field id="auditObjects" name="Название объекта" />
         <field id="sourceApplication" name="Название системы" />
         <field id="sourceWorkstation" domain="string" name="Рабочая станция"/>
         <field id="objectId" domain="string" name="Идентификатор объекта"/>
@@ -14,6 +14,7 @@
         <field id="username" domain="string" name="Имя пользователя"/>
         <field id="context" domain="string" name="Контекст, информация о событии "/>
         <field id="hostname" domain="string" name="Сервер"/>
+        <field id="auditTypeId" domain="integer" name="тип"/>
     </fields>
 
 </object>
