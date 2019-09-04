@@ -8,7 +8,7 @@ public final class EventTypePredicates {
     private EventTypePredicates() {
     }
 
-    public static BooleanExpression eqAuditTypeId(Integer value) {
+    public static BooleanExpression eqAuditTypeId(Short value) {
         return QEventTypeEntity.eventTypeEntity.auditTypeId.eq(value);
     }
 
