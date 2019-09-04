@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.i_novus.ms.audit.Application;
@@ -119,18 +118,6 @@ public class ApplicationTest {
         assertTrue(search.getTotalElements() > 0);
 
         criteria.setObjectId(TEST);
-        search = auditRest.search(criteria);
-        assertEquals(0, search.getTotalElements());
-    }
-
-    @Test
-    public void testSearchByObjectName() {
-        AuditCriteria criteria = new AuditCriteria();
-        criteria.setObjectName(new String[]{auditRequest.getObjectName()});
-        Page<Audit> search = auditRest.search(criteria);
-        assertTrue(search.getTotalElements() > 0);
-
-        criteria.setObjectName(new String[]{TEST});
         search = auditRest.search(criteria);
         assertEquals(0, search.getTotalElements());
     }

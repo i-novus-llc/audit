@@ -13,7 +13,7 @@ public final class EventTypePredicates {
     }
 
     public static BooleanExpression containsName(String value) {
-        return QEventTypeEntity.eventTypeEntity.name.contains(value.trim());
+        return QEventTypeEntity.eventTypeEntity.name.containsIgnoreCase(value.trim());
     }
 
 }

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <query xmlns="http://n2oapp.net/framework/config/schema/query-4.0"
-        object-id="audit" name="Audit">
+       object-id="audit" name="Audit">
 
     <list count-mapping="[totalElements]" result-mapping="[content]">
         <rest filters-separator="&amp;">${audit.backend.url}/audit?{filters}&amp;{sorting}&amp;page={page}</rest>
@@ -28,10 +28,13 @@
             </filters>
         </field>
 
-        <field id="eventType" domain="string">
-            <sorting/>
+        <field id="auditEventTypes" domain="string">
+            <sorting mapping="['direction']">sortingColumn=auditEventTypes.name&amp;sortingOrder={direction}</sorting>
             <select/>
             <sorting/>
+            <filters>
+                <in filter-id="auditEventTypes*.name">auditEventTypes={auditEventTypes*.name}</in>
+            </filters>
         </field>
 
         <field id="context" domain="string">
@@ -41,10 +44,10 @@
         </field>
 
         <field id="sourceApplication" domain="string">
-            <sorting mapping="['direction']">sortingColumn=auditSourceApplication.name&amp;sortingOrder={direction}</sorting>
+            <sorting mapping="['direction']">sortingColumn=auditSourceApplications.code&amp;sortingOrder={direction}</sorting>
             <select/>
             <filters>
-                <in filter-id="auditSourceApplications*.name">auditSourceApplications={auditSourceApplications*.name}</in>
+                <in filter-id="auditSourceApplications*.code">auditSourceApplications={auditSourceApplications*.code}</in>
             </filters>
         </field>
 
@@ -58,15 +61,18 @@
             </filters>
         </field>
 
-        <field id="objectName" domain="string">
+        <field id="auditObjects" domain="string">
             <sorting mapping="['direction']">sortingColumn=auditObjectName.name&amp;sortingOrder={direction}</sorting>
             <select/>
             <sorting/>
             <filters>
-                <in filter-id="auditObjectNames*.name">auditObjectNames={auditObjectNames*.name}</in>
+                <in filter-id="auditObjects*.name">auditObjects={auditObjects*.name}</in>
             </filters>
         </field>
 
+        <field id="objectName" domain="string">
+            <select/>
+        </field>
 
         <field id="hostname" domain="string">
             <select/>
@@ -85,7 +91,7 @@
             <select/>
             <sorting mapping="['direction']">sortingColumn=objectId&amp;sortingOrder={direction}</sorting>
             <filters>
-                <like filter-id="objectId">objectId={objectId}</like>
+                <like filter-id="objectId">auditObjectId={objectId}</like>
             </filters>
         </field>
 
@@ -93,10 +99,16 @@
             <select/>
             <sorting mapping="['direction']">sortingColumn=username&amp;sortingOrder={direction}</sorting>
             <filters>
-                <like filter-id="username">username={username}</like>>
+                <like filter-id="username">username={username}</like>
             </filters>
         </field>
 
+        <field id="auditTypeId" domain="integer">
+            <select/>
+            <filters>
+                <eq filter-id="auditTypeId">auditTypeId={auditTypeId}</eq>
+            </filters>
+        </field>
     </fields>
 
 </query>
