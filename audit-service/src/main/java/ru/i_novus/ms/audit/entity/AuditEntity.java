@@ -65,6 +65,9 @@ public class AuditEntity {
     @JsonProperty("hostname")
     private String hostname;
 
+    @Column(name = "audit_type_id", nullable = false)
+    private Short auditTypeId;
+
     @PrePersist
     public void prePersist() {
         id = id == null ? UUID.randomUUID() : id;
