@@ -64,6 +64,10 @@ public class AuditCriteria extends RestCriteria {
     @QueryParam("hostname")
     private String hostname;
 
+    @ApiParam("Идентификатор типа журнала")
+    @QueryParam("auditTypeId")
+    private Short[] auditTypeId;
+
     @ApiParam("Поле сортировки")
     @QueryParam("sortingColumn")
     private String sortingColumn;

@@ -27,10 +27,10 @@ public class Audit extends AbstractAudit {
     @Builder
     public Audit(UUID id, LocalDateTime creationDate, LocalDateTime eventDate, String eventType, String objectType,
                  String objectId, String objectName, String userId, String username, String sourceApplication,
-                 String sourceWorkstation, String context, String hostname) {
+                 String sourceWorkstation, String context, String hostname, Short auditTypeId) {
 
         super(eventDate, eventType, objectType, objectId, objectName,
-                userId, username, sourceApplication, sourceWorkstation, context, hostname);
+                userId, username, sourceApplication, sourceWorkstation, context, hostname, auditTypeId);
 
         this.creationDate = creationDate;
         this.id = id;
