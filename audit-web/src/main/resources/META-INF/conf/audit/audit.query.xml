@@ -28,6 +28,10 @@
             </filters>
         </field>
 
+        <field id="eventType" domain="string">
+            <select/>
+        </field>
+
         <field id="auditEventTypes" domain="string">
             <sorting mapping="['direction']">sortingColumn=auditEventTypes.name&amp;sortingOrder={direction}</sorting>
             <select/>
@@ -38,9 +42,7 @@
         </field>
 
         <field id="context" domain="string">
-            <sorting/>
             <select/>
-            <sorting/>
         </field>
 
         <field id="sourceApplication" domain="string">
@@ -93,6 +95,10 @@
             <filters>
                 <like filter-id="objectId">auditObjectId={objectId}</like>
             </filters>
+        </field>
+
+        <field id="userId" domain="string">
+            <select/>
         </field>
 
         <field id="username" domain="string">
