@@ -1,4 +1,4 @@
-package ru.i_novus.ms.audit.model;
+package ru.i_novus.ms.audit.criteria;
 
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
@@ -13,8 +13,7 @@ import javax.ws.rs.QueryParam;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventTypeCriteria extends RestCriteria {
-
+public class AuditEventTypeCriteria extends RestCriteria {
     @ApiParam("Наименование")
     @QueryParam("name")
     private String name;

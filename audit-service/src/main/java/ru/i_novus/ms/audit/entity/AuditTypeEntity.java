@@ -13,7 +13,6 @@ import javax.persistence.*;
 @Builder
 @SequenceGenerator(name = "audit.audit_type_id_seq", allocationSize = 1)
 public class AuditTypeEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "audit.audit_type_id_seq")
     @Access(AccessType.PROPERTY)

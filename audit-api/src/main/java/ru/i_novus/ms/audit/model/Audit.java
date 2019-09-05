@@ -17,7 +17,6 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 public class Audit extends AbstractAudit {
-
     @ApiModelProperty("Идентификатор события")
     private UUID id;
 

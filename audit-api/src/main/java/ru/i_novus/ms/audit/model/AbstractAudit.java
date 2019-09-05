@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Validated
 public abstract class AbstractAudit implements Serializable {
-
     @ApiModelProperty(value = "Дата события", required = true)
     @NotNull
     private LocalDateTime eventDate;

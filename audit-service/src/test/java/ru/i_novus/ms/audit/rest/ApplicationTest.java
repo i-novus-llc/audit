@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.i_novus.ms.audit.Application;
+import ru.i_novus.ms.audit.criteria.AuditCriteria;
 import ru.i_novus.ms.audit.model.*;
 import ru.i_novus.ms.audit.service.api.AuditRest;
 

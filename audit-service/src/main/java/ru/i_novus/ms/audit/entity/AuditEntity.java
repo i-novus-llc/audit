@@ -20,7 +20,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @ToString()
 public class AuditEntity {
-
     @Id
     @Access(AccessType.PROPERTY)
     @Column(name = "id", nullable = false)

@@ -4,8 +4,12 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.CollectionUtils;
-import ru.i_novus.ms.audit.model.AuditCriteria;
-import ru.i_novus.ms.audit.model.EventTypeCriteria;
+import ru.i_novus.ms.audit.criteria.AuditCriteria;
+import ru.i_novus.ms.audit.criteria.AuditEventTypeCriteria;
+import ru.i_novus.ms.audit.criteria.AuditObjectCriteria;
+import ru.i_novus.ms.audit.criteria.AuditSourceApplicationCriteria;
+import ru.i_novus.ms.audit.entity.QAuditObjectEntity;
+import ru.i_novus.ms.audit.entity.QAuditSourceApplicationEntity;
 import ru.i_novus.ms.audit.repository.predicates.EventTypePredicates;
 
 import java.util.Collections;
@@ -93,13 +97,30 @@ public class QueryService {
         return new Sort(order.getDirection(), order.getProperty());
     }
 
-    static Predicate toPredicate(EventTypeCriteria criteria) {
+    static Predicate toPredicate(AuditEventTypeCriteria criteria) {
         BooleanBuilder where = new BooleanBuilder();
         if (nonNull(criteria.getAuditTypeId())) {
             where.and(EventTypePredicates.eqAuditTypeId(criteria.getAuditTypeId()));
         }
         if (nonNull(criteria.getName())) {
             where.and(EventTypePredicates.containsName(criteria.getName()));
+        }
+
+        return where.getValue();
+    }
+
+    static Predicate toPredicate(AuditSourceApplicationCriteria criteria) {
+        BooleanBuilder where = new BooleanBuilder();
+        if (nonNull(criteria.getCode())) {
+            where.and(QAuditSourceApplicationEntity.auditSourceApplicationEntity.code.containsIgnoreCase(criteria.getCode().trim()));
+        }
+        return where.getValue();
+    }
+
+    static Predicate toPredicate(AuditObjectCriteria criteria) {
+        BooleanBuilder where = new BooleanBuilder();
+        if (nonNull(criteria.getName())) {
+            where.and(QAuditObjectEntity.auditObjectEntity.name.containsIgnoreCase(criteria.getName().trim()));
         }
 
         return where.getValue();
