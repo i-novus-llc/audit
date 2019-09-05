@@ -13,8 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString()
-public class EventTypeEntity {
-
+public class AuditEventTypeEntity {
     @Id
     @Access(AccessType.PROPERTY)
     @Column(name = "id", nullable = false)

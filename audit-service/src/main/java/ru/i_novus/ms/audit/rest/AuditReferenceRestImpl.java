@@ -1,15 +1,18 @@
 package ru.i_novus.ms.audit.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RestController;
-import ru.i_novus.ms.audit.model.EventTypeCriteria;
+import ru.i_novus.ms.audit.criteria.AuditObjectCriteria;
+import ru.i_novus.ms.audit.criteria.AuditSourceApplicationCriteria;
+import ru.i_novus.ms.audit.model.*;
+import ru.i_novus.ms.audit.criteria.AuditEventTypeCriteria;
 import ru.i_novus.ms.audit.service.AuditObjectService;
 import ru.i_novus.ms.audit.service.AuditTypeService;
 import ru.i_novus.ms.audit.service.EventTypeService;
 import ru.i_novus.ms.audit.service.SourceApplicationService;
 import ru.i_novus.ms.audit.service.api.AuditReferenceRest;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 @RestController
@@ -27,19 +30,23 @@ public class AuditReferenceRestImpl implements AuditReferenceRest {
     @Autowired
     private AuditTypeService auditTypeService;
 
-    public Collection getObjects() {
-        return auditObjectService.getAll();
+    @Override
+    public Page<AuditObject> getObjects(AuditObjectCriteria criteria) {
+        return auditObjectService.search(criteria);
     }
 
-    public Collection getEventType(EventTypeCriteria eventTypeCriteria) {
-        return new ArrayList<>(eventTypeService.search(eventTypeCriteria));
+    @Override
+    public Page<AuditEventType> getEventType(AuditEventTypeCriteria criteria) {
+        return eventTypeService.search(criteria);
     }
 
-    public Collection getSourceApplications() {
-        return sourceApplicationService.getAll();
+    @Override
+    public Page<AuditSourceApplication> getSourceApplications(AuditSourceApplicationCriteria criteria) {
+        return sourceApplicationService.search(criteria);
     }
 
-    public Collection getAuditTypes() {
+    @Override
+    public Collection<AuditType> getAuditTypes() {
         return auditTypeService.getAll();
     }
 }

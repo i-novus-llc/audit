@@ -7,9 +7,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import ru.i_novus.ms.audit.builder.model.AuditBuilder;
+import ru.i_novus.ms.audit.builder.entity.AuditEntityBuilder;
+import ru.i_novus.ms.audit.criteria.AuditCriteria;
 import ru.i_novus.ms.audit.entity.AuditEntity;
 import ru.i_novus.ms.audit.model.Audit;
-import ru.i_novus.ms.audit.model.AuditCriteria;
 import ru.i_novus.ms.audit.model.AuditForm;
 import ru.i_novus.ms.audit.repository.AuditRepository;
 
@@ -42,13 +44,15 @@ public class AuditService {
             );
             criteria.setOrders(Lists.newArrayList(order));
         }
-        return (searchEntity(criteria)).map(AuditService::getAuditByEntity);
+
+        return (searchEntity(criteria)).map(AuditBuilder::getAuditByEntity);
     }
 
     private Page<AuditEntity> searchEntity(AuditCriteria criteria) {
         int size = criteria.getPageSize() > 0 ? criteria.getPageSize() : 10;
         int pageNum = criteria.getPageNumber() > 0 ? criteria.getPageNumber() - 1 : 0;
         Pageable pageable = PageRequest.of(pageNum, size, QueryService.toSort(criteria));
+
         return auditRepository.findAll(QueryService.toPredicate(criteria), pageable);
     }
 
@@ -57,40 +61,7 @@ public class AuditService {
         auditObjectService.createIfNotPresent(request.getObjectName(), request.getObjectType());
         sourceApplicationService.createIfNotPresent(request.getSourceApplication());
 
-        AuditEntity entity = AuditEntity.builder()
-                .auditObjectName(request.getObjectName())
-                .auditObjectType(request.getObjectType())
-                .auditSourceApplication(request.getSourceApplication())
-                .context(request.getContext())
-                .eventDate(request.getEventDate())
-                .eventType(request.getEventType())
-                .userId(request.getUserId())
-                .username(request.getUsername())
-                .objectId(request.getObjectId())
-                .sourceWorkstation(request.getSourceWorkstation())
-                .hostname(request.getHostname())
-                .auditTypeId(request.getAuditTypeId())
-                .build();
-        return auditRepository.save(entity);
+        return auditRepository.save(AuditEntityBuilder.buildEntity(request));
     }
 
-
-    public static Audit getAuditByEntity(AuditEntity entity) {
-        return Audit.builder()
-                .creationDate(entity.getCreationDate())
-                .id(entity.getId())
-                .context(entity.getContext())
-                .eventDate(entity.getEventDate())
-                .eventType(entity.getEventType())
-                .objectId(entity.getObjectId())
-                .objectName(entity.getAuditObjectName())
-                .objectType(entity.getAuditObjectType())
-                .sourceApplication(entity.getAuditSourceApplication())
-                .sourceWorkstation(entity.getSourceWorkstation())
-                .userId(entity.getUserId())
-                .hostname(entity.getHostname())
-                .username(entity.getUsername())
-                .auditTypeId(entity.getAuditTypeId())
-                .build();
-    }
 }

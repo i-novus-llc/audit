@@ -1,4 +1,4 @@
-package ru.i_novus.ms.audit.model;
+package ru.i_novus.ms.audit.criteria;
 
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Setter
 public class AuditCriteria extends RestCriteria {
-
     @ApiParam(value = "Дата события (от)", format = "yyyy-MM-ddTHH:mm:ss")
     @QueryParam("eventDateFrom")
     private LocalDateTime eventDateFrom;
