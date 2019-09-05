@@ -20,8 +20,7 @@
                         </date-interval>
                         <input-select id="auditSourceApplications" label="Система/Модуль" type="multi"
                                       query-id="auditSourceApplication"
-                                      label-field-id="code">
-                        </input-select>
+                                      label-field-id="code"/>
                         <input-select id="auditEventTypes" label="Тип события" type="multi" query-id="auditEventType"
                                       label-field-id="name">
                             <pre-filters>
@@ -31,9 +30,7 @@
                     </row>
                     <row>
                         <input-select id="auditObjects" label="Объект" type="multi" query-id="auditObject"
-                                      label-field-id="name">
-                        </input-select>
-
+                                      label-field-id="name"/>
                         <input-text id="objectId" label="Идентификатор объекта" domain="string">
                             <validations>
                                 <condition id="checkDate" client-moment="before-load" severity="danger"

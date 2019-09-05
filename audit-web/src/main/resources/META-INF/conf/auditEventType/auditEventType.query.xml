@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <query xmlns="http://n2oapp.net/framework/config/schema/query-4.0" name="Объект">
-    <list>
+    <list count-mapping="[totalElements]" result-mapping="[content]">
         <rest filters-separator="&amp;">${audit.backend.url}/audit/eventType?{filters}</rest>
     </list>
     <fields>
