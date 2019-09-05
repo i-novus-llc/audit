@@ -6,13 +6,7 @@
 
     <changeSet id="NNOP-7-1" author="zamaliev" dbms="postgresql">
         <sql>
-            INSERT INTO audit.audit_object_type (id, name) VALUES ('03912eee-a667-11e9-a2a3-2a2ae2dbcce4', 'Object_type')
-        </sql>
-    </changeSet>
-
-    <changeSet id="NNOP-7-2" author="zamaliev" dbms="postgresql">
-        <sql>
-            INSERT INTO audit.audit_object_name (id, name) VALUES ('039131aa-a667-11e9-a2a3-2a2ae2dbcce4', 'Object_name')
+            INSERT INTO audit.audit_object (id, name, type) VALUES ('03912eee-a667-11e9-a2a3-2a2ae2dbcce4', 'Object_name', 'Object_type')
         </sql>
     </changeSet>
 
@@ -30,11 +24,11 @@
         </sql>
     </changeSet>
 
-    <changeSet id="NNOP-7-5" author="zamaliev" dbms="postgresql">
+    <changeSet id="NNOP-7-5_v2" author="elvira.ibragimova" dbms="postgresql">
         <sql>
             INSERT INTO audit.audit(
-                id, event_date, event_type, object_type_id, object_id, object_name_id, user_id, username, source_application_id, source_workstation, context, creation_date)
-            VALUES ('9264b032-ff05-11e8-8eb2-f2801f1b9fd1', '2019-07-12', 'EventType', '03912eee-a667-11e9-a2a3-2a2ae2dbcce4', 'ObjectId', '039131aa-a667-11e9-a2a3-2a2ae2dbcce4',
+                id, event_date, event_type, object_type_id, object_id, user_id, username, source_application_id, source_workstation, context, creation_date)
+            VALUES ('9264b032-ff05-11e8-8eb2-f2801f1b9fd1', '2019-07-12', 'EventType', '03912eee-a667-11e9-a2a3-2a2ae2dbcce4', 'ObjectId',
                 'UserId', 'Username', '03913538-a667-11e9-a2a3-2a2ae2dbcce4', 'SourceWorkstation', '{"field": "name", "value": "Значение"}', '2019-07-12');
         </sql>
     </changeSet>

@@ -1,4 +1,4 @@
-package ru.i_novus.ms.audit.model;
+package ru.i_novus.ms.audit.criteria;
 
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Setter
 public class AuditCriteria extends RestCriteria {
-
     @ApiParam(value = "Дата события (от)", format = "yyyy-MM-ddTHH:mm:ss")
     @QueryParam("eventDateFrom")
     private LocalDateTime eventDateFrom;
@@ -28,17 +27,17 @@ public class AuditCriteria extends RestCriteria {
     @QueryParam("eventType")
     private String eventType;
 
-    @ApiParam(value = "Тип объекта")
-    @QueryParam("auditObjectTypes")
+    @ApiParam(value = "Объект")
+    @QueryParam("auditObjects")
     private String[] objectType;
 
     @ApiParam("Идентификатор объекта")
     @QueryParam("auditObjectId")
     private String objectId;
 
-    @ApiParam("Наименование объекта")
-    @QueryParam("auditObjectNames")
-    private String[] objectName;
+    @ApiParam("Тип события")
+    @QueryParam("auditEventTypes")
+    private String[] auditEventType;
 
     @ApiParam("Идентификатор пользователя")
     @QueryParam("userId")
@@ -63,6 +62,10 @@ public class AuditCriteria extends RestCriteria {
     @ApiParam("Имя хоста")
     @QueryParam("hostname")
     private String hostname;
+
+    @ApiParam("Идентификатор типа журнала")
+    @QueryParam("auditTypeId")
+    private Short[] auditTypeId;
 
     @ApiParam("Поле сортировки")
     @QueryParam("sortingColumn")

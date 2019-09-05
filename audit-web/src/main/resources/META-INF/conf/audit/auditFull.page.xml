@@ -3,39 +3,51 @@
         <fields>
             <set>
                 <row>
-                    <text id="auditSourceApplication_label">Система/Модуль:</text>
-                    <text id="auditSourceApplication">{sourceApplication}</text>
+                    <text id="sourceApplication_label">Система/Модуль:</text>
+                    <text id="sourceApplication">{sourceApplication}</text>
                 </row>
                 <row>
-                    <text label="Идентификатор объекта" id="id_label">Идентификатор объекта:</text>
-                    <text label="Идентификатор объекта" id="id">{objectId}</text>
+                    <text id="id_label">Идентификатор события:</text>
+                    <text id="id">{id}</text>
                 </row>
                 <row>
-                    <text label="Наименование объекта" id="objectName_label">Наименование объекта:</text>
-                    <text id="objectName">{objectName}</text>
+                    <text id="objectId_label">Идентификатор объекта:</text>
+                    <text id="objectId">{objectId}</text>
                 </row>
                 <row>
-                    <text label="Тип события" id="objectType_label">Тип события:</text>
+                    <text id="objectType_label">Тип объекта:</text>
                     <text id="objectType">{objectType}</text>
                 </row>
                 <row>
-                    <text label="Дата и время" id="eventDate_label">Дата и время:</text>
+                    <text id="objectName_label">Наименование объекта:</text>
+                    <text id="objectName">{objectName}</text>
+                </row>
+                <row>
+                    <text id="eventType_label">Тип события:</text>
+                    <text id="eventType">{eventType}</text>
+                </row>
+                <row>
+                    <text id="eventDate_label">Дата и время:</text>
                     <text id="eventDate">{eventDate}</text>
                 </row>
                 <row>
-                    <text label="Имя пользователя" id="userName_label">Имя пользователя:</text>
-                    <text  id="userName">{username}</text>
+                    <text id="userName_label">Имя пользователя:</text>
+                    <text id="userName">{username}</text>
                 </row>
                 <row>
-                    <text label="Рабочая станция" id="auditSourceWorkstation_label">Рабочая станция:</text>
-                    <text id="auditSourceWorkstation">{sourceWorkstation}</text>
+                    <text id="userId_label">Идентификатор пользователя:</text>
+                    <text id="userId">{userId}</text>
                 </row>
                 <row>
-                    <text label="Имя сервера" id="hostname_label">Имя сервера:</text>
+                    <text id="sourceWorkstation_label">Рабочая станция:</text>
+                    <text id="sourceWorkstation">{sourceWorkstation}</text>
+                </row>
+                <row>
+                    <text id="hostname_label">Имя сервера:</text>
                     <text id="hostname">{hostname}</text>
                 </row>
                 <row>
-                    <text label="Данные" id="context_label">Данные:</text>
+                    <text id="context_label">Данные:</text>
                     <line collapsible="true">
                         <code-editor id="context_json" label="context" language="javascript" rows="10">
                             <dependencies>

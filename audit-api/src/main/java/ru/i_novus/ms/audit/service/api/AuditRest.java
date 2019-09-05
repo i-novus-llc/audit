@@ -3,7 +3,7 @@ package ru.i_novus.ms.audit.service.api;
 import io.swagger.annotations.*;
 import org.springframework.data.domain.Page;
 import ru.i_novus.ms.audit.model.Audit;
-import ru.i_novus.ms.audit.model.AuditCriteria;
+import ru.i_novus.ms.audit.criteria.AuditCriteria;
 import ru.i_novus.ms.audit.model.AuditForm;
 
 import javax.validation.Valid;
