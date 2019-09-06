@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="AUDIT-26_audit_sender_id_add_column" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="audit" schemaName="audit" columnName="sender_id"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="audit" schemaName="audit">
+            <column name="sender_id" type="varchar" remarks="Код системы (отправителя)"/>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="audit" schemaName="audit" columnName="sender_id"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-26_audit_receiver_id_add_column" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="audit" schemaName="audit" columnName="receiver_id"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="audit" schemaName="audit">
+            <column name="receiver_id" type="varchar" remarks="Код системы (получателя)"/>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="audit" schemaName="audit" columnName="receiver_id"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
