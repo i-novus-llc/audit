@@ -65,6 +65,12 @@ public abstract class AbstractAudit implements Serializable {
     @NotNull
     private Short auditTypeId;
 
+    @ApiModelProperty(value = "Код (наименование) системы-отправителя")
+    private String sender;
+
+    @ApiModelProperty(value = "Код (наименование) системы-получателя")
+    private String receiver;
+
     @Override
     public String toString() {
         return "AbstractAudit{" +
