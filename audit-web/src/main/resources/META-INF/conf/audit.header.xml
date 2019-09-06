@@ -3,6 +3,7 @@
     <nav>
         <sub-menu label="Подсистема журналирования">
             <page page-id="audit" label="Журнал действий пользователей"/>
+            <page page-id="auditIntegration" label="Журнал интеграционных сервисов"/>
         </sub-menu>
     </nav>
 </header>
