@@ -18,9 +18,8 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"auditObjectType", "auditObjectName", "auditSourceApplication"})
+@ToString()
 public class AuditEntity {
-
     @Id
     @Access(AccessType.PROPERTY)
     @Column(name = "id", nullable = false)
@@ -32,13 +31,11 @@ public class AuditEntity {
     @Column(name = "event_type", nullable = false)
     private String eventType;
 
-    @ManyToOne
-    @JoinColumn(name = "object_type_id", nullable = false)
-    private AuditObjectTypeEntity auditObjectType;
+    @Column(name = "object_type", nullable = false)
+    private String auditObjectType;
 
-    @ManyToOne
-    @JoinColumn(name = "object_name_id", nullable = false)
-    private AuditObjectNameEntity auditObjectName;
+    @Column(name = "object_name", nullable = false)
+    private String auditObjectName;
 
     @Column(name = "object_id")
     private String objectId;
@@ -50,9 +47,8 @@ public class AuditEntity {
     @JsonProperty("username")
     private String username;
 
-    @ManyToOne
-    @JoinColumn(name = "source_application_id", nullable = false)
-    private AuditSourceApplicationEntity auditSourceApplication;
+    @Column(name = "source_application", nullable = false)
+    private String auditSourceApplication;
 
     @Column(name = "source_workstation")
     private String sourceWorkstation;
@@ -67,6 +63,9 @@ public class AuditEntity {
     @Column(name = "hostname")
     @JsonProperty("hostname")
     private String hostname;
+
+    @Column(name = "audit_type_id", nullable = false)
+    private Short auditTypeId;
 
     @PrePersist
     public void prePersist() {

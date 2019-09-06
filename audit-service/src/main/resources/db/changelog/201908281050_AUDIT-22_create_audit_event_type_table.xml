@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="AUDIT-22_create_audit_event_type_table" author="agaifutdinov" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="audit_event_type" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <createTable tableName="audit_event_type" schemaName="audit" remarks="Справочник типов событий">
+            <column name="id" type="uuid" remarks="Идентификатор">
+                <constraints primaryKey="true" primaryKeyName="audit_event_type_pk"/>
+            </column>
+            <column name="name" type="varchar" remarks="Тип события">
+                <constraints nullable="false"/>
+            </column>
+            <column name="audit_id" type="int2" remarks="Идентификатор типа журнала">
+                <constraints nullable="false" foreignKeyName="audit_event_type_audit_id_fk" references="audit.audit_type(id)"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="audit_event_type" schemaName="audit"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-22_create_pgcrypto_extension" author="agaifutdinov" dbms="postgresql">
+        <sql>
+            CREATE EXTENSION IF NOT EXISTS pgcrypto;
+        </sql>
+    </changeSet>
+
+    <changeSet id="AUDIT-22_copy_from_audit" author="agaifutdinov" dbms="postgresql">
+        <preConditions onFail="WARN">
+            <tableExists tableName="audit_event_type" schemaName="audit"/>
+        </preConditions>
+        <sql>
+            INSERT INTO audit.audit_event_type(id, audit_id, name) (
+                SELECT gen_random_uuid(), 1, event_type
+                FROM audit.audit
+                GROUP BY event_type
+            );
+        </sql>
+    </changeSet>
+</databaseChangeLog>
