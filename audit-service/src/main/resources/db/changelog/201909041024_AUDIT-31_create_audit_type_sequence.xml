@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="AUDIT-31_create_audit_type_id_sequence" author="agaifutdinov">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="audit_type_id_seq" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="audit_type_id_seq" schemaName="audit"/>
+        <rollback>
+            <dropSequence sequenceName="audit_type_id_seq" schemaName="audit"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-31_alter_audit_type_id_seq" author="agaifutdinov" dbms="postgresql">
+        <sql>
+            ALTER SEQUENCE audit.audit_type_id_seq
+                AS smallint
+                OWNED BY audit.audit.id;
+            SELECT setval('audit.audit_type_id_seq', max(id)) FROM audit.audit_type;
+        </sql>
+    </changeSet>
+</databaseChangeLog>

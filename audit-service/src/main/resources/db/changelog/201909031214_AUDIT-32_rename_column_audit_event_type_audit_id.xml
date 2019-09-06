@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    
+    <changeSet id="AUDIT-32_rename_column_audit_event_type_audit_id" author="agaifutdinov" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="audit_event_type" schemaName="audit" columnName = "audit_id"/>
+            <not>
+                <columnExists tableName="audit_event_type" schemaName="audit" columnName="audit_type_id"/>
+            </not>
+        </preConditions>
+        <renameColumn tableName="audit_event_type"
+                      schemaName="audit"
+                      oldColumnName="audit_id"
+                      newColumnName="audit_type_id"/>
+        <rollback>
+            <renameColumn tableName="audit_event_type"
+                          schemaName="audit"
+                          oldColumnName="audit_type_id"
+                          newColumnName="audit_id"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
