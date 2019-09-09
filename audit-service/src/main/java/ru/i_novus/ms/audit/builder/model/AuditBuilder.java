@@ -26,6 +26,8 @@ public class AuditBuilder {
                 .hostname(entity.getHostname())
                 .username(entity.getUsername())
                 .auditTypeId(entity.getAuditTypeId())
+                .senderId(entity.getSenderId())
+                .receiverId(entity.getReceiverId())
                 .build();
     }
 }

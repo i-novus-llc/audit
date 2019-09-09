@@ -15,6 +15,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Setter
 public class AuditCriteria extends RestCriteria {
+
+    @QueryParam("id")
+    private String id;
+
     @ApiParam(value = "Дата события (от)", format = "yyyy-MM-ddTHH:mm:ss")
     @QueryParam("eventDateFrom")
     private LocalDateTime eventDateFrom;

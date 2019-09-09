@@ -12,6 +12,10 @@ public final class AuditPredicates {
     private AuditPredicates() {
     }
 
+    public static BooleanExpression isIdEquals(String value) {
+        return QAuditEntity.auditEntity.eventType.equalsIgnoreCase(value.trim());
+    }
+
     public static BooleanExpression isEventDateAfterOrEquals(LocalDateTime from) {
         return QAuditEntity.auditEntity.eventDate.after(from).or(QAuditEntity.auditEntity.eventDate.eq(from));
     }

@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<query xmlns="http://n2oapp.net/framework/config/schema/query-4.0"
+       object-id="audit" name="Audit">
+
+    <list count-mapping="[totalElements]" result-mapping="[content]">
+        <rest filters-separator="&amp;">${audit.backend.url}/audit?{filters}&amp;{sorting}&amp;page={page}</rest>
+    </list>
+    <unique filters="id">
+        <rest>${audit.backend.url}/audit/{id}</rest>
+    </unique>
+
+    <fields>
+
+        <field id="id" domain="string">
+            <select/>
+            <sorting mapping="['direction']">sortingColumn=id&amp;sortingOrder={direction}</sorting>
+            <filters>
+                <eq filter-id="id">id={id}</eq>
+            </filters>
+        </field>
+
+        <field id="eventDate" domain="localdatetime">
+            <select/>
+            <sorting mapping="['direction']">sortingColumn=eventDate&amp;sortingOrder={direction}</sorting>
+            <filters>
+                <more filter-id="period.begin">eventDateFrom={period.begin}</more>
+                <less filter-id="period.end">eventDateTo={period.end}</less>
+            </filters>
+        </field>
+
+        <field id="eventType" domain="string">
+            <select/>
+        </field>
+
+        <field id="auditEventTypes" domain="string">
+            <sorting mapping="['direction']">sortingColumn=auditEventTypes.name&amp;sortingOrder={direction}</sorting>
+            <select/>
+            <sorting/>
+            <filters>
+                <in filter-id="auditEventTypes*.name">auditEventTypes={auditEventTypes*.name}</in>
+            </filters>
+        </field>
+
+        <field id="context" domain="string">
+            <select/>
+        </field>
+
+        <field id="sourceApplication" domain="string">
+            <sorting mapping="['direction']">sortingColumn=auditSourceApplications.code&amp;sortingOrder={direction}</sorting>
+            <select/>
+            <filters>
+                <in filter-id="auditSourceApplications*.code">auditSourceApplications={auditSourceApplications*.code}</in>
+            </filters>
+        </field>
+
+        <field id="auditTypeId" domain="integer">
+            <select/>
+            <filters>
+                <eq filter-id="auditTypeId">auditTypeId={auditTypeId}</eq>
+            </filters>
+        </field>
+
+        <field id="sender" domain="string">
+            <select/>
+        </field>
+
+        <field id="receiver" domain="string">
+            <select/>
+        </field>
+    </fields>
+
+</query>

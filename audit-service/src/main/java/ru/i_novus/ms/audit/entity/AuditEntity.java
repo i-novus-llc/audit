@@ -67,6 +67,12 @@ public class AuditEntity {
     @Column(name = "audit_type_id", nullable = false)
     private Short auditTypeId;
 
+    @Column(name = "sender_id", nullable = false)
+    private String senderId;
+
+    @Column(name = "receiver_id", nullable = false)
+    private String receiverId;
+
     @PrePersist
     public void prePersist() {
         id = id == null ? UUID.randomUUID() : id;

@@ -52,6 +52,9 @@ public class QueryService {
     private static Predicate getAuditPredicate(AuditCriteria criteria) {
         BooleanBuilder where = new BooleanBuilder();
 
+        if (nonNull(criteria.getId()))
+            where.and(isIdEquals(criteria.getId()));
+
         if (nonNull(criteria.getUserId()))
             where.and(isUserIdEquals(criteria.getUserId()));
 
