@@ -3,7 +3,7 @@ version: '3.6'
 services:
 
   postgres:
-    image: postgres:11.4-alpine
+    image: 538721144237.dkr.ecr.eu-west-1.amazonaws.com/audit/db/develop
     ports:
       - 5432
     environment:
