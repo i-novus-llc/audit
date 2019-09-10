@@ -13,7 +13,6 @@
 
         <field id="id" domain="string">
             <select/>
-            <sorting mapping="['direction']">sortingColumn=id&amp;sortingOrder={direction}</sorting>
             <filters>
                 <eq filter-id="id">id={id}</eq>
             </filters>
@@ -33,9 +32,7 @@
         </field>
 
         <field id="auditEventTypes" domain="string">
-            <sorting mapping="['direction']">sortingColumn=auditEventTypes.name&amp;sortingOrder={direction}</sorting>
             <select/>
-            <sorting/>
             <filters>
                 <in filter-id="auditEventTypes*.name">auditEventTypes={auditEventTypes*.name}</in>
             </filters>
@@ -43,14 +40,6 @@
 
         <field id="context" domain="string">
             <select/>
-        </field>
-
-        <field id="sourceApplication" domain="string">
-            <sorting mapping="['direction']">sortingColumn=auditSourceApplications.code&amp;sortingOrder={direction}</sorting>
-            <select/>
-            <filters>
-                <in filter-id="auditSourceApplications*.code">auditSourceApplications={auditSourceApplications*.code}</in>
-            </filters>
         </field>
 
         <field id="auditTypeId" domain="integer">
@@ -62,10 +51,16 @@
 
         <field id="sender" domain="string">
             <select/>
+            <filters>
+                <eq filter-id="sender*.code">senders={sender*.code}</eq>
+            </filters>
         </field>
 
         <field id="receiver" domain="string">
             <select/>
+            <filters>
+                <eq filter-id="receiver*.code">receivers={receiver*.code}</eq>
+            </filters>
         </field>
     </fields>
 
