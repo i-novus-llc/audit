@@ -1,0 +1,28 @@
+FROM postgres:11.5
+MAINTAINER Alexander Kuznetsov
+
+ENV PGDATA "/var/lib/postgresql/data"
+ENV PGCONTRIB "/var/lib/postgresql/contrib"
+
+COPY docker-entrypoint-initdb/*.conf /etc/postgres/conf.d/
+COPY docker-entrypoint-initdb/*.sh /docker-entrypoint-initdb.d/
+COPY docker-entrypoint-initdb/*.sql /docker-entrypoint-initdb.d/
+RUN apt-get -y update && apt-get install -y \
+git \
+make \
+gcc \
+libpq-dev \
+postgresql-server-dev-11
+
+RUN git clone https://github.com/postgrespro/pg_pathman $PGCONTRIB/pg_pathman/
+RUN cd $PGCONTRIB/pg_pathman/ && make install USE_PGXS=1
+
+RUN apt-get remove -y \
+postgresql-server-dev-11 \
+libpq-dev \
+gcc \
+make \
+git
+
+RUN apt-get autoremove -y
+RUN rm -r $PGCONTRIB/pg_pathman
