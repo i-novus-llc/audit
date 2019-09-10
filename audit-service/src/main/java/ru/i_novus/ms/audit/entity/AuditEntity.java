@@ -2,15 +2,12 @@ package ru.i_novus.ms.audit.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@TypeDef(name = "JsonbType", typeClass = JsonbType.class)
 @Getter
 @Setter
 @Builder
@@ -53,8 +50,7 @@ public class AuditEntity {
     @Column(name = "source_workstation")
     private String sourceWorkstation;
 
-    @Column(name = "context", columnDefinition = "json")
-    @Type(type = "JsonbType")
+    @Column(name = "context")
     private String context;
 
     @Column(name = "creation_date", nullable = false)
