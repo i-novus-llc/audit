@@ -41,8 +41,8 @@ services:
       retries: 3
       start_period: 300s
     depends_on:
-      postgres:
-        condition: service_healthy
+      - "postgres"
+    command: ["./wait-for-it.sh", "postgres:5432", "--", "python", "app.py"]
 
   audit-web:
     environment:
