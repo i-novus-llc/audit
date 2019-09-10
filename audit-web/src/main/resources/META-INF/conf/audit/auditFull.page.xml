@@ -49,7 +49,7 @@
                 <row>
                     <text id="context_label">Данные:</text>
                     <line collapsible="true">
-                        <code-editor id="context_json" label="context" language="javascript" rows="10">
+                        <text-area id="context_json" label="context" rows="10" enabled="false">
                             <dependencies>
                                 <set-value>
                                     str = context;
@@ -59,7 +59,7 @@
                                     return str.split(",").join(",\n\t");
                                 </set-value>
                             </dependencies>
-                        </code-editor>
+                        </text-area>
                     </line>
                 </row>
             </set>
