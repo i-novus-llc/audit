@@ -16,8 +16,7 @@ services:
       placement:
         constraints:
           - node.labels.type == db
-    healthcheck:
-      test: nc -z localhost 5432
+#    command: postgres -c shared_preload_libraries='pg_pathman'
 
   audit-service:
     environment:
