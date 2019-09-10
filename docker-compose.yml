@@ -2,14 +2,14 @@ version: '3.6'
 
 services:
 
-  postgres:
-#    image: ${DOCKER_REGISTRY}/audit/db/develop:${TAG:-latest}
+  db:
+    image: ${DOCKER_REGISTRY}/audit/db/develop
     ports:
-      - 5432
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: audit
+      - "5432"
+#    environment:
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: postgres
+#      POSTGRES_DB: audit
     deploy:
       resources:
         limits:
