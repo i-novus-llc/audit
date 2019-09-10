@@ -6,10 +6,10 @@ services:
     image: ${DOCKER_REGISTRY}/audit/db/develop
     ports:
       - "5432"
-#    environment:
-#      POSTGRES_USER: postgres
-#      POSTGRES_PASSWORD: postgres
-#      POSTGRES_DB: audit
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: audit
     deploy:
       resources:
         limits:
@@ -17,7 +17,6 @@ services:
       placement:
         constraints:
           - node.labels.type == db
-#    command: postgres -c shared_preload_libraries='pg_pathman'
 
   audit-service:
     environment:
@@ -40,8 +39,8 @@ services:
       timeout: 10s
       retries: 3
       start_period: 300s
-#    depends_on:
-#      - postgres
+    depends_on:
+      - db
 
   audit-web:
     environment:
@@ -64,5 +63,3 @@ services:
       timeout: 10s
       retries: 3
       start_period: 300s
-#    depends_on:
-#      - audit-service

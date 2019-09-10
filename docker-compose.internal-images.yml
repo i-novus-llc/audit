@@ -2,9 +2,6 @@ version: "3.6"
 
 services:
 
-#  postgres:
-#    image: ${DOCKER_REGISTRY}/audit/db/develop:${TAG:-latest}
-
   audit-service:
     image: ${DOCKER_REGISTRY}/audit/audit-service:${TAG:-latest}
 
