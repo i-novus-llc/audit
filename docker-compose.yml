@@ -42,7 +42,7 @@ services:
       start_period: 300s
     depends_on:
       - "postgres"
-    command: ["./wait-for-it.sh", "postgres:5432", "--", "python", "app.py"]
+    command: ["./wait-for-it.sh", "postgres:5432", "-- echo \"postgres running\"", "python", "app.py"]
 
   audit-web:
     environment:
