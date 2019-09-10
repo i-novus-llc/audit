@@ -12,8 +12,8 @@ public final class AuditPredicates {
     private AuditPredicates() {
     }
 
-    public static BooleanExpression isIdEquals(String value) {
-        return QAuditEntity.auditEntity.eventType.equalsIgnoreCase(value.trim());
+    public static BooleanExpression isIdContains(String value) {
+        return QAuditEntity.auditEntity.eventType.containsIgnoreCase(value.trim());
     }
 
     public static BooleanExpression isEventDateAfterOrEquals(LocalDateTime from) {
@@ -22,6 +22,10 @@ public final class AuditPredicates {
 
     public static BooleanExpression isEventDateBeforeOrEquals(LocalDateTime to) {
         return QAuditEntity.auditEntity.eventDate.before(to).or(QAuditEntity.auditEntity.eventDate.eq(to));
+    }
+
+    public static BooleanExpression isEventDateBetween(LocalDateTime from, LocalDateTime to) {
+        return QAuditEntity.auditEntity.eventDate.between(from, to);
     }
 
     public static BooleanExpression isEventTypeEquals(String value) {
@@ -82,6 +86,14 @@ public final class AuditPredicates {
 
     public static BooleanExpression inAuditTypeIds(Short[] value) {
         return QAuditEntity.auditEntity.auditTypeId.in(value);
+    }
+
+    public static BooleanExpression inSenders(String[] value) {
+        return QAuditEntity.auditEntity.senderId.in(value);
+    }
+
+    public static BooleanExpression inRecivers(String[] value) {
+        return QAuditEntity.auditEntity.receiverId.in(value);
     }
 
 }

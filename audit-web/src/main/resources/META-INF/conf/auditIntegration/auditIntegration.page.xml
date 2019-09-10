@@ -28,7 +28,8 @@
                     </row>
                 </filters>
                 <columns>
-                    <column text-field-id="eventDate" label="Дата и время"/>
+                    <column text-field-id="eventDate" label="Дата и время"
+                            sorting-direction="desc" sorting-field-id="eventDate"/>
                     <column text-field-id="id" label="Идентификатор сообщения"/>
                     <column text-field-id="sender" label="Отправитель"/>
                     <column text-field-id="receiver" label="Получатель"/>
