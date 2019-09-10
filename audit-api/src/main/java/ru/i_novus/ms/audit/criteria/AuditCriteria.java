@@ -71,6 +71,14 @@ public class AuditCriteria extends RestCriteria {
     @QueryParam("auditTypeId")
     private Short[] auditTypeId;
 
+    @ApiParam("Код системы отправителя")
+    @QueryParam("senders")
+    private String[] sender;
+
+    @ApiParam("Код системы получателя")
+    @QueryParam("receivers")
+    private String[] receiver;
+
     @ApiParam("Поле сортировки")
     @QueryParam("sortingColumn")
     private String sortingColumn;
