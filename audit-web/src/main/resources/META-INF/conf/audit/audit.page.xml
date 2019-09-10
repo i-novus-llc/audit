@@ -44,75 +44,43 @@
                 <columns>
                     <column text-field-id="eventDate" label="Дата и время">
                         <link>
-                            <show-modal page-id="auditFull">
-                                <pre-filters>
-                                    <eq field-id="id" value="{id}"/>
-                                </pre-filters>
-                            </show-modal>
+                            <show-modal page-id="auditFull" detail-field-id="id" master-field-id="id"/>
                         </link>
                     </column>
                     <column text-field-id="sourceApplication" label="Система/Модуль">
                         <link>
-                            <show-modal page-id="auditFull">
-                                <pre-filters>
-                                    <eq field-id="id" value="{id}"/>
-                                </pre-filters>
-                            </show-modal>
+                            <show-modal page-id="auditFull" detail-field-id="id" master-field-id="id"/>
                         </link>
                     </column>
                     <column text-field-id="sourceWorkstation" label="Рабочая станция">
                         <link>
-                            <show-modal page-id="auditFull">
-                                <pre-filters>
-                                    <eq field-id="id" value="{id}"/>
-                                </pre-filters>
-                            </show-modal>
+                            <show-modal page-id="auditFull" detail-field-id="id" master-field-id="id"/>
                         </link>
                     </column>
                     <column text-field-id="hostname" sorting-field-id="hostname" sorting-direction="desc"
                             label="Имя сервера">
                         <link>
-                            <show-modal page-id="auditFull">
-                                <pre-filters>
-                                    <eq field-id="id" value="{id}"/>
-                                </pre-filters>
-                            </show-modal>
+                            <show-modal page-id="auditFull" detail-field-id="id" master-field-id="id"/>
                         </link>
                     </column>
                     <column text-field-id="objectId" label="Идентификатор объекта">
                         <link>
-                            <show-modal page-id="auditFull">
-                                <pre-filters>
-                                    <eq field-id="id" value="{id}"/>
-                                </pre-filters>
-                            </show-modal>
+                            <show-modal page-id="auditFull" detail-field-id="id" master-field-id="id"/>
                         </link>
                     </column>
                     <column text-field-id="objectName" label="Объект">
                         <link>
-                            <show-modal page-id="auditFull">
-                                <pre-filters>
-                                    <eq field-id="id" value="{id}"/>
-                                </pre-filters>
-                            </show-modal>
+                            <show-modal page-id="auditFull" detail-field-id="id" master-field-id="id"/>
                         </link>
                     </column>
                     <column text-field-id="username" label="Пользователь">
                         <link>
-                            <show-modal page-id="auditFull">
-                                <pre-filters>
-                                    <eq field-id="id" value="{id}"/>
-                                </pre-filters>
-                            </show-modal>
+                            <show-modal page-id="auditFull" detail-field-id="id" master-field-id="id"/>
                         </link>
                     </column>
                     <column text-field-id="objectType" label="Тип события">
                         <link>
-                            <show-modal page-id="auditFull">
-                                <pre-filters>
-                                    <eq field-id="id" value="{id}"/>
-                                </pre-filters>
-                            </show-modal>
+                            <show-modal page-id="auditFull" detail-field-id="id" master-field-id="id"/>
                         </link>
                     </column>
                 </columns>

@@ -1,67 +1,29 @@
 <simple-page xmlns="http://n2oapp.net/framework/config/schema/page-2.0" name="Просмотр события">
     <form object-id="audit" query-id="audit">
         <fields>
-            <set>
-                <row>
-                    <text id="sourceApplication_label">Система/Модуль:</text>
-                    <text id="sourceApplication">{sourceApplication}</text>
-                </row>
-                <row>
-                    <text id="id_label">Идентификатор события:</text>
-                    <text id="id">{id}</text>
-                </row>
-                <row>
-                    <text id="objectId_label">Идентификатор объекта:</text>
-                    <text id="objectId">{objectId}</text>
-                </row>
-                <row>
-                    <text id="objectType_label">Тип объекта:</text>
-                    <text id="objectType">{objectType}</text>
-                </row>
-                <row>
-                    <text id="objectName_label">Наименование объекта:</text>
-                    <text id="objectName">{objectName}</text>
-                </row>
-                <row>
-                    <text id="eventType_label">Тип события:</text>
-                    <text id="eventType">{eventType}</text>
-                </row>
-                <row>
-                    <text id="eventDate_label">Дата и время:</text>
-                    <text id="eventDate">{eventDate}</text>
-                </row>
-                <row>
-                    <text id="userName_label">Имя пользователя:</text>
-                    <text id="userName">{username}</text>
-                </row>
-                <row>
-                    <text id="userId_label">Идентификатор пользователя:</text>
-                    <text id="userId">{userId}</text>
-                </row>
-                <row>
-                    <text id="sourceWorkstation_label">Рабочая станция:</text>
-                    <text id="sourceWorkstation">{sourceWorkstation}</text>
-                </row>
-                <row>
-                    <text id="hostname_label">Имя сервера:</text>
-                    <text id="hostname">{hostname}</text>
-                </row>
-                <row>
-                    <text id="context_label">Данные:</text>
-                    <line collapsible="true">
-                        <code-editor id="context_json" label="context" language="javascript" rows="10">
-                            <dependencies>
-                                <set-value>
-                                    str = context;
-                                    str = str.split("'").join("\"");
-                                    str = str.replace("{", "{\n\t");
-                                    str = str.replace("}", "\n}");
-                                    return str.split(",").join(",\n\t");
-                                </set-value>
-                            </dependencies>
-                        </code-editor>
-                    </line>
-                </row>
+            <set field-label-location="left">
+                <output-text id="sourceApplication" label="Система/Модуль: " label-class="w-50"/>
+                <output-text id="id" label="Идентификатор события: " label-class="w-50"/>
+                <output-text id="objectId" label="Идентификатор объекта: " label-class="w-50" />
+                <output-text id="objectType" label="Тип объекта: " label-class="w-50"/>
+                <output-text id="objectName" label="Наименование объекта: " label-class="w-50"/>
+                <output-text id="eventType" label="Тип события: " label-class="w-50"/>
+                <output-text id="eventDate" label="Дата и время: " label-class="w-50"/>
+                <output-text id="userName" label="Имя пользователя: " label-class="w-50"/>
+                <output-text id="userId" label="Идентификатор пользователя: " label-class="w-50"/>
+                <output-text id="sourceWorkstation" label="Рабочая станция: " label-class="w-50"/>
+                <output-text id="hostname" label="Имя сервера: " label-class="w-50"/>
+                <text-area id="context_json" label="Данные: " rows="10" enabled="false" label-class="w-50">
+                    <dependencies>
+                        <set-value>
+                            str = context;
+                            str = str.split("'").join("\"");
+                            str = str.replace("{", "{\n\t");
+                            str = str.replace("}", "\n}");
+                            return str.split(",").join(",\n\t");
+                        </set-value>
+                    </dependencies>
+                </text-area>
             </set>
         </fields>
     </form>
