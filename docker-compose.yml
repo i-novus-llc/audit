@@ -16,6 +16,8 @@ services:
       placement:
         constraints:
           - node.labels.type == db
+    healthcheck:
+      test: nc -z localhost 5432
 
   audit-service:
     environment:
@@ -34,10 +36,13 @@ services:
           - node.labels.dc == hetzner
     healthcheck:
       test: curl -f http://localhost:8080/monitoring/health | grep -io '^{"status":"UP"' || exit 1
-      interval: 2m
-      timeout: 30s
-      retries: 10
+      interval: 1m
+      timeout: 10s
+      retries: 3
       start_period: 300s
+    depends_on:
+      postgres:
+        condition: service_healthy
 
   audit-web:
     environment:
