@@ -20,7 +20,7 @@ services:
 
   audit-service:
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/audit
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/audit
       JAVA_OPTS: -Xmx200m
     ports:
       - 8080
