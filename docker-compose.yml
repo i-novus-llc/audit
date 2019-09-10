@@ -41,8 +41,7 @@ services:
       retries: 3
       start_period: 300s
     depends_on:
-      - "postgres"
-    command: ["./wait-for-it.sh", "postgres:5432", "-- echo \"postgres running\"", "python", "app.py"]
+      - postgres
 
   audit-web:
     environment:
