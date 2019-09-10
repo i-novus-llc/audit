@@ -4,7 +4,6 @@ services:
 
   postgres:
 #    image: ${DOCKER_REGISTRY}/audit/db/develop:${TAG:-latest}
-    dockerfile: Dockerfile-postgresql
     ports:
       - 5432
     environment:
@@ -65,3 +64,5 @@ services:
       timeout: 10s
       retries: 3
       start_period: 300s
+    depends_on:
+      - audit-service
