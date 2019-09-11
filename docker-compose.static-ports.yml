@@ -10,6 +10,6 @@ services:
     ports:
       - 8951:8080
 
-  audit-web:
+  audit-webapp:
     ports:
       - 8950:8080
