@@ -40,7 +40,7 @@ services:
       retries: 3
       start_period: 300s
 
-  audit-web:
+  audit-webapp:
     environment:
       AUDIT_BACKEND_URL: "http://audit-service:8080/api"
       JAVA_OPTS: -Xmx300m

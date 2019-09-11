@@ -5,5 +5,5 @@ services:
   audit-service:
     image: ${DOCKER_REGISTRY}/audit/audit-service:${TAG:-latest}
 
-  audit-web:
-    image: ${DOCKER_REGISTRY}/audit/audit-web:${TAG:-latest}
+  audit-webapp:
+    image: ${DOCKER_REGISTRY}/audit/audit-webapp:${TAG:-latest}
