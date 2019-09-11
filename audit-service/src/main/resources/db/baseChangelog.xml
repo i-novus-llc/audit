@@ -16,5 +16,7 @@
     <include file="changelog/201909041024_AUDIT-31_create_audit_type_sequence.xml" relativeToChangelogFile="true" />
     <include file="changelog/201909051024_AUDIT-40_audit_table_add_columns.xml" relativeToChangelogFile="true" />
     <include file="changelog/201909091024_AUDIT-44_audit_context_change_type.xml" relativeToChangelogFile="true" />
+    <include file="changelog/201909051024_AUDIT-24_create_audit_partitions.xml" relativeToChangelogFile="true" />
+    <include file="changelog/201909061649_AUDIT-25_audit_event_type_partitioning.xml" relativeToChangelogFile="true" />
 
 </databaseChangeLog>

@@ -2,10 +2,10 @@ version: '3.6'
 
 services:
 
-  postgres:
-    image: postgres:11.4-alpine
+  db:
+    image: ${DOCKER_REGISTRY}/audit/db/develop
     ports:
-      - 5432
+      - "5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -20,7 +20,7 @@ services:
 
   audit-service:
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/audit
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/audit
       JAVA_OPTS: -Xmx200m
     ports:
       - 8080
@@ -39,6 +39,8 @@ services:
       timeout: 10s
       retries: 3
       start_period: 300s
+    depends_on:
+      - db
 
   audit-webapp:
     environment:
