@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    
+    <changeSet id="AUDIT-25_create_extension_pg_pathman" author="agaifutdinov" dbms="postgresql">
+        <sql>
+            CREATE EXTENSION IF NOT EXISTS pg_pathman;
+        </sql>
+        <rollback>
+            <sql>
+                DROP EXTENSION IF EXISTS pg_pathman;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-25_rename_audit_event_type" author="agaifutdinov">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="audit_event_type_old" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <renameTable oldTableName="audit_event_type" newTableName="audit_event_type_old" schemaName="audit"/>
+        <rollback>
+            <renameTable oldTableName="audit_event_type_old" newTableName="audit_event_type" schemaName="audit"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-25_create_audit_event_type_table" author="agaifutdinov">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="audit_event_type"/>
+            </not>
+        </preConditions>
+        <createTable tableName="audit_event_type" schemaName="audit" remarks="Справочник типов событий">
+            <column name="id" type="uuid" remarks="Идентификатор">
+                <constraints primaryKey="true" primaryKeyName="audit_event_type_id_pk"/>
+            </column>
+            <column name="name" remarks="Тип события" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="audit_type_id" remarks="Идентификатор типа журнала" type="int2">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="audit_event_type" schemaName="audit" columnNames="name, audit_type_id"/>
+        <rollback>
+            <dropTable tableName="audit_event_type" schemaName="audit"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-25_audit_event_type_partitioning" author="agaifutdinov" dbms="postgresql">
+        <sql>
+            SELECT create_range_partitions('audit.audit_event_type', 'audit_type_id', 1::int2, 1::int2, 10);
+            SELECT add_range_partition('audit.audit_event_type', 11, NULL, 'audit.audit_event_type_default');
+        </sql>
+        <rollback>
+            SELECT drop_partitions('audit.audit_event_type', false);
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-25_copy_from_audit_event_type_old" author="agaifutdinov" dbms="postgresql">
+        <sql>
+            INSERT INTO audit.audit_event_type(id, name, audit_type_id) (SELECT id, name, audit_type_id FROM audit.audit_event_type_old);
+        </sql>
+    </changeSet>
+
+    <changeSet id="AUDIT-25_drop_audit_event_type_old" author="agaifutdinov" dbms="postgresql">
+        <preConditions onFail="WARN">
+            <changeSetExecuted id="AUDIT-25_copy_from_audit_event_type_old"
+                               author="agaifutdinov"
+                               changeLogFile="db/changelog/201908281842_AUDIT-25_audit_event_type_partitioning.xml"/>
+        </preConditions>
+        <dropTable tableName="audit_event_type_old" schemaName="audit"/>
+    </changeSet>
+</databaseChangeLog>
