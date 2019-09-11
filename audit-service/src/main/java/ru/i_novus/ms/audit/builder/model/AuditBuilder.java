@@ -15,7 +15,7 @@ public class AuditBuilder {
                 .creationDate(entity.getCreationDate())
                 .id(entity.getId())
                 .context(entity.getContext())
-                .eventDate(entity.getEventDate())
+                .eventDate(entity.getEventDate().withNano(0))
                 .eventType(entity.getEventType())
                 .objectId(entity.getObjectId())
                 .objectName(entity.getAuditObjectName())

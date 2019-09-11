@@ -1,0 +1,14 @@
+<simple-page xmlns="http://n2oapp.net/framework/config/schema/page-2.0" name="Просмотр события">
+    <form query-id="auditIntegration">
+        <fields>
+            <set field-label-location="left">
+                <output-text id="id" label="Идентификатор: "  label-class="w-25"/>
+                <output-text id="eventType" label="Действие: " label-class="w-25"/>
+                <output-text id="sender" label="Отправитель: " label-class="w-25" />
+                <output-text id="receiver" label="Получатель: " label-class="w-25"/>
+                <output-text id="eventDate" label="Дата и время: " label-class="w-25"/>
+                <text-area id="context" label="Данные: " label-class="w-25" enabled="false" rows="10"/>
+            </set>
+        </fields>
+    </form>
+</simple-page>
