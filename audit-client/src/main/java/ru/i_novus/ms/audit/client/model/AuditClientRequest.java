@@ -1,10 +1,15 @@
 package ru.i_novus.ms.audit.client.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
 public class AuditClientRequest implements Serializable {
-    
+
     private LocalDateTime eventDate;
 
     private String eventType;
@@ -17,53 +22,9 @@ public class AuditClientRequest implements Serializable {
 
     private String context;
 
-    public LocalDateTime getEventDate() {
-        return eventDate;
-    }
+    private String hostname;
 
-    public void setEventDate(LocalDateTime eventDate) {
-        this.eventDate = eventDate;
-    }
-
-    public String getEventType() {
-        return eventType;
-    }
-
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
-    }
-
-    public String getObjectType() {
-        return objectType;
-    }
-
-    public void setObjectType(String objectType) {
-        this.objectType = objectType;
-    }
-
-    public String getObjectId() {
-        return objectId;
-    }
-
-    public void setObjectId(String objectId) {
-        this.objectId = objectId;
-    }
-
-    public String getObjectName() {
-        return objectName;
-    }
-
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
-    }
-
-    public String getContext() {
-        return context;
-    }
-
-    public void setContext(String context) {
-        this.context = context;
-    }
+    private Short auditTypeId;
 
     @Override
     public String toString() {

@@ -2,6 +2,9 @@ package ru.i_novus.ms.audit.service;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.CollectionUtils;
 import ru.i_novus.ms.audit.criteria.AuditCriteria;
@@ -15,24 +18,27 @@ import ru.i_novus.ms.audit.repository.predicates.EventTypePredicates;
 import java.util.Collections;
 import java.util.List;
 
-import static java.util.Objects.nonNull;
 import static ru.i_novus.ms.audit.repository.predicates.AuditPredicates.*;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class QueryService {
-    private QueryService() {
-    }
 
     private static Predicate getAuditEventPredicate(AuditCriteria criteria) {
         BooleanBuilder where = new BooleanBuilder();
 
-        if (nonNull(criteria.getEventDateFrom()))
-            where.and(isEventDateAfterOrEquals(criteria.getEventDateFrom()));
-
-        if (nonNull(criteria.getEventDateTo()))
-            where.and(isEventDateBeforeOrEquals(criteria.getEventDateTo()));
-
-        if (nonNull(criteria.getEventType()))
+        if (criteria.getEventDateFrom() != null && criteria.getEventDateTo() != null) {
+            where.and(isEventDateBetween(criteria.getEventDateFrom(), criteria.getEventDateTo()));
+        } else {
+            if (criteria.getEventDateFrom() != null) {
+                where.and(isEventDateAfterOrEquals(criteria.getEventDateFrom()));
+            }
+            if (criteria.getEventDateTo() != null) {
+                where.and(isEventDateBeforeOrEquals(criteria.getEventDateTo()));
+            }
+        }
+        if (criteria.getEventType() != null) {
             where.and(isEventTypeEquals(criteria.getEventType()));
+        }
 
         return where.getValue();
     }
@@ -40,10 +46,10 @@ public class QueryService {
     private static Predicate getAuditObjectPredicate(AuditCriteria criteria) {
         BooleanBuilder where = new BooleanBuilder();
 
-        if (nonNull(criteria.getObjectType()) && criteria.getObjectType().length > 0)
+        if (ArrayUtils.isNotEmpty(criteria.getObjectType()))
             where.and(inObjectNameNames(criteria.getObjectType()));
 
-        if (nonNull(criteria.getObjectId()))
+        if (criteria.getObjectId() != null)
             where.and(isObjectIdEquals(criteria.getObjectId()));
 
         return where.getValue();
@@ -52,26 +58,45 @@ public class QueryService {
     private static Predicate getAuditPredicate(AuditCriteria criteria) {
         BooleanBuilder where = new BooleanBuilder();
 
-        if (nonNull(criteria.getUserId()))
+        if (criteria.getId() != null) {
+            where.and(isIdContains(criteria.getId()));
+        }
+
+        if (criteria.getUserId() != null) {
             where.and(isUserIdEquals(criteria.getUserId()));
+        }
 
-        if (nonNull(criteria.getUsername()))
+        if (criteria.getUsername() != null) {
             where.and(isUsernameEquals(criteria.getUsername()));
+        }
 
-        if (nonNull(criteria.getSourceWorkstation()))
+        if (criteria.getSourceWorkstation() != null) {
             where.and(isSourceWorkstationContains(criteria.getSourceWorkstation()));
+        }
 
-        if (nonNull(criteria.getContext()))
+        if (criteria.getContext() != null) {
             where.and(isContextContains(criteria.getContext()));
+        }
 
-        if (nonNull(criteria.getHostname()))
+        if (criteria.getHostname() != null) {
             where.and(isHostnameContains(criteria.getHostname()));
+        }
 
-        if (nonNull(criteria.getSourceApplication()) && criteria.getSourceApplication().length > 0)
+        if (ArrayUtils.isNotEmpty(criteria.getSourceApplication())) {
             where.and(inSourceApplicationNames(criteria.getSourceApplication()));
+        }
 
-        if (nonNull(criteria.getAuditTypeId()) && criteria.getAuditTypeId().length > 0)
+        if (ArrayUtils.isNotEmpty(criteria.getAuditTypeId())) {
             where.and(inAuditTypeIds(criteria.getAuditTypeId()));
+        }
+
+        if (ArrayUtils.isNotEmpty(criteria.getSender())) {
+            where.and(inSenders(criteria.getSender()));
+        }
+
+        if (ArrayUtils.isNotEmpty(criteria.getReceiver())) {
+            where.and(inRecivers(criteria.getReceiver()));
+        }
 
         return where.getValue();
     }
@@ -88,8 +113,9 @@ public class QueryService {
 
     public static Sort toSort(AuditCriteria criteria) {
         List<Sort.Order> orders = criteria.getOrders();
-        if (CollectionUtils.isEmpty(orders))
+        if (CollectionUtils.isEmpty(orders)) {
             orders = Collections.singletonList(new Sort.Order(Sort.Direction.DESC, "eventDate"));
+        }
         return Sort.by(orders);
     }
 
@@ -99,10 +125,10 @@ public class QueryService {
 
     static Predicate toPredicate(AuditEventTypeCriteria criteria) {
         BooleanBuilder where = new BooleanBuilder();
-        if (nonNull(criteria.getAuditTypeId())) {
+        if (criteria.getAuditTypeId() != null) {
             where.and(EventTypePredicates.eqAuditTypeId(criteria.getAuditTypeId()));
         }
-        if (nonNull(criteria.getName())) {
+        if (criteria.getName() != null) {
             where.and(EventTypePredicates.containsName(criteria.getName()));
         }
 
@@ -111,7 +137,7 @@ public class QueryService {
 
     static Predicate toPredicate(AuditSourceApplicationCriteria criteria) {
         BooleanBuilder where = new BooleanBuilder();
-        if (nonNull(criteria.getCode())) {
+        if (criteria.getCode() != null) {
             where.and(QAuditSourceApplicationEntity.auditSourceApplicationEntity.code.containsIgnoreCase(criteria.getCode().trim()));
         }
         return where.getValue();
@@ -119,7 +145,7 @@ public class QueryService {
 
     static Predicate toPredicate(AuditObjectCriteria criteria) {
         BooleanBuilder where = new BooleanBuilder();
-        if (nonNull(criteria.getName())) {
+        if (criteria.getName() != null) {
             where.and(QAuditObjectEntity.auditObjectEntity.name.containsIgnoreCase(criteria.getName().trim()));
         }
 

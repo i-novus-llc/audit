@@ -7,8 +7,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.i_novus.ms.audit.builder.model.AuditBuilder;
+import org.springframework.util.StringUtils;
 import ru.i_novus.ms.audit.builder.entity.AuditEntityBuilder;
+import ru.i_novus.ms.audit.builder.model.AuditBuilder;
 import ru.i_novus.ms.audit.criteria.AuditCriteria;
 import ru.i_novus.ms.audit.entity.AuditEntity;
 import ru.i_novus.ms.audit.model.Audit;
@@ -57,9 +58,14 @@ public class AuditService {
     }
 
     public AuditEntity create(AuditForm request) {
-
         auditObjectService.createIfNotPresent(request.getObjectName(), request.getObjectType());
         sourceApplicationService.createIfNotPresent(request.getSourceApplication());
+        if (!StringUtils.isEmpty(request.getSender())) {
+            sourceApplicationService.createIfNotPresent(request.getSender());
+        }
+        if (!StringUtils.isEmpty(request.getReceiver())) {
+            sourceApplicationService.createIfNotPresent(request.getReceiver());
+        }
 
         return auditRepository.save(AuditEntityBuilder.buildEntity(request));
     }

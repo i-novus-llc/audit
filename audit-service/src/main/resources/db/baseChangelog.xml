@@ -14,5 +14,7 @@
     <include file="changelog/201909031214_AUDIT-32_rename_column_audit_event_type_audit_id.xml" relativeToChangelogFile="true" />
     <include file="changelog/201909031459_AUDIT-26_add_column_audit_audit_type_id.xml" relativeToChangelogFile="true" />
     <include file="changelog/201909041024_AUDIT-31_create_audit_type_sequence.xml" relativeToChangelogFile="true" />
+    <include file="changelog/201909051024_AUDIT-40_audit_table_add_columns.xml" relativeToChangelogFile="true" />
+    <include file="changelog/201909091024_AUDIT-44_audit_context_change_type.xml" relativeToChangelogFile="true" />
 
 </databaseChangeLog>
