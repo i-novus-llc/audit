@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+
+    <changeSet id="AUDIT-24_create_pg_pathman_extension" author="elvira.ibragimova" dbms="postgresql">
+        <sql>
+            CREATE EXTENSION IF NOT EXISTS pg_pathman;
+        </sql>
+    </changeSet>
+
+    <changeSet id="AUDIT-24_create_callback_for_audit_function" author="elvira.ibragimova">
+        <createProcedure dbms="postgresql"
+                         encoding="utf8"
+                         path="db/sql/create_callback_for_audit_table.sql"
+                         procedureName="callback_for_audit"
+                         schemaName="public">
+        </createProcedure>
+    </changeSet>
+
+    <changeSet id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="audit" schemaName="audit"/>
+        </preConditions>
+        <sql>
+            CREATE TABLE audit.audit_temp (LIKE audit.audit);
+            INSERT INTO audit.audit_temp (select * from audit.audit);
+            DROP TABLE IF EXISTS audit.audit;
+            CREATE TABLE audit.audit (LIKE audit.audit_temp);
+        </sql>
+    </changeSet>
+
+    <changeSet id="AUDIT-24_set_callback_for_audit" author="elvira.ibragimova" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="audit" schemaName="audit"/>
+        </preConditions>
+        <sql>
+            select set_init_callback('audit.audit'::regclass, 'callback_for_audit(jsonb)');
+        </sql>
+    </changeSet>
+
+    <changeSet id="AUDIT-24_add_comments_to_audit_table" author="elvira.ibragimova" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
+                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+            <tableExists tableName="audit" schemaName="audit"/>
+        </preConditions>
+        <sql>
+            COMMENT ON TABLE audit.audit IS 'Аудит';
+            COMMENT ON COLUMN audit.audit.id IS 'Идентификатор';
+            COMMENT ON COLUMN audit.audit.event_date IS 'Дата';
+            COMMENT ON COLUMN audit.audit.event_type IS 'Тип события';
+            COMMENT ON COLUMN audit.audit.object_type IS 'Тип объекта';
+            COMMENT ON COLUMN audit.audit.object_id IS 'Идентификатор объекта';
+            COMMENT ON COLUMN audit.audit.object_name IS 'Наименование объекта';
+            COMMENT ON COLUMN audit.audit.user_id IS 'Идентификатор пользователя';
+            COMMENT ON COLUMN audit.audit.username IS 'Имя пользователя';
+            COMMENT ON COLUMN audit.audit.hostname IS 'Сервер';
+            COMMENT ON COLUMN audit.audit.source_application IS 'Имя программы';
+            COMMENT ON COLUMN audit.audit.source_workstation IS 'Рабочая станция';
+            COMMENT ON COLUMN audit.audit.context IS 'Контекст';
+            COMMENT ON COLUMN audit.audit.creation_date IS 'Дата создания';
+            COMMENT ON COLUMN audit.audit.audit_type_id IS 'Идентификатор типа журнала';
+        </sql>
+    </changeSet>
+
+    <changeSet id="AUDIT-24_audit_event_date_ix" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
+                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+            <columnExists schemaName="audit" tableName="audit" columnName="event_date"/>
+            <not>
+                <indexExists columnNames="event_date" schemaName="audit" tableName="audit"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="audit" schemaName="audit" indexName="audit_event_date_ix">
+            <column name="event_date"/>
+        </createIndex>
+        <rollback>
+            <dropIndex tableName="audit" schemaName="audit" indexName="audit_event_date_ix"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-24_audit_event_type_ix" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
+                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+            <columnExists schemaName="audit" tableName="audit" columnName="event_type"/>
+            <not>
+                <indexExists columnNames="event_type" schemaName="audit" tableName="audit"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="audit" schemaName="audit" indexName="audit_event_type_ix">
+            <column name="event_type"/>
+        </createIndex>
+        <rollback>
+            <dropIndex tableName="audit" schemaName="audit" indexName="audit_event_type_ix"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-24_audit_object_type_ix" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
+                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+            <columnExists schemaName="audit" tableName="audit" columnName="object_type"/>
+            <not>
+                <indexExists columnNames="object_type" schemaName="audit" tableName="audit"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="audit" schemaName="audit" indexName="audit_object_type_ix">
+            <column name="object_type"/>
+        </createIndex>
+        <rollback>
+            <dropIndex tableName="audit" schemaName="audit" indexName="audit_object_type_ix"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-24_audit_object_id_ix" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
+                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+            <columnExists schemaName="audit" tableName="audit" columnName="object_id"/>
+            <not>
+                <indexExists columnNames="object_id" schemaName="audit" tableName="audit"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="audit" schemaName="audit" indexName="audit_object_id_ix">
+            <column name="object_id"/>
+        </createIndex>
+        <rollback>
+            <dropIndex tableName="audit" schemaName="audit" indexName="audit_object_id_ix"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-24_audit_object_name_ix" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
+                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+            <columnExists schemaName="audit" tableName="audit" columnName="object_name"/>
+            <not>
+                <indexExists columnNames="object_name" schemaName="audit" tableName="audit"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="audit" schemaName="audit" indexName="audit_object_name_ix">
+            <column name="object_name"/>
+        </createIndex>
+        <rollback>
+            <dropIndex tableName="audit" schemaName="audit" indexName="audit_object_name_ix"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-24_audit_user_id_ix" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
+                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+            <columnExists schemaName="audit" tableName="audit" columnName="user_id"/>
+            <not>
+                <indexExists columnNames="user_id" schemaName="audit" tableName="audit"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="audit" schemaName="audit" indexName="audit_user_id_ix">
+            <column name="user_id"/>
+        </createIndex>
+        <rollback>
+            <dropIndex tableName="audit" schemaName="audit" indexName="audit_user_id_ix"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-24_audit_username_ix" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
+                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+            <columnExists schemaName="audit" tableName="audit" columnName="username"/>
+            <not>
+                <indexExists columnNames="username" schemaName="audit" tableName="audit"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="audit" schemaName="audit" indexName="audit_username_ix">
+            <column name="username"/>
+        </createIndex>
+        <rollback>
+            <dropIndex tableName="audit" schemaName="audit" indexName="audit_username_ix"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-24_audit_source_application_ix" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
+                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+            <columnExists schemaName="audit" tableName="audit" columnName="source_application"/>
+            <not>
+                <indexExists columnNames="source_application" schemaName="audit" tableName="audit"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="audit" schemaName="audit" indexName="audit_source_application_ix">
+            <column name="source_application"/>
+        </createIndex>
+        <rollback>
+            <dropIndex tableName="audit" schemaName="audit" indexName="audit_source_application_ix"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-24_audit_source_workstation_ix" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
+                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+            <columnExists schemaName="audit" tableName="audit" columnName="source_workstation"/>
+            <not>
+                <indexExists columnNames="source_workstation" schemaName="audit" tableName="audit"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="audit" schemaName="audit" indexName="audit_source_workstation_ix">
+            <column name="source_workstation"/>
+        </createIndex>
+        <rollback>
+            <dropIndex tableName="audit" schemaName="audit" indexName="audit_source_workstation_ix"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-24_audit_audit_type_id_ix" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
+                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+            <columnExists schemaName="audit" tableName="audit" columnName="audit_type_id"/>
+            <not>
+                <indexExists columnNames="audit_type_id" schemaName="audit" tableName="audit"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="audit" schemaName="audit" indexName="audit_audit_type_id_ix">
+            <column name="audit_type_id"/>
+        </createIndex>
+        <rollback>
+            <dropIndex tableName="audit" schemaName="audit" indexName="audit_audit_type_id_ix"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-24_create_range_partitions_audit_table_empty" author="elvira.ibragimova" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
+                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+            <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
+                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+            <tableIsEmpty tableName="audit" schemaName="audit"/>
+        </preConditions>
+        <sql>
+            select create_range_partitions('audit.audit',
+            'event_date',
+            date_trunc('month', current_date),
+            interval '1 month',
+            1)
+        </sql>
+    </changeSet>
+
+    <changeSet id="AUDIT-24_migrate_data_from_audit_temp" author="elvira.ibragimova" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
+                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+            <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
+                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+            <not>
+                <tableIsEmpty tableName="audit_temp" schemaName="audit"/>
+            </not>
+            <tableExists tableName="audit_temp" schemaName="audit"/>
+            <tableExists tableName="audit" schemaName="audit"/>
+        </preConditions>
+        <sql>
+            INSERT INTO audit.audit (select * from audit.audit_temp);
+        </sql>
+    </changeSet>
+
+    <changeSet id="AUDIT-24_delete_audit_temp_table" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
+                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+            <tableExists tableName="audit_temp" schemaName="audit"/>
+        </preConditions>
+        <dropTable tableName="audit_temp" schemaName="audit"/>
+    </changeSet>
+
+</databaseChangeLog>
