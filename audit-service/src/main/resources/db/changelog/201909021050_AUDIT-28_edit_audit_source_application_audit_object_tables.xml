@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="uuid_function" value="gen_random_uuid()" dbms="postgresql"/>
+
+    <changeSet id="AUDIT-28_audit_object_type_add_column" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="audit" schemaName="audit" columnName="object_type"/>
+            </not>
+        </preConditions>
+        <addColumn schemaName="audit" tableName="audit">
+            <column name="object_type" type="varchar"/>
+        </addColumn>
+        <rollback>
+            <dropColumn schemaName="audit" tableName="audit" columnName="object_type"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-28_audit_object_name_add_column" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="audit" schemaName="audit" columnName="object_name"/>
+            </not>
+        </preConditions>
+        <addColumn schemaName="audit" tableName="audit">
+            <column name="object_name" type="varchar"/>
+        </addColumn>
+        <rollback>
+            <dropColumn schemaName="audit" tableName="audit" columnName="object_name"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-28_audit_source_application_add_column" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="audit" schemaName="audit" columnName="source_application"/>
+            </not>
+        </preConditions>
+        <addColumn schemaName="audit" tableName="audit">
+            <column name="source_application" type="varchar"/>
+        </addColumn>
+        <rollback>
+            <dropColumn schemaName="audit" tableName="audit" columnName="source_application"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-28_audit_object_type_migrate_value" author="zamaliev">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="audit" columnName="object_type" schemaName="audit"/>
+            <tableExists tableName="audit_object" schemaName="audit"/>
+        </preConditions>
+        <update tableName="audit" schemaName="audit">
+            <column name="object_type"
+                    valueComputed="(select obn.type from audit.audit_object obn where object_type_id = obn.id)"/>
+        </update>
+    </changeSet>
+
+    <changeSet id="AUDIT-28_audit_object_name_migrate_value" author="zamaliev">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="audit" columnName="object_name" schemaName="audit"/>
+            <tableExists tableName="audit_object_name" schemaName="audit"/>
+        </preConditions>
+        <update tableName="audit" schemaName="audit">
+            <column name="object_name"
+                    valueComputed="(select obn.name from audit.audit_object_name obn where object_name_id = obn.id)"/>
+        </update>
+    </changeSet>
+
+    <changeSet id="AUDIT-28_audit_source_application_migrate_value" author="zamaliev">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="audit" columnName="source_application" schemaName="audit"/>
+            <tableExists tableName="audit_source_application" schemaName="audit"/>
+        </preConditions>
+        <update tableName="audit" schemaName="audit">
+            <column name="source_application"
+                    valueComputed="(select obn.name from audit.audit_source_application obn where source_application_id = obn.id)"/>
+        </update>
+    </changeSet>
+
+    <changeSet id="AUDIT-28_audit_object_type_id_drop_column" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="object_type_id" tableName="audit" schemaName="audit"/>
+        </preConditions>
+        <dropColumn tableName="audit" columnName="object_type_id" schemaName="audit"/>
+        <rollback>
+            <addColumn tableName="audit" schemaName="audit">
+                <column name="object_type_id" type="uuid"/>
+            </addColumn>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-28_audit_object_name_id_drop_column" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="object_name_id" tableName="audit" schemaName="audit"/>
+        </preConditions>
+        <dropColumn tableName="audit" columnName="object_name_id" schemaName="audit"/>
+        <rollback>
+            <addColumn tableName="audit" schemaName="audit">
+                <column name="object_name_id" type="uuid"/>
+            </addColumn>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-28_source_application_id_drop_column" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="source_application_id" tableName="audit" schemaName="audit"/>
+        </preConditions>
+        <dropColumn tableName="audit" columnName="source_application_id" schemaName="audit"/>
+        <rollback>
+            <addColumn tableName="audit" schemaName="audit">
+                <column name="source_application_id" type="uuid"/>
+            </addColumn>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-28_audit_drop_constraints" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="audit" tableName="audit"/>
+        </preConditions>
+        <dropAllForeignKeyConstraints baseTableName="audit" baseTableSchemaName="audit"/>
+    </changeSet>
+
+    <changeSet id="AUDIT-28_audit_object_id_drop_column" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="id" tableName="audit_object" schemaName="audit"/>
+        </preConditions>
+        <dropColumn tableName="audit_object" columnName="id" schemaName="audit"/>
+        <rollback>
+            <addColumn tableName="audit_object" schemaName="audit">
+                <column name="id" type="uuid" defaultValueComputed="${uuid_function}">
+                    <constraints primaryKey="true"/>
+                </column>
+            </addColumn>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-28_audit_object_id_add_column" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="id" tableName="audit_object" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="audit_object" schemaName="audit">
+            <column name="id" type="serial">
+                <constraints primaryKey="true"/>
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="audit_object" columnName="id" schemaName="audit"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-28_audit_source_application_rename_column" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="name" tableName="audit_source_application" schemaName="audit"/>
+        </preConditions>
+        <renameColumn tableName="audit_source_application" schemaName="audit" oldColumnName="name" newColumnName="code"/>
+        <rollback>
+            <renameColumn tableName="audit_source_application" schemaName="audit" oldColumnName="code" newColumnName="name"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-28_audit_source_application_id_drop_column" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="id" tableName="audit_source_application" schemaName="audit"/>
+        </preConditions>
+        <dropColumn tableName="audit_source_application" columnName="id" schemaName="audit"/>
+        <rollback>
+            <addColumn tableName="audit_source_application" schemaName="audit">
+                <column name="id" type="uuid" defaultValueComputed="${uuid_function}">
+                    <constraints primaryKey="true"/>
+                </column>
+            </addColumn>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-28_audit_source_application_id_add_column" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="id" tableName="audit_source_application" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="audit_source_application" schemaName="audit">
+            <column name="id" type="serial">
+                <constraints primaryKey="true"/>
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="audit_source_application" columnName="id" schemaName="audit"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-28_audit_object_name_drop_table" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="audit_object_name" schemaName="audit"/>
+        </preConditions>
+        <dropTable tableName="audit_object_name" schemaName="audit"/>
+        <rollback>
+            <createTable tableName="audit_object_name" schemaName="audit">
+                <column name="id" type="uuid" defaultValueComputed="${uuid_function}">
+                    <constraints primaryKey="true"/>
+                </column>
+                <column name="name" type="varchar">
+                    <constraints nullable="false" unique="true"/>
+                </column>
+            </createTable>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

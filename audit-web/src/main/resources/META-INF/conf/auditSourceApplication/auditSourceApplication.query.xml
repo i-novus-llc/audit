@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <query xmlns="http://n2oapp.net/framework/config/schema/query-4.0" name="Система/Модуль">
-    <list>
-        <rest>${audit.backend.url}/audit/sourceApplication/</rest>
+    <list count-mapping="[totalElements]" result-mapping="[content]">
+        <rest filters-separator="&amp;">${audit.backend.url}/audit/sourceApplications?{filters}</rest>
     </list>
     <fields>
         <field id="id" domain="string">
@@ -10,11 +10,11 @@
                 <eq filter-id="id">:id</eq>
             </filters>
         </field>
-        <field id="name" domain="string">
+        <field id="code" domain="string">
             <select/>
             <sorting/>
             <filters>
-                <eq filter-id="name" mapping="['name']">name={name}</eq>
+                <eq filter-id="code" mapping="['code']">code={code}</eq>
             </filters>
         </field>
     </fields>
