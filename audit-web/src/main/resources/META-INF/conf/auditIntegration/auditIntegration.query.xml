@@ -34,7 +34,7 @@
         <field id="auditEventTypes" domain="string">
             <select/>
             <filters>
-                <in filter-id="auditEventTypes*.name">auditEventTypes={auditEventTypes*.name}</in>
+                <in filter-id="auditEventTypes*.name">eventType={auditEventTypes*.name}</in>
             </filters>
         </field>
 
@@ -45,21 +45,21 @@
         <field id="auditTypeId" domain="integer">
             <select/>
             <filters>
-                <eq filter-id="auditTypeId">auditTypeId={auditTypeId}</eq>
+                <eq filter-id="auditTypeId">auditType={auditTypeId}</eq>
             </filters>
         </field>
 
         <field id="sender" domain="string">
             <select/>
             <filters>
-                <eq filter-id="sender*.code">senders={sender*.code}</eq>
+                <eq filter-id="sender*.code">sender={sender*.code}</eq>
             </filters>
         </field>
 
         <field id="receiver" domain="string">
             <select/>
             <filters>
-                <eq filter-id="receiver*.code">receivers={receiver*.code}</eq>
+                <eq filter-id="receiver*.code">receiver={receiver*.code}</eq>
             </filters>
         </field>
     </fields>

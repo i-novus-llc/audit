@@ -33,11 +33,9 @@
         </field>
 
         <field id="auditEventTypes" domain="string">
-            <sorting mapping="['direction']">sortingColumn=auditEventTypes.name&amp;sortingOrder={direction}</sorting>
             <select/>
-            <sorting/>
             <filters>
-                <in filter-id="auditEventTypes*.name">auditEventTypes={auditEventTypes*.name}</in>
+                <in filter-id="auditEventTypes*.name">eventType={auditEventTypes*.name}</in>
             </filters>
         </field>
 
@@ -46,29 +44,21 @@
         </field>
 
         <field id="sourceApplication" domain="string">
-            <sorting mapping="['direction']">sortingColumn=auditSourceApplications.code&amp;sortingOrder={direction}</sorting>
             <select/>
             <filters>
-                <in filter-id="auditSourceApplications*.code">auditSourceApplications={auditSourceApplications*.code}</in>
+                <in filter-id="auditSourceApplications*.code">sourceApplication={auditSourceApplications*.code}</in>
             </filters>
         </field>
 
 
         <field id="objectType" domain="string">
-            <sorting mapping="['direction']">sortingColumn=auditObjectType.name&amp;sortingOrder={direction}</sorting>
             <select/>
-            <sorting/>
-            <filters>
-                <in filter-id="auditObjectTypes*.name">auditObjectTypes={auditObjectTypes*.name}</in>
-            </filters>
         </field>
 
         <field id="auditObjects" domain="string">
-            <sorting mapping="['direction']">sortingColumn=auditObjectName.name&amp;sortingOrder={direction}</sorting>
             <select/>
-            <sorting/>
             <filters>
-                <in filter-id="auditObjects*.name">auditObjects={auditObjects*.name}</in>
+                <in filter-id="auditObjects*.name">objectName={auditObjects*.name}</in>
             </filters>
         </field>
 
@@ -78,22 +68,18 @@
 
         <field id="hostname" domain="string">
             <select/>
-            <sorting mapping="['direction']">sortingColumn=hostname&amp;sortingOrder={direction}</sorting>
             <filters/>
         </field>
 
         <field id="sourceWorkstation" domain="string">
             <select/>
-            <sorting mapping="['direction']">sortingColumn=sourceWorkstation&amp;sortingOrder={direction}</sorting>
-            <filters/>
         </field>
 
 
         <field id="objectId" domain="string">
             <select/>
-            <sorting mapping="['direction']">sortingColumn=objectId&amp;sortingOrder={direction}</sorting>
             <filters>
-                <like filter-id="objectId">auditObjectId={objectId}</like>
+                <like filter-id="objectId">objectId={objectId}</like>
             </filters>
         </field>
 
@@ -103,7 +89,6 @@
 
         <field id="username" domain="string">
             <select/>
-            <sorting mapping="['direction']">sortingColumn=username&amp;sortingOrder={direction}</sorting>
             <filters>
                 <like filter-id="username">username={username}</like>
             </filters>
@@ -112,7 +97,7 @@
         <field id="auditTypeId" domain="integer">
             <select/>
             <filters>
-                <eq filter-id="auditTypeId">auditTypeId={auditTypeId}</eq>
+                <eq filter-id="auditTypeId">auditType={auditTypeId}</eq>
             </filters>
         </field>
     </fields>

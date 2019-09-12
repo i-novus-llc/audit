@@ -32,15 +32,19 @@ public class AuditCriteria extends RestCriteria {
     private String eventType;
 
     @ApiParam(value = "Объект")
-    @QueryParam("auditObjects")
+    @QueryParam("objectType")
     private String[] objectType;
 
+    @ApiParam(value = "Наименование объекта")
+    @QueryParam("objectName")
+    private String[] objectName;
+
     @ApiParam("Идентификатор объекта")
-    @QueryParam("auditObjectId")
+    @QueryParam("objectId")
     private String objectId;
 
     @ApiParam("Тип события")
-    @QueryParam("auditEventTypes")
+    @QueryParam("eventType")
     private String[] auditEventType;
 
     @ApiParam("Идентификатор пользователя")
@@ -52,11 +56,11 @@ public class AuditCriteria extends RestCriteria {
     private String username;
 
     @ApiParam("Имя программы")
-    @QueryParam("auditSourceApplications")
+    @QueryParam("sourceApplication")
     private String[] sourceApplication;
 
     @ApiParam("Рабочая станция")
-    @QueryParam("auditSourceWorkstations")
+    @QueryParam("sourceWorkstation")
     private String sourceWorkstation;
 
     @ApiParam("Контекст")
@@ -68,15 +72,15 @@ public class AuditCriteria extends RestCriteria {
     private String hostname;
 
     @ApiParam("Идентификатор типа журнала")
-    @QueryParam("auditTypeId")
+    @QueryParam("auditType")
     private Short[] auditTypeId;
 
     @ApiParam("Код системы отправителя")
-    @QueryParam("senders")
+    @QueryParam("sender")
     private String[] sender;
 
     @ApiParam("Код системы получателя")
-    @QueryParam("receivers")
+    @QueryParam("receiver")
     private String[] receiver;
 
     @ApiParam("Поле сортировки")

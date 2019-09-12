@@ -46,11 +46,17 @@ public class QueryService {
     private static Predicate getAuditObjectPredicate(AuditCriteria criteria) {
         BooleanBuilder where = new BooleanBuilder();
 
-        if (ArrayUtils.isNotEmpty(criteria.getObjectType()))
-            where.and(inObjectNameNames(criteria.getObjectType()));
+        if (ArrayUtils.isNotEmpty(criteria.getObjectType())) {
+            where.and(inObjectTypeNames(criteria.getObjectType()));
+        }
 
-        if (criteria.getObjectId() != null)
+        if (ArrayUtils.isNotEmpty(criteria.getObjectName())) {
+            where.and(inObjectNameNames(criteria.getObjectName()));
+        }
+
+        if (criteria.getObjectId() != null) {
             where.and(isObjectIdEquals(criteria.getObjectId()));
+        }
 
         return where.getValue();
     }
