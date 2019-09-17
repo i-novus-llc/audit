@@ -4,7 +4,7 @@ services:
 
   db:
     build:
-      context: audit-db
+      context: "audit-db"
 
   audit-service:
     build:
