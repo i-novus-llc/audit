@@ -20,5 +20,3 @@ services:
 
 volumes:
   db-data:
-#  activemq-data:
-#  activemq-log:
