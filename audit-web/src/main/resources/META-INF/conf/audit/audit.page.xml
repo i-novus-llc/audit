@@ -15,7 +15,7 @@
                                 <condition id="checkDate" client-moment="before-load" field-id="objectId"
                                            severity="danger"
                                            message="Чтобы искать записи с интервалом больше 31 дня укажите Идентификатор объекта"
-                                           src="validation.js" on="period, objectId"/>
+                                           src="/META-INF/js/validation.js" on="period, objectId"/>
                             </validations>
                         </date-interval>
                         <input-select id="auditSourceApplications" label="Система/Модуль" type="multi"
@@ -34,7 +34,7 @@
                         <input-text id="objectId" label="Идентификатор объекта" domain="string">
                             <validations>
                                 <condition id="checkDate" client-moment="before-load" severity="danger"
-                                           message="Укажите значение" src="validation.js" on="period, objectId"/>
+                                           message="Укажите значение" src="/META-INF/js/validation.js" on="period, objectId"/>
                             </validations>
                         </input-text>
 
