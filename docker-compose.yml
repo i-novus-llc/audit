@@ -3,9 +3,6 @@ version: '3.6'
 services:
 
   db:
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
     ports:
       - 5432
     deploy:
