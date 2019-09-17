@@ -3,13 +3,11 @@ version: '3.6'
 services:
 
   db:
-    image: ${DOCKER_REGISTRY}/audit/db/develop
-    ports:
-      - "5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: audit
+    ports:
+      - 5432
     deploy:
       resources:
         limits:
