@@ -3,7 +3,7 @@ version: '3.6'
 services:
 
   db:
-    image: ${DOCKER_REGISTRY}/audit/db/develop
+    image: ${DOCKER_REGISTRY}/postgres:11.5
     ports:
       - "5432"
     environment:
