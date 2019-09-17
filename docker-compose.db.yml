@@ -2,12 +2,9 @@ version: "3.6"
 
 services:
   db:
-    volumes:
-      - db-data:/pg/11/data
     ports:
       - 5432
     environment:
-      - PGDATA=/pg/11/data
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     deploy:
@@ -17,6 +14,3 @@ services:
       placement:
         constraints:
           - node.labels.type == db
-
-volumes:
-  db-data:

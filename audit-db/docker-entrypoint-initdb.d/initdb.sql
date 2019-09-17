@@ -1,3 +1,3 @@
-CREATE DATABASE audit;
+SELECT 'CREATE DATABASE audit' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'audit')\gexec
 \connect audit
-CREATE EXTENSION pg_pathman;
+CREATE EXTENSION IF NOT EXISTS pg_pathman;
