@@ -59,7 +59,9 @@ public class AuditService {
 
     public AuditEntity create(AuditForm request) {
         auditObjectService.createIfNotPresent(request.getObjectName(), request.getObjectType());
-        sourceApplicationService.createIfNotPresent(request.getSourceApplication());
+        if (!StringUtils.isEmpty(request.getSourceApplication())) {
+            sourceApplicationService.createIfNotPresent(request.getSourceApplication());
+        }
         if (!StringUtils.isEmpty(request.getSender())) {
             sourceApplicationService.createIfNotPresent(request.getSender());
         }

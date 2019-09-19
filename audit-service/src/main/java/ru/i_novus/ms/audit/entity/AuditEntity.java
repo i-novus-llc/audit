@@ -28,10 +28,10 @@ public class AuditEntity {
     @Column(name = "event_type", nullable = false)
     private String eventType;
 
-    @Column(name = "object_type", nullable = false)
+    @Column(name = "object_type")
     private String auditObjectType;
 
-    @Column(name = "object_name", nullable = false)
+    @Column(name = "object_name")
     private String auditObjectName;
 
     @Column(name = "object_id")
@@ -44,13 +44,13 @@ public class AuditEntity {
     @JsonProperty("username")
     private String username;
 
-    @Column(name = "source_application", nullable = false)
+    @Column(name = "source_application")
     private String auditSourceApplication;
 
     @Column(name = "source_workstation")
     private String sourceWorkstation;
 
-    @Column(name = "context")
+    @Column(name = "context", nullable = false)
     private String context;
 
     @Column(name = "creation_date", nullable = false)
@@ -63,10 +63,10 @@ public class AuditEntity {
     @Column(name = "audit_type_id", nullable = false)
     private Short auditTypeId;
 
-    @Column(name = "sender_id", nullable = false)
+    @Column(name = "sender_id")
     private String senderId;
 
-    @Column(name = "receiver_id", nullable = false)
+    @Column(name = "receiver_id")
     private String receiverId;
 
     @PrePersist

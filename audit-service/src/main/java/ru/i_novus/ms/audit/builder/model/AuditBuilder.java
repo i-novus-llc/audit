@@ -4,16 +4,14 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.i_novus.ms.audit.entity.AuditEntity;
+import ru.i_novus.ms.audit.model.AbstractAudit;
 import ru.i_novus.ms.audit.model.Audit;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Component
 public class AuditBuilder {
-
     public static Audit getAuditByEntity(AuditEntity entity) {
-        return Audit.builder()
-                .creationDate(entity.getCreationDate())
-                .id(entity.getId())
+        AbstractAudit original = AbstractAudit.builder()
                 .context(entity.getContext())
                 .eventDate(entity.getEventDate())
                 .eventType(entity.getEventType())
@@ -25,9 +23,14 @@ public class AuditBuilder {
                 .userId(entity.getUserId())
                 .hostname(entity.getHostname())
                 .username(entity.getUsername())
-                .auditTypeId(entity.getAuditTypeId())
-                .senderId(entity.getSenderId())
-                .receiverId(entity.getReceiverId())
+                .auditType(entity.getAuditTypeId())
+                .sender(entity.getSenderId())
+                .receiver(entity.getReceiverId())
                 .build();
+
+        Audit audit = new Audit(original);
+        audit.setId(entity.getId());
+        audit.setCreationDate(entity.getCreationDate());
+        return audit;
     }
 }
