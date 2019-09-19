@@ -21,7 +21,7 @@ public class AuditEntityBuilder {
                 .objectId(form.getObjectId())
                 .sourceWorkstation(form.getSourceWorkstation())
                 .hostname(form.getHostname())
-                .auditTypeId(form.getAuditTypeId())
+                .auditTypeId(form.getAuditType())
                 .senderId(form.getSender())
                 .receiverId(form.getReceiver())
                 .build();

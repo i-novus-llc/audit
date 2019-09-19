@@ -1,10 +1,8 @@
 package ru.i_novus.ms.audit.model;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
@@ -16,7 +14,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Validated
-public abstract class AbstractAudit implements Serializable {
+@Builder
+public class AbstractAudit implements Serializable {
     @ApiModelProperty(value = "Дата события", required = true)
     @NotNull
     private LocalDateTime eventDate;
@@ -25,16 +24,13 @@ public abstract class AbstractAudit implements Serializable {
     @NotNull
     private String eventType;
 
-    @ApiModelProperty(value = "Тип объекта", required = true)
-    @NotNull
+    @ApiModelProperty(value = "Тип объекта")
     private String objectType;
 
-    @ApiModelProperty(value = "Идентификатор объекта", required = true)
-    @NotNull
+    @ApiModelProperty(value = "Идентификатор объекта")
     private String objectId;
 
-    @ApiModelProperty(value = "Наименование объекта", required = true)
-    @NotNull
+    @ApiModelProperty(value = "Наименование объекта")
     private String objectName;
 
     @ApiModelProperty(value = "Идентификатор пользователя", required = true)
@@ -45,8 +41,7 @@ public abstract class AbstractAudit implements Serializable {
     @NotNull
     private String username;
 
-    @ApiModelProperty(value = "Имя программы", required = true)
-    @NotNull
+    @ApiModelProperty(value = "Имя программы")
     private String sourceApplication;
 
     @ApiModelProperty(value = "Рабочая станция")
@@ -63,7 +58,8 @@ public abstract class AbstractAudit implements Serializable {
 
     @ApiModelProperty(value = "Идентификатор типа журнала", required = true)
     @NotNull
-    private Short auditTypeId;
+    @Range(min = 1, max = 32767)
+    private Short auditType;
 
     @ApiModelProperty(value = "Код (наименование) системы-отправителя")
     private String sender;
@@ -84,7 +80,7 @@ public abstract class AbstractAudit implements Serializable {
                 ", auditSourceApplication='" + sourceApplication + '\'' +
                 ", auditSourceWorkstations='" + sourceWorkstation + '\'' +
                 ", context='" + context + '\'' +
-                ", auditTypeId='" + auditTypeId + '\'' +
+                ", auditType='" + auditType + '\'' +
                 '}';
     }
 }

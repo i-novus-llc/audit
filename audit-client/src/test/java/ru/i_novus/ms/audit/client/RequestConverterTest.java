@@ -34,7 +34,7 @@ public class RequestConverterTest {
         auditClientRequest.setObjectId("ObjectId");
         auditClientRequest.setObjectName("ObjectName");
         auditClientRequest.setContext("{\"field\": \"name\", \"value\": \"Значение\"}");
-        auditClientRequest.setAuditTypeId((short) 1);
+        auditClientRequest.setAuditType((short) 1);
     }
 
     @Test

@@ -101,13 +101,13 @@ public class QueryService {
         }
 
         if (ArrayUtils.isNotEmpty(criteria.getReceiver())) {
-            where.and(inRecivers(criteria.getReceiver()));
+            where.and(inReceivers(criteria.getReceiver()));
         }
 
         return where.getValue();
     }
 
-    public static Predicate toPredicate(AuditCriteria criteria) {
+    static Predicate toPredicate(AuditCriteria criteria) {
         BooleanBuilder where = new BooleanBuilder();
 
         where.and(getAuditEventPredicate(criteria))
@@ -117,7 +117,7 @@ public class QueryService {
         return where.getValue();
     }
 
-    public static Sort toSort(AuditCriteria criteria) {
+    static Sort toSort(AuditCriteria criteria) {
         List<Sort.Order> orders = criteria.getOrders();
         if (CollectionUtils.isEmpty(orders)) {
             orders = Collections.singletonList(new Sort.Order(Sort.Direction.DESC, "eventDate"));
@@ -125,7 +125,7 @@ public class QueryService {
         return Sort.by(orders);
     }
 
-    public static Sort sort(Sort.Order order) {
+    static Sort sort(Sort.Order order) {
         return new Sort(order.getDirection(), order.getProperty());
     }
 

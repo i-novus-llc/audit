@@ -24,7 +24,7 @@ public class AuditClientRequest implements Serializable {
 
     private String hostname;
 
-    private Short auditTypeId;
+    private Short auditType;
 
     @Override
     public String toString() {
@@ -35,6 +35,8 @@ public class AuditClientRequest implements Serializable {
                 ", auditObjectId='" + objectId + '\'' +
                 ", auditObjectNames='" + objectName + '\'' +
                 ", context='" + context + '\'' +
+                ", hostname='" + hostname + '\'' +
+                ", auditType='" + auditType + '\'' +
                 '}';
     }
 }

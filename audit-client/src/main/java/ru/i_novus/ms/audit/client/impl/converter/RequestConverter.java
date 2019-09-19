@@ -73,8 +73,8 @@ public class RequestConverter {
         if (request.getContext() == null || request.getContext().isBlank())
             throw new AuditException(messages.getMessage("requestConverter.invalidContext"));
 
-        if (request.getAuditTypeId() == null)
-            throw new AuditException(messages.getMessage("requestConverter.invalidAuditTypeId"));
+        if (request.getAuditType() == null)
+            throw new AuditException(messages.getMessage("requestConverter.invalidAuditType"));
     }
 
     public AuditForm toAuditRequest(AuditClientRequest request) {
@@ -90,7 +90,7 @@ public class RequestConverter {
         auditForm.setObjectName(request.getObjectName());
         auditForm.setContext(request.getContext());
         auditForm.setHostname(request.getHostname());
-        auditForm.setAuditTypeId(request.getAuditTypeId());
+        auditForm.setAuditType(request.getAuditType());
         auditForm.setUserId(userAccessor.get().getUserId());
         auditForm.setUsername(userAccessor.get().getUsername());
 

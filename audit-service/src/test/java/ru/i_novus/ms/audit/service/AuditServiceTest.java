@@ -34,12 +34,12 @@ public class AuditServiceTest {
         AuditForm auditForm = new AuditForm();
         service.create(auditForm);
         verify(auditRepository, times(1)).save(any());
-        verify(sourceApplicationService, times(1)).createIfNotPresent(any());
     }
 
     @Test
     public void testCreateIntegration() {
         AuditForm auditForm = new AuditForm();
+        auditForm.setSourceApplication(TEXT);
         auditForm.setSender(TEXT);
         auditForm.setReceiver(TEXT);
         doNothing().when(sourceApplicationService).createIfNotPresent(anyString());

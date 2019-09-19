@@ -32,14 +32,6 @@ public final class AuditPredicates {
         return QAuditEntity.auditEntity.eventType.equalsIgnoreCase(value.trim());
     }
 
-    public static BooleanExpression isObjectTypeEquals(String value) {
-        return QAuditEntity.auditEntity.auditObjectType.equalsIgnoreCase(value.trim());
-    }
-
-    public static BooleanExpression isObjectNameEquals(String value) {
-        return QAuditEntity.auditEntity.auditObjectName.equalsIgnoreCase(value.trim());
-    }
-
     public static BooleanExpression isObjectIdEquals(String value) {
         return QAuditEntity.auditEntity.objectId.containsIgnoreCase(value.trim());
     }
@@ -65,10 +57,6 @@ public final class AuditPredicates {
         return QAuditEntity.auditEntity.username.containsIgnoreCase(value.trim());
     }
 
-    public static BooleanExpression isSourceApplicationContains(String value) {
-        return QAuditEntity.auditEntity.auditSourceApplication.equalsIgnoreCase(value.trim());
-    }
-
     public static BooleanExpression isSourceWorkstationContains(String value) {
         return QAuditEntity.auditEntity.sourceWorkstation.equalsIgnoreCase(value.trim());
     }
@@ -92,7 +80,7 @@ public final class AuditPredicates {
         return QAuditEntity.auditEntity.senderId.in(value);
     }
 
-    public static BooleanExpression inRecivers(String[] value) {
+    public static BooleanExpression inReceivers(String[] value) {
         return QAuditEntity.auditEntity.receiverId.in(value);
     }
 

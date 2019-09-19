@@ -3,7 +3,6 @@ package ru.i_novus.ms.audit.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,17 +22,25 @@ public class Audit extends AbstractAudit {
     @ApiModelProperty("Дата создания")
     private LocalDateTime creationDate;
 
-    @Builder
-    public Audit(UUID id, LocalDateTime creationDate, LocalDateTime eventDate, String eventType, String objectType,
-                 String objectId, String objectName, String userId, String username, String sourceApplication,
-                 String sourceWorkstation, String context, String hostname, Short auditTypeId, String senderId,
-                 String receiverId) {
-
-        super(eventDate, eventType, objectType, objectId, objectName,
-                userId, username, sourceApplication, sourceWorkstation, context, hostname, auditTypeId, senderId,
-                receiverId);
-
-        this.creationDate = creationDate;
-        this.id = id;
+    /**
+     * Constructor
+     *
+     * @param original parent object
+     */
+    public Audit(AbstractAudit original) {
+        this.setAuditType(original.getAuditType());
+        this.setContext(original.getContext());
+        this.setEventDate(original.getEventDate());
+        this.setHostname(original.getHostname());
+        this.setEventType(original.getEventType());
+        this.setObjectId(original.getObjectId());
+        this.setObjectName(original.getObjectName());
+        this.setObjectType(original.getObjectType());
+        this.setReceiver(original.getReceiver());
+        this.setSender(original.getSender());
+        this.setSourceApplication(original.getSourceApplication());
+        this.setSourceWorkstation(original.getSourceWorkstation());
+        this.setUserId(original.getUserId());
+        this.setUsername(original.getUsername());
     }
 }

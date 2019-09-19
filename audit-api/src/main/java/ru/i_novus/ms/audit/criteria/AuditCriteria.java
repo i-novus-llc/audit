@@ -6,7 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.n2oapp.platform.jaxrs.RestCriteria;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.QueryParam;
 import java.time.LocalDateTime;
 
@@ -14,6 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
+@Validated
 public class AuditCriteria extends RestCriteria {
 
     @QueryParam("id")
@@ -21,10 +25,12 @@ public class AuditCriteria extends RestCriteria {
 
     @ApiParam(value = "Дата события (от)", format = "yyyy-MM-ddTHH:mm:ss")
     @QueryParam("eventDateFrom")
+    @NotNull
     private LocalDateTime eventDateFrom;
 
     @ApiParam(value = "Дата события (до)", format = "yyyy-MM-ddTHH:mm:ss")
     @QueryParam("eventDateTo")
+    @NotNull
     private LocalDateTime eventDateTo;
 
     @ApiParam("Тип события")
@@ -73,6 +79,7 @@ public class AuditCriteria extends RestCriteria {
 
     @ApiParam("Идентификатор типа журнала")
     @QueryParam("auditType")
+    @NotEmpty
     private Short[] auditTypeId;
 
     @ApiParam("Код системы отправителя")

@@ -34,7 +34,7 @@
     </changeSet>
 
     <changeSet id="AUDIT-22_copy_from_audit" author="agaifutdinov" dbms="postgresql">
-        <preConditions onFail="WARN">
+        <preConditions onFail="MARK_RAN">
             <tableExists tableName="audit_event_type" schemaName="audit"/>
         </preConditions>
         <sql>

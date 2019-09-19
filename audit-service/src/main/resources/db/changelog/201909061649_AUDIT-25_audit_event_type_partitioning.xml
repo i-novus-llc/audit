@@ -68,10 +68,10 @@
     </changeSet>
 
     <changeSet id="AUDIT-25_drop_audit_event_type_old" author="agaifutdinov" dbms="postgresql">
-        <preConditions onFail="WARN">
+        <preConditions onFail="MARK_RAN">
             <changeSetExecuted id="AUDIT-25_copy_from_audit_event_type_old"
                                author="agaifutdinov"
-                               changeLogFile="db/changelog/201908281842_AUDIT-25_audit_event_type_partitioning.xml"/>
+                               changeLogFile="classpath:/db/changelog/201909061649_AUDIT-25_audit_event_type_partitioning.xml"/>
         </preConditions>
         <dropTable tableName="audit_event_type_old" schemaName="audit"/>
     </changeSet>
