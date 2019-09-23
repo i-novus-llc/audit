@@ -43,9 +43,10 @@
         <validCheckSum>8:c8989e2dcf176fab92a411c8acc3d41e</validCheckSum>
         <createProcedure dbms="postgresql"
                          encoding="utf8"
-                         path="db/sql/create_database_for_existing_data.sql"
+                         path="db/v-1.1/sql/create_database_for_existing_data.sql"
                          procedureName="create_database_for_existing_data"
-                         schemaName="public">
+                         schemaName="public"
+                         relativeToChangelogFile="true">
         </createProcedure>
     </changeSet>
 

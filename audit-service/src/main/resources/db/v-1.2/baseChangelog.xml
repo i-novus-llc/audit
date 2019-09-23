@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <include file="changelog/201908010000_init_db.xml" relativeToChangelogFile="true" />
+    <include file="changelog/201908271154_AUDIT-17_create_audit_type_table.xml" relativeToChangelogFile="true" />
+    <include file="changelog/201908272300_AUDIT-18_audit_object_type_table.xml" relativeToChangelogFile="true" />
+    <include file="changelog/201908281050_AUDIT-22_create_audit_event_type_table.xml" relativeToChangelogFile="true" />
+    <include file="changelog/201909021050_AUDIT-28_edit_audit_source_application_audit_object_tables.xml" relativeToChangelogFile="true" />
+    <include file="changelog/201909031214_AUDIT-32_rename_column_audit_event_type_audit_id.xml" relativeToChangelogFile="true" />
+    <include file="changelog/201909031459_AUDIT-26_add_column_audit_audit_type_id.xml" relativeToChangelogFile="true" />
+    <include file="changelog/201909041024_AUDIT-31_create_audit_type_sequence.xml" relativeToChangelogFile="true" />
+    <include file="changelog/201909051024_AUDIT-40_audit_table_add_columns.xml" relativeToChangelogFile="true" />
+    <include file="changelog/201909091024_AUDIT-44_audit_context_change_type.xml" relativeToChangelogFile="true" />
+    <include file="changelog/201909051024_AUDIT-24_create_audit_partitions.xml" relativeToChangelogFile="true" />
+    <include file="changelog/201909061649_AUDIT-25_audit_event_type_partitioning.xml" relativeToChangelogFile="true" />
+    <include file="changelog/201909111709_AUDIT-54_audit_add_not_null_constraints.xml" relativeToChangelogFile="true" />
+
+</databaseChangeLog>
