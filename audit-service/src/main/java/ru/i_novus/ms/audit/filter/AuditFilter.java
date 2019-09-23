@@ -68,16 +68,16 @@ public class AuditFilter implements Filter {
         JsonNode auditTypeJson = requestJson.get(FIELD_AUDIT_TYPE);
 
         List<String> errors = new ArrayList<>();
-        if (eventDateJson != null && !isDate(eventDateJson.textValue())) {
+        if (eventDateJson != null && !isDate(eventDateJson.asText())) {
             errors.add(
                     messages.getMessage(
-                            CODE_IS_DATE, FIELD_EVENT_DATE, eventDateJson.textValue()));
+                            CODE_IS_DATE, FIELD_EVENT_DATE, eventDateJson.asText()));
         }
 
-        if (auditTypeJson != null && NumberUtils.toShort(auditTypeJson.textValue()) == 0) {
+        if (auditTypeJson != null && NumberUtils.toShort(auditTypeJson.asText()) == 0) {
             errors.add(
                     messages.getMessage(
-                            CODE_IS_NUMERIC_NON_ZERO, FIELD_AUDIT_TYPE, auditTypeJson.textValue()));
+                            CODE_IS_NUMERIC_NON_ZERO, FIELD_AUDIT_TYPE, auditTypeJson.asText()));
         }
 
         sendResponse(wrappedRequest, response, chain, joinErrorMessages(errors));
