@@ -15,7 +15,7 @@
     <changeSet id="AUDIT-24_create_callback_for_audit_function" author="elvira.ibragimova">
         <createProcedure dbms="postgresql"
                          encoding="utf8"
-                         path="db/sql/create_callback_for_audit_table.sql"
+                         path="db/v-1.2/sql/create_callback_for_audit_table.sql"
                          procedureName="callback_for_audit"
                          schemaName="public">
         </createProcedure>
