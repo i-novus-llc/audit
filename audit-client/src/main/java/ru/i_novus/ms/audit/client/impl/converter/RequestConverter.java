@@ -61,15 +61,6 @@ public class RequestConverter {
         if (request.getEventType() == null || request.getEventType().isBlank())
             throw new AuditException(messages.getMessage("requestConverter.invalidEventType"));
 
-        if (request.getObjectType() == null || request.getObjectType().isBlank())
-            throw new AuditException(messages.getMessage("requestConverter.invalidObjectType"));
-
-        if (request.getObjectId() == null || request.getObjectId().isBlank())
-            throw new AuditException(messages.getMessage("requestConverter.invalidObjectId"));
-
-        if (request.getObjectName() == null || request.getObjectName().isBlank())
-            throw new AuditException(messages.getMessage("requestConverter.invalidObjectName"));
-
         if (request.getContext() == null || request.getContext().isBlank())
             throw new AuditException(messages.getMessage("requestConverter.invalidContext"));
 
