@@ -20,23 +20,38 @@ public class AuditClientRequest implements Serializable {
 
     private String objectName;
 
+    private String userId;
+
+    private String username;
+
+    private String sourceWorkstation;
+
     private String context;
 
     private String hostname;
 
     private Short auditType;
 
+    private String sender;
+
+    private String receiver;
+
     @Override
     public String toString() {
         return "AuditClientRequest{" +
                 "eventDate=" + eventDate +
                 ", eventType='" + eventType + '\'' +
-                ", auditObjectTypes='" + objectType + '\'' +
+                ", auditObjectType='" + objectType + '\'' +
                 ", auditObjectId='" + objectId + '\'' +
-                ", auditObjectNames='" + objectName + '\'' +
+                ", auditObjectName='" + objectName + '\'' +
+                ", userId='" + userId + '\'' +
+                ", username='" + username + '\'' +
+                ", sourceWorkstation='" + sourceWorkstation + '\'' +
                 ", context='" + context + '\'' +
                 ", hostname='" + hostname + '\'' +
                 ", auditType='" + auditType + '\'' +
+                ", sender='" + sender + '\'' +
+                ", receiver='" + receiver + '\'' +
                 '}';
     }
 }

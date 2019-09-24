@@ -8,10 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.i_novus.ms.audit.client.SourceApplicationAccessor;
-import ru.i_novus.ms.audit.client.SourceWorkstationAccessor;
-import ru.i_novus.ms.audit.client.UserAccessor;
 import ru.i_novus.ms.audit.client.model.AuditClientRequest;
-import ru.i_novus.ms.audit.client.model.User;
 import ru.i_novus.ms.audit.exception.AuditException;
 import ru.i_novus.ms.audit.model.AuditForm;
 
@@ -23,43 +20,21 @@ public class RequestConverter {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestConverter.class);
 
-    @Autowired
-    private UserAccessor userAccessor;
-
     @Autowired(required = false)
     private SourceApplicationAccessor applicationAccessor;
-
-    @Autowired(required = false)
-    private SourceWorkstationAccessor workstationAccessor;
 
     @Autowired
     private Messages messages;
 
-    private void assertUserAccessor(AuditClientRequest request) {
-        if (userAccessor == null) {
-            throw new AuditException(messages.getMessage("requestConverter.undefinedUserAccessor"));
-        }
-
-        if (userAccessor.get() == null) {
-            logger.error("User is undefined. Request: {}", request);
-            throw new AuditException(messages.getMessage("requestConverter.undefinedUser"));
-        }
-
-        User user = userAccessor.get();
-        if (user.getUserId() == null || user.getUserId().isBlank()) {
-            logger.error("Invalid userId. User: {}. Request: {}", user, request);
-            throw new AuditException(messages.getMessage("requestConverter.invalidUserId"));
-        }
-
-        if (user.getUsername() == null || user.getUsername().isBlank()) {
-            logger.error("Invalid username. User: {}. Request: {}", user, request);
-            throw new AuditException(messages.getMessage("requestConverter.invalidUsername"));
-        }
-    }
-
     private void assertRequiredFields(AuditClientRequest request) {
         if (request.getEventType() == null || request.getEventType().isBlank())
             throw new AuditException(messages.getMessage("requestConverter.invalidEventType"));
+
+        if (request.getUserId() == null || request.getUserId().isBlank())
+            throw new AuditException(messages.getMessage("requestConverter.invalidUserId"));
+
+        if (request.getUsername() == null || request.getUsername().isBlank())
+            throw new AuditException(messages.getMessage("requestConverter.invalidUsername"));
 
         if (request.getContext() == null || request.getContext().isBlank())
             throw new AuditException(messages.getMessage("requestConverter.invalidContext"));
@@ -69,7 +44,6 @@ public class RequestConverter {
     }
 
     public AuditForm toAuditRequest(AuditClientRequest request) {
-        assertUserAccessor(request);
         assertRequiredFields(request);
 
         AuditForm auditForm = new AuditForm();
@@ -79,17 +53,17 @@ public class RequestConverter {
         auditForm.setObjectType(request.getObjectType());
         auditForm.setObjectId(request.getObjectId());
         auditForm.setObjectName(request.getObjectName());
+        auditForm.setUserId(request.getUserId());
+        auditForm.setUsername(request.getUsername());
+        auditForm.setSourceWorkstation(request.getSourceWorkstation());
         auditForm.setContext(request.getContext());
         auditForm.setHostname(request.getHostname());
         auditForm.setAuditType(request.getAuditType());
-        auditForm.setUserId(userAccessor.get().getUserId());
-        auditForm.setUsername(userAccessor.get().getUsername());
+        auditForm.setSender(request.getSender());
+        auditForm.setReceiver(request.getReceiver());
 
         if (applicationAccessor != null)
             auditForm.setSourceApplication(applicationAccessor.get());
-
-        if (workstationAccessor != null)
-            auditForm.setSourceWorkstation(workstationAccessor.get());
 
         return auditForm;
     }

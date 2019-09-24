@@ -1,11 +1,11 @@
 package ru.i_novus.ms.audit.client;
 
 import net.n2oapp.platform.i18n.Messages;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.i_novus.ms.audit.client.app.TestedRequestConverter;
 import ru.i_novus.ms.audit.client.model.AuditClientRequest;
-import ru.i_novus.ms.audit.client.model.User;
 import ru.i_novus.ms.audit.exception.AuditException;
 import ru.i_novus.ms.audit.model.AuditForm;
 
@@ -16,36 +16,52 @@ import static org.mockito.Mockito.mock;
 
 public class RequestConverterTest {
 
+    private static final String EVENT_TYPE = "EventType";
+    private static final String OBJECT_TYPE = "ObjectType";
+    private static final String OBJECT_ID = "ObjectId";
+    private static final String OBJECT_NAME = "ObjectName";
     private static final String USER_ID = "785";
     private static final String USERNAME = "ekrasulina";
-    private static final String SOURCE_APPLICATION = "app";
-    private static final String SOURCE_WORKSTATION = "ws";
+    private static final String SOURCE_WORKSTATION = "Workstation";
+    private static final String SOURCE_APPLICATION = "Application";
+    private static final String CONTEXT = "{\"field\": \"name\", \"value\": \"Значение\"}";
+    private static final short AUDIT_TYPE = 1;
+    private static final String SENDER = "Sender";
+    private static final String RECEIVER = "Receiver";
+
+    private static TestedRequestConverter requestConverter;
 
     private static AuditClientRequest auditClientRequest;
 
-    private Messages messages = mock(Messages.class);
+    private static Messages messages = mock(Messages.class);
 
     @BeforeClass
     public static void initialize() {
+        requestConverter = new TestedRequestConverter(
+                () -> SOURCE_APPLICATION,
+                messages
+        );
+    }
+
+    @Before
+    public void beforeEach() {
         auditClientRequest = new AuditClientRequest();
         auditClientRequest.setEventDate(LocalDateTime.now().withNano(0));
-        auditClientRequest.setEventType("EventType");
-        auditClientRequest.setObjectType("ObjectType");
-        auditClientRequest.setObjectId("ObjectId");
-        auditClientRequest.setObjectName("ObjectName");
-        auditClientRequest.setContext("{\"field\": \"name\", \"value\": \"Значение\"}");
-        auditClientRequest.setAuditType((short) 1);
+        auditClientRequest.setEventType(EVENT_TYPE);
+        auditClientRequest.setObjectType(OBJECT_TYPE);
+        auditClientRequest.setObjectId(OBJECT_ID);
+        auditClientRequest.setObjectName(OBJECT_NAME);
+        auditClientRequest.setUserId(USER_ID);
+        auditClientRequest.setUsername(USERNAME);
+        auditClientRequest.setSourceWorkstation(SOURCE_WORKSTATION);
+        auditClientRequest.setContext(CONTEXT);
+        auditClientRequest.setAuditType(AUDIT_TYPE);
+        auditClientRequest.setSender(SENDER);
+        auditClientRequest.setReceiver(RECEIVER);
     }
 
     @Test
     public void successRequestConverterTest() {
-        TestedRequestConverter requestConverter = new TestedRequestConverter(
-                () -> new User(USER_ID, USERNAME),
-                () -> SOURCE_APPLICATION,
-                () -> SOURCE_WORKSTATION,
-                messages
-        );
-
         AuditForm auditForm = requestConverter.toAuditRequest(auditClientRequest);
 
         assertEquals(auditClientRequest.getEventDate(), auditForm.getEventDate());
@@ -53,55 +69,48 @@ public class RequestConverterTest {
         assertEquals(auditClientRequest.getObjectType(), auditForm.getObjectType());
         assertEquals(auditClientRequest.getObjectId(), auditForm.getObjectId());
         assertEquals(auditClientRequest.getObjectName(), auditForm.getObjectName());
-        assertEquals(auditClientRequest.getContext(), auditForm.getContext());
-        assertEquals(auditClientRequest.getEventType(), auditForm.getEventType());
-        assertEquals(USER_ID, auditForm.getUserId());
-        assertEquals(USERNAME, auditForm.getUsername());
-        assertEquals(SOURCE_WORKSTATION, auditForm.getSourceWorkstation());
+        assertEquals(auditClientRequest.getUserId(), auditForm.getUserId());
+        assertEquals(auditClientRequest.getUsername(), auditForm.getUsername());
+        assertEquals(auditClientRequest.getSourceWorkstation(), auditForm.getSourceWorkstation());
         assertEquals(SOURCE_APPLICATION, auditForm.getSourceApplication());
-    }
-
-    @Test(expected = AuditException.class)
-    public void userAccessorUndefinedTest() {
-        TestedRequestConverter requestConverter = new TestedRequestConverter(
-                null,
-                () -> null,
-                () -> null,
-                messages
-        );
-        requestConverter.toAuditRequest(auditClientRequest);
-    }
-
-    @Test(expected = AuditException.class)
-    public void userUndefinedTest() {
-        TestedRequestConverter requestConverter = new TestedRequestConverter(
-                () -> null,
-                () -> null,
-                () -> null,
-                messages
-        );
-        requestConverter.toAuditRequest(auditClientRequest);
+        assertEquals(auditClientRequest.getContext(), auditForm.getContext());
+        assertEquals(auditClientRequest.getAuditType(), auditForm.getAuditType());
+        assertEquals(auditClientRequest.getSender(), auditForm.getSender());
+        assertEquals(auditClientRequest.getReceiver(), auditForm.getReceiver());
     }
 
     @Test(expected = AuditException.class)
     public void invalidUserIdTest() {
-        TestedRequestConverter requestConverter = new TestedRequestConverter(
-                () -> new User(null, USERNAME),
-                () -> null,
-                () -> null,
-                messages
-        );
+        auditClientRequest.setUserId(null);
+
         requestConverter.toAuditRequest(auditClientRequest);
     }
 
     @Test(expected = AuditException.class)
     public void invalidUsernameTest() {
-        TestedRequestConverter requestConverter = new TestedRequestConverter(
-                () -> new User(USER_ID, null),
-                () -> null,
-                () -> null,
-                messages
-        );
+        auditClientRequest.setUsername(null);
+
+        requestConverter.toAuditRequest(auditClientRequest);
+    }
+
+    @Test(expected = AuditException.class)
+    public void invalidEventTypeTest() {
+        auditClientRequest.setEventType(null);
+
+        requestConverter.toAuditRequest(auditClientRequest);
+    }
+
+    @Test(expected = AuditException.class)
+    public void invalidContextTest() {
+        auditClientRequest.setContext(null);
+
+        requestConverter.toAuditRequest(auditClientRequest);
+    }
+
+    @Test(expected = AuditException.class)
+    public void invalidAuditTypeTest() {
+        auditClientRequest.setAuditType(null);
+
         requestConverter.toAuditRequest(auditClientRequest);
     }
 }
