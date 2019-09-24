@@ -3,6 +3,7 @@ package ru.i_novus.ms.audit.client.app;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import ru.i_novus.ms.audit.client.UserAccessor;
 import ru.i_novus.ms.audit.client.model.User;
 
@@ -13,7 +14,8 @@ public class AuditClientApp {
     private static final String USERNAME = "ekrasulina";
 
     @Bean
-    public UserAccessor userAccessor() {
+    @Primary
+    public UserAccessor testUserAccessor() {
         return () -> new User(USER_ID, USERNAME);
     }
 
