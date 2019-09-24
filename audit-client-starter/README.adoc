@@ -1,0 +1,16 @@
+Стартер для работы с audit-client
+
+== Подключение
+Добавьте зависимость:
+[source,xml]
+----
+<dependency>
+    <groupId>ru.i-novus.ms.audit</groupId>
+    <artifactId>audit-client-spring-boot-starter</artifactId>
+    <version>${version}</version>
+</dependency>
+----
+
+Для работы клиента в properties следует добавить следующие значения: +
+audit.client.apiUrl=URL где расположен сервис бэкенда +
+audit.client.sourceApplication=Идентификатор системы откуда происходит запись(необязательное поле)
