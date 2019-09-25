@@ -14,6 +14,7 @@ BEGIN
  -- rename partition
  EXECUTE format('ALTER TABLE %s.%s RENAME TO %s', params->>'partition_schema', params->>'partition', new_relname);
  --add multilevel partitioning
- PERFORM create_range_partitions(concat(params->>'partition_schema', '.', new_relname), field_id, 1, 1, 1);
+ PERFORM create_range_partitions(concat(params->>'partition_schema', '.', new_relname), field_id, 1, 1, 10);
+ PERFORM add_range_partition(concat(params->>'partition_schema', '.', new_relname), 11, NULL, concat(params->>'partition_schema', '.', new_relname, '_default'));
 END
 $$ LANGUAGE plpgsql;
