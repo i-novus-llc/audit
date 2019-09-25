@@ -45,7 +45,7 @@
     <changeSet id="AUDIT-24_add_comments_to_audit_table" author="elvira.ibragimova" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
-                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+                               changeLogFile="classpath:/db/v-1.2/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
             <tableExists tableName="audit" schemaName="audit"/>
         </preConditions>
         <sql>
@@ -70,7 +70,7 @@
     <changeSet id="AUDIT-24_audit_event_date_ix" author="elvira.ibragimova">
         <preConditions onFail="MARK_RAN">
             <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
-                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+                               changeLogFile="classpath:/db/v-1.2/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
             <columnExists schemaName="audit" tableName="audit" columnName="event_date"/>
             <not>
                 <indexExists columnNames="event_date" schemaName="audit" tableName="audit"/>
@@ -87,7 +87,7 @@
     <changeSet id="AUDIT-24_audit_event_type_ix" author="elvira.ibragimova">
         <preConditions onFail="MARK_RAN">
             <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
-                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+                               changeLogFile="classpath:/db/v-1.2/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
             <columnExists schemaName="audit" tableName="audit" columnName="event_type"/>
             <not>
                 <indexExists columnNames="event_type" schemaName="audit" tableName="audit"/>
@@ -104,7 +104,7 @@
     <changeSet id="AUDIT-24_audit_object_type_ix" author="elvira.ibragimova">
         <preConditions onFail="MARK_RAN">
             <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
-                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+                               changeLogFile="classpath:/db/v-1.2/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
             <columnExists schemaName="audit" tableName="audit" columnName="object_type"/>
             <not>
                 <indexExists columnNames="object_type" schemaName="audit" tableName="audit"/>
@@ -121,7 +121,7 @@
     <changeSet id="AUDIT-24_audit_object_id_ix" author="elvira.ibragimova">
         <preConditions onFail="MARK_RAN">
             <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
-                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+                               changeLogFile="classpath:/db/v-1.2/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
             <columnExists schemaName="audit" tableName="audit" columnName="object_id"/>
             <not>
                 <indexExists columnNames="object_id" schemaName="audit" tableName="audit"/>
@@ -138,7 +138,7 @@
     <changeSet id="AUDIT-24_audit_object_name_ix" author="elvira.ibragimova">
         <preConditions onFail="MARK_RAN">
             <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
-                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+                               changeLogFile="classpath:/db/v-1.2/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
             <columnExists schemaName="audit" tableName="audit" columnName="object_name"/>
             <not>
                 <indexExists columnNames="object_name" schemaName="audit" tableName="audit"/>
@@ -155,7 +155,7 @@
     <changeSet id="AUDIT-24_audit_user_id_ix" author="elvira.ibragimova">
         <preConditions onFail="MARK_RAN">
             <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
-                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+                               changeLogFile="classpath:/db/v-1.2/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
             <columnExists schemaName="audit" tableName="audit" columnName="user_id"/>
             <not>
                 <indexExists columnNames="user_id" schemaName="audit" tableName="audit"/>
@@ -172,7 +172,7 @@
     <changeSet id="AUDIT-24_audit_username_ix" author="elvira.ibragimova">
         <preConditions onFail="MARK_RAN">
             <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
-                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+                               changeLogFile="classpath:/db/v-1.2/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
             <columnExists schemaName="audit" tableName="audit" columnName="username"/>
             <not>
                 <indexExists columnNames="username" schemaName="audit" tableName="audit"/>
@@ -189,7 +189,7 @@
     <changeSet id="AUDIT-24_audit_source_application_ix" author="elvira.ibragimova">
         <preConditions onFail="MARK_RAN">
             <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
-                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+                               changeLogFile="classpath:/db/v-1.2/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
             <columnExists schemaName="audit" tableName="audit" columnName="source_application"/>
             <not>
                 <indexExists columnNames="source_application" schemaName="audit" tableName="audit"/>
@@ -206,7 +206,7 @@
     <changeSet id="AUDIT-24_audit_source_workstation_ix" author="elvira.ibragimova">
         <preConditions onFail="MARK_RAN">
             <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
-                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+                               changeLogFile="classpath:/db/v-1.2/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
             <columnExists schemaName="audit" tableName="audit" columnName="source_workstation"/>
             <not>
                 <indexExists columnNames="source_workstation" schemaName="audit" tableName="audit"/>
@@ -223,7 +223,7 @@
     <changeSet id="AUDIT-24_audit_audit_type_id_ix" author="elvira.ibragimova">
         <preConditions onFail="MARK_RAN">
             <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
-                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+                               changeLogFile="classpath:/db/v-1.2/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
             <columnExists schemaName="audit" tableName="audit" columnName="audit_type_id"/>
             <not>
                 <indexExists columnNames="audit_type_id" schemaName="audit" tableName="audit"/>
@@ -240,9 +240,7 @@
     <changeSet id="AUDIT-24_create_range_partitions_audit_table_empty" author="elvira.ibragimova" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
-                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
-            <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
-                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+                               changeLogFile="classpath:/db/v-1.2/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
             <tableIsEmpty tableName="audit" schemaName="audit"/>
         </preConditions>
         <sql>
@@ -257,9 +255,7 @@
     <changeSet id="AUDIT-24_migrate_data_from_audit_temp" author="elvira.ibragimova" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
-                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
-            <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
-                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+                               changeLogFile="classpath:/db/v-1.2/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
             <not>
                 <tableIsEmpty tableName="audit_temp" schemaName="audit"/>
             </not>
@@ -274,7 +270,7 @@
     <changeSet id="AUDIT-24_delete_audit_temp_table" author="elvira.ibragimova">
         <preConditions onFail="MARK_RAN">
             <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
-                               changeLogFile="classpath:/db/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+                               changeLogFile="classpath:/db/v-1.2/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
             <tableExists tableName="audit_temp" schemaName="audit"/>
         </preConditions>
         <dropTable tableName="audit_temp" schemaName="audit"/>
