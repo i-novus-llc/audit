@@ -76,7 +76,10 @@
     <changeSet id="AUDIT-18_audit_object_drop_unique_constraint" author="elvira.ibragimova" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="t">
-                SELECT exists(SELECT FROM pg_catalog.pg_constraint WHERE conname ilike 'audit_object_type_name_key');
+                SELECT exists(SELECT FROM pg_catalog.pg_constraint
+                    JOIN pg_catalog.pg_class on pg_class.oid =  pg_constraint.conrelid
+                WHERE pg_constraint.conname ilike 'audit_object_type_name_key'
+                    AND pg_class.relname ilike 'audit_object');
             </sqlCheck>
         </preConditions>
         <dropUniqueConstraint tableName="audit_object" schemaName="audit" constraintName="audit_object_type_name_key"/>
