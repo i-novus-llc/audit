@@ -8,6 +8,9 @@
     <changeSet id="AUDIT-18_rename_audit_object_type_table" author="elvira.ibragimova">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="audit_object_type" schemaName="audit"/>
+            <not>
+                <tableExists tableName="audit_object" schemaName="audit"/>
+            </not>
         </preConditions>
         <renameTable oldTableName="audit_object_type" schemaName="audit" newTableName="audit_object"/>
         <rollback>
