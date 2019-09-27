@@ -62,8 +62,11 @@ public class RequestConverter {
         auditForm.setSender(request.getSender());
         auditForm.setReceiver(request.getReceiver());
 
-        if (applicationAccessor != null)
+        if (request.getSourceApplication() != null) {
+            auditForm.setSourceApplication(request.getSourceApplication());
+        } else if (applicationAccessor != null) {
             auditForm.setSourceApplication(applicationAccessor.get());
+        }
 
         return auditForm;
     }

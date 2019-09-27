@@ -26,6 +26,8 @@ public class AuditClientRequest implements Serializable {
 
     private String sourceWorkstation;
 
+    private String sourceApplication;
+
     private String context;
 
     private String hostname;
