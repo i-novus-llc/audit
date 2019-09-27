@@ -24,6 +24,7 @@ public class RequestConverterTest {
     private static final String USERNAME = "ekrasulina";
     private static final String SOURCE_WORKSTATION = "Workstation";
     private static final String SOURCE_APPLICATION = "Application";
+    private static final String SOURCE_APPLICATION_PARAMETRIZED = "Parametrized application";
     private static final String CONTEXT = "{\"field\": \"name\", \"value\": \"Значение\"}";
     private static final short AUDIT_TYPE = 1;
     private static final String SENDER = "Sender";
@@ -54,6 +55,7 @@ public class RequestConverterTest {
         auditClientRequest.setUserId(USER_ID);
         auditClientRequest.setUsername(USERNAME);
         auditClientRequest.setSourceWorkstation(SOURCE_WORKSTATION);
+        auditClientRequest.setSourceApplication(SOURCE_APPLICATION_PARAMETRIZED);
         auditClientRequest.setContext(CONTEXT);
         auditClientRequest.setAuditType(AUDIT_TYPE);
         auditClientRequest.setSender(SENDER);
@@ -72,7 +74,28 @@ public class RequestConverterTest {
         assertEquals(auditClientRequest.getUserId(), auditForm.getUserId());
         assertEquals(auditClientRequest.getUsername(), auditForm.getUsername());
         assertEquals(auditClientRequest.getSourceWorkstation(), auditForm.getSourceWorkstation());
-        assertEquals(SOURCE_APPLICATION, auditForm.getSourceApplication());
+        assertEquals(auditClientRequest.getSourceApplication(), auditForm.getSourceApplication());
+        assertEquals(auditClientRequest.getContext(), auditForm.getContext());
+        assertEquals(auditClientRequest.getAuditType(), auditForm.getAuditType());
+        assertEquals(auditClientRequest.getSender(), auditForm.getSender());
+        assertEquals(auditClientRequest.getReceiver(), auditForm.getReceiver());
+    }
+
+    @Test
+    public void successRequestConverterTestParametrized() {
+        AuditForm auditForm = requestConverter.toAuditRequest(auditClientRequest);
+
+        auditClientRequest.setSourceApplication(null);
+
+        assertEquals(auditClientRequest.getEventDate(), auditForm.getEventDate());
+        assertEquals(auditClientRequest.getEventType(), auditForm.getEventType());
+        assertEquals(auditClientRequest.getObjectType(), auditForm.getObjectType());
+        assertEquals(auditClientRequest.getObjectId(), auditForm.getObjectId());
+        assertEquals(auditClientRequest.getObjectName(), auditForm.getObjectName());
+        assertEquals(auditClientRequest.getUserId(), auditForm.getUserId());
+        assertEquals(auditClientRequest.getUsername(), auditForm.getUsername());
+        assertEquals(auditClientRequest.getSourceWorkstation(), auditForm.getSourceWorkstation());
+        assertEquals(SOURCE_APPLICATION_PARAMETRIZED, auditForm.getSourceApplication());
         assertEquals(auditClientRequest.getContext(), auditForm.getContext());
         assertEquals(auditClientRequest.getAuditType(), auditForm.getAuditType());
         assertEquals(auditClientRequest.getSender(), auditForm.getSender());
