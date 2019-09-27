@@ -1,6 +1,5 @@
 package ru.i_novus.ms.audit.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -37,11 +36,10 @@ public class AuditEntity {
     @Column(name = "object_id")
     private String objectId;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     private String userId;
 
-    @Column(name = "username", nullable = false)
-    @JsonProperty("username")
+    @Column(name = "username")
     private String username;
 
     @Column(name = "source_application")
@@ -57,7 +55,6 @@ public class AuditEntity {
     private LocalDateTime creationDate;
 
     @Column(name = "hostname")
-    @JsonProperty("hostname")
     private String hostname;
 
     @Column(name = "audit_type_id", nullable = false)
@@ -74,5 +71,4 @@ public class AuditEntity {
         id = id == null ? UUID.randomUUID() : id;
         creationDate = creationDate == null ? LocalDateTime.now(Clock.systemUTC()) : creationDate;
     }
-
 }

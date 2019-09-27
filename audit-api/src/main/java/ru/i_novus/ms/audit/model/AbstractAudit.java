@@ -33,12 +33,10 @@ public class AbstractAudit implements Serializable {
     @ApiModelProperty(value = "Наименование объекта")
     private String objectName;
 
-    @ApiModelProperty(value = "Идентификатор пользователя", required = true)
-    @NotNull
+    @ApiModelProperty(value = "Идентификатор пользователя")
     private String userId;
 
-    @ApiModelProperty(value = "Имя пользователя", required = true)
-    @NotNull
+    @ApiModelProperty(value = "Имя пользователя")
     private String username;
 
     @ApiModelProperty(value = "Имя программы")
