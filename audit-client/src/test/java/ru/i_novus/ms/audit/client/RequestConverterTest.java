@@ -103,20 +103,6 @@ public class RequestConverterTest {
     }
 
     @Test(expected = AuditException.class)
-    public void invalidUserIdTest() {
-        auditClientRequest.setUserId(null);
-
-        requestConverter.toAuditRequest(auditClientRequest);
-    }
-
-    @Test(expected = AuditException.class)
-    public void invalidUsernameTest() {
-        auditClientRequest.setUsername(null);
-
-        requestConverter.toAuditRequest(auditClientRequest);
-    }
-
-    @Test(expected = AuditException.class)
     public void invalidEventTypeTest() {
         auditClientRequest.setEventType(null);
 

@@ -30,12 +30,6 @@ public class RequestConverter {
         if (request.getEventType() == null || request.getEventType().isBlank())
             throw new AuditException(messages.getMessage("requestConverter.invalidEventType"));
 
-        if (request.getUserId() == null || request.getUserId().isBlank())
-            throw new AuditException(messages.getMessage("requestConverter.invalidUserId"));
-
-        if (request.getUsername() == null || request.getUsername().isBlank())
-            throw new AuditException(messages.getMessage("requestConverter.invalidUsername"));
-
         if (request.getContext() == null || request.getContext().isBlank())
             throw new AuditException(messages.getMessage("requestConverter.invalidContext"));
 
