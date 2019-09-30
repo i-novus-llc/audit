@@ -36,6 +36,8 @@
     <changeSet id="AUDIT-22_copy_from_audit" author="agaifutdinov" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="audit_event_type" schemaName="audit"/>
+            <columnExists tableName="audit_event_type" schemaName="audit" columnName="audit_id"/>
+            <tableIsEmpty tableName="audit_event_type" schemaName="audit"/>
         </preConditions>
         <sql>
             INSERT INTO audit.audit_event_type(id, audit_id, name) (
