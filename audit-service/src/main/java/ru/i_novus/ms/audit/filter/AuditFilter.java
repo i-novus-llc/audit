@@ -3,6 +3,7 @@ package ru.i_novus.ms.audit.filter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.n2oapp.platform.i18n.Messages;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.cxf.common.util.CollectionUtils;
 import org.slf4j.Logger;
@@ -27,6 +28,7 @@ public class AuditFilter implements Filter {
     private static final String FIELD_EVENT_DATE = "eventDate";
     private static final String FIELD_EVENT_DATE_FROM = "eventDateFrom";
     private static final String FIELD_EVENT_DATE_TO = "eventDateTo";
+    private static final String FIELD_OBJECT_ID = "objectId";
 
     private static final String CODE_IS_NUMERIC_NON_ZERO = "auditFilter.isNumericNotZero";
     private static final String CODE_IS_DATE = "auditFilter.isDate";
@@ -90,6 +92,7 @@ public class AuditFilter implements Filter {
         String auditType = request.getParameter(FIELD_AUDIT_TYPE);
         String eventDateFrom = request.getParameter(FIELD_EVENT_DATE_FROM);
         String eventDateTo = request.getParameter(FIELD_EVENT_DATE_TO);
+        String objectId = request.getParameter(FIELD_OBJECT_ID);
 
         List<String> errors = new ArrayList<>();
         if (!isDate(eventDateFrom)) {
@@ -106,7 +109,7 @@ public class AuditFilter implements Filter {
 
         if (isDate(eventDateFrom) && isDate(eventDateTo)) {
             long daysBetweenDates = Duration.between(LocalDateTime.parse(eventDateFrom), LocalDateTime.parse(eventDateTo)).toDays();
-            if (daysBetweenDates > 31) {
+            if (daysBetweenDates > 31 && StringUtils.isBlank(objectId)) {
                 errors.add(
                         messages.getMessage(
                                 CODE_TOO_BIG_PERIOD, FIELD_EVENT_DATE_FROM, eventDateFrom, FIELD_EVENT_DATE_TO, eventDateTo));
