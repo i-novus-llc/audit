@@ -14,3 +14,19 @@
 Для работы клиента в properties следует добавить следующие значения: +
 audit.client.apiUrl=URL где расположен сервис бэкенда +
 audit.client.sourceApplication=Необязательная настройка. Идентификатор системы откуда происходит запись(sourceApplication). Если в запросе будет передан sourceApplication, то значение этой настройки будет игнорироваться.
+
+Для сохранения записи в аудите используются бины simpleAuditClient и asyncAuditClient. Пример:
+[source, java]
+----
+@Import(AuditClientConfiguration.class)
+@Component
+public class TestClass {
+
+    @Autowired
+    private AuditClient asyncAuditClient;
+
+    public void sendAsync(AuditClientRequest request) {
+        asyncAuditClient.add(request);
+    }
+}
+----
