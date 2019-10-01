@@ -8,6 +8,7 @@
     <groupId>ru.i-novus.ms.audit</groupId>
     <artifactId>audit-client-spring-boot-starter</artifactId>
     <version>${version}</version>
+    <type>pom</type>
 </dependency>
 ----
 
