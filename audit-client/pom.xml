@@ -12,11 +12,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>net.n2oapp.platform</groupId>
-            <artifactId>n2o-platform-jaxrs-commons</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>ru.i-novus.ms.audit</groupId>
             <artifactId>audit-api</artifactId>
             <version>${project.version}</version>
@@ -25,16 +20,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-activemq</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>net.n2oapp.platform</groupId>
-            <artifactId>n2o-platform-starter-jaxrs-server</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>net.n2oapp.platform</groupId>
-            <artifactId>n2o-platform-starter-jaxrs-client</artifactId>
         </dependency>
 
         <dependency>
@@ -48,12 +33,5 @@
             <artifactId>n2o-platform-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
-
 </project>

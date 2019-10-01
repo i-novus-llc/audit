@@ -6,8 +6,6 @@ import org.springframework.stereotype.Component;
 import ru.i_novus.ms.audit.model.AuditForm;
 import ru.i_novus.ms.audit.service.api.AuditRest;
 
-import static ru.i_novus.ms.audit.client.AuditClientConfiguration.AUDIT_QUEUE;
-
 @Component
 public class Consumer {
 
@@ -19,7 +17,7 @@ public class Consumer {
         this.auditRest = auditRest;
     }
 
-    @JmsListener(destination = AUDIT_QUEUE)
+    @JmsListener(destination = "${audit.client.queue}")
     public void receiveMessage(AuditForm request) {
         auditRest.add(request);
     }

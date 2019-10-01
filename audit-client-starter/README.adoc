@@ -8,9 +8,44 @@
     <groupId>ru.i-novus.ms.audit</groupId>
     <artifactId>audit-client-spring-boot-starter</artifactId>
     <version>${version}</version>
+    <type>pom</type>
 </dependency>
 ----
 
 Для работы клиента в properties следует добавить следующие значения: +
 audit.client.apiUrl=URL где расположен сервис бэкенда +
 audit.client.sourceApplication=Необязательная настройка. Идентификатор системы откуда происходит запись(sourceApplication). Если в запросе будет передан sourceApplication, то значение этой настройки будет игнорироваться.
+
+Для сохранения записи в аудите используются бины simpleAuditClient и asyncAuditClient. Пример:
+[source, java]
+----
+@Component
+public class TestClass {
+
+    @Autowired
+    private AuditClient asyncAuditClient;
+
+    public void sendAsync(AuditClientRequest request) {
+        asyncAuditClient.add(request);
+    }
+
+    public void test() {
+        AuditClientRequest auditClientRequest = new AuditClientRequest();
+        auditClientRequest.setEventDate(LocalDateTime.now().withNano(0));
+        auditClientRequest.setEventType("EVENT_TYPE");
+        auditClientRequest.setObjectType("OBJECT_TYPE");
+        auditClientRequest.setObjectId("OBJECT_ID");
+        auditClientRequest.setObjectName("OBJECT_NAME");
+        auditClientRequest.setUserId("USER_ID");
+        auditClientRequest.setUsername("USERNAME");
+        auditClientRequest.setSourceWorkstation("SOURCE_WORKSTATION");
+        auditClientRequest.setSourceApplication("SOURCE_APPLICATION");
+        auditClientRequest.setContext("CONTEXT");
+        auditClientRequest.setAuditType((short)1);
+        auditClientRequest.setSender("SENDER");
+        auditClientRequest.setReceiver("RECEIVER");
+
+        sendAsync(auditClientRequest);
+    }
+}
+----
