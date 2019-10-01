@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.i_novus.ms.audit.client.app.AuditClientApp;
 import ru.i_novus.ms.audit.client.model.AuditClientRequest;
@@ -21,7 +20,6 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AuditClientApp.class)
-@Import(AuditClientConfiguration.class)
 public class AsyncAuditClientTest {
 
     private static AuditClientRequest auditClientRequest = new AuditClientRequest();

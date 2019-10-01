@@ -1,14 +1,16 @@
 package ru.i_novus.ms.audit.client.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import ru.i_novus.ms.audit.client.impl.queue.Producer;
 import ru.i_novus.ms.audit.client.model.AuditClientRequest;
-
-import static ru.i_novus.ms.audit.client.AuditClientConfiguration.AUDIT_QUEUE;
 
 public class AsyncAuditClientImpl extends AbstractAuditService {
 
     private Producer producer;
+
+    @Value("${audit.client.queue}")
+    private String auditQueue;
 
     @Autowired
     public void setProducer(Producer producer) {
@@ -17,6 +19,6 @@ public class AsyncAuditClientImpl extends AbstractAuditService {
 
     @Override
     public void add(AuditClientRequest request) {
-        producer.send(AUDIT_QUEUE, requestConverter.toAuditRequest(request));
+        producer.send(auditQueue, requestConverter.toAuditRequest(request));
     }
 }
