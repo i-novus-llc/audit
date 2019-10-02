@@ -69,9 +69,12 @@
 
     <changeSet id="AUDIT-24_add_primary_key_on_audit_table" author="rizmailov">
         <preConditions onFail="MARK_RAN">
-            <not>
-                <primaryKeyExists tableName="audit" schemaName="audit" primaryKeyName="audit_pk"/>
-            </not>
+            <sqlCheck expectedResult="f">
+                SELECT EXISTS(SELECT a.attname
+                              FROM pg_index i
+                              JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey)
+                              WHERE i.indrelid = 'audit.audit'::regclass and a.attname = 'id' AND i.indisprimary);
+            </sqlCheck>
         </preConditions>
         <addPrimaryKey tableName="audit" schemaName="audit" columnNames="id" constraintName="audit_pk"/>
     </changeSet>
