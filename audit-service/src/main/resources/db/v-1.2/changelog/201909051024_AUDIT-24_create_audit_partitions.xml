@@ -67,6 +67,15 @@
         </sql>
     </changeSet>
 
+    <changeSet id="AUDIT-24_add_primary_key_on_audit_table" author="rizmailov">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists tableName="audit" schemaName="audit" primaryKeyName="audit_pk"/>
+            </not>
+        </preConditions>
+        <addPrimaryKey tableName="audit" schemaName="audit" columnNames="id" constraintName="audit_pk"/>
+    </changeSet>
+
     <changeSet id="AUDIT-24_audit_event_date_ix" author="elvira.ibragimova">
         <preConditions onFail="MARK_RAN">
             <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
