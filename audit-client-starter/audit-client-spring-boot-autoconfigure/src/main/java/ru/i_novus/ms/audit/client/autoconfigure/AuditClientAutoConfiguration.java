@@ -3,6 +3,7 @@ package ru.i_novus.ms.audit.client.autoconfigure;
 import net.n2oapp.platform.jaxrs.autoconfigure.EnableJaxRsProxyClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,6 +14,7 @@ import ru.i_novus.ms.audit.client.AuditClient;
 import ru.i_novus.ms.audit.client.SourceApplicationAccessor;
 import ru.i_novus.ms.audit.client.impl.AsyncAuditClientImpl;
 import ru.i_novus.ms.audit.client.impl.SimpleAuditClientImpl;
+import ru.i_novus.ms.audit.client.impl.StubAuditClientImpl;
 import ru.i_novus.ms.audit.service.api.AuditRest;
 
 @EnableJms
@@ -32,6 +34,7 @@ public class AuditClientAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnExpression("${audit.client.enabled}==true && ${audit.client.send-async}==true")
     public AuditClient asyncAuditClient(@Qualifier("auditRestJaxRsProxyClient") AuditRest auditRest) {
         AsyncAuditClientImpl asyncAuditClient = new AsyncAuditClientImpl();
         asyncAuditClient.setAuditRest(auditRest);
@@ -39,9 +42,16 @@ public class AuditClientAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnExpression("${audit.client.enabled}==true && ${audit.client.send-async}==false")
     public AuditClient simpleAuditClient(@Qualifier("auditRestJaxRsProxyClient") AuditRest auditRest) {
         SimpleAuditClientImpl simpleAuditClient = new SimpleAuditClientImpl();
         simpleAuditClient.setAuditRest(auditRest);
         return simpleAuditClient;
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "audit.client", name = "enabled", havingValue = "false")
+    public AuditClient stubAuditClient() {
+        return new StubAuditClientImpl();
     }
 }

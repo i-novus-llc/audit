@@ -6,6 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.i_novus.ms.audit.client.app.TestedRequestConverter;
 import ru.i_novus.ms.audit.client.model.AuditClientRequest;
+import ru.i_novus.ms.audit.client.model.User;
 import ru.i_novus.ms.audit.exception.AuditException;
 import ru.i_novus.ms.audit.model.AuditForm;
 
@@ -20,9 +21,12 @@ public class RequestConverterTest {
     private static final String OBJECT_TYPE = "ObjectType";
     private static final String OBJECT_ID = "ObjectId";
     private static final String OBJECT_NAME = "ObjectName";
-    private static final String USER_ID = "785";
-    private static final String USERNAME = "ekrasulina";
+    private static final String USER_ID = "UserId";
+    private static final String USER_ID_PARAMETRIZED = "Parametrized userId";
+    private static final String USERNAME = "username";
+    private static final String USERNAME_PARAMETRIZED = "Parametrized username";
     private static final String SOURCE_WORKSTATION = "Workstation";
+    private static final String SOURCE_WORKSTATION_PARAMETRIZED = "Parametrized workstation";
     private static final String SOURCE_APPLICATION = "Application";
     private static final String SOURCE_APPLICATION_PARAMETRIZED = "Parametrized application";
     private static final String CONTEXT = "{\"field\": \"name\", \"value\": \"Значение\"}";
@@ -39,7 +43,9 @@ public class RequestConverterTest {
     @BeforeClass
     public static void initialize() {
         requestConverter = new TestedRequestConverter(
-                () -> SOURCE_APPLICATION,
+                () -> new User(USER_ID_PARAMETRIZED, USERNAME_PARAMETRIZED),
+                () -> SOURCE_WORKSTATION_PARAMETRIZED,
+                () -> SOURCE_APPLICATION_PARAMETRIZED,
                 messages
         );
     }
@@ -55,7 +61,7 @@ public class RequestConverterTest {
         auditClientRequest.setUserId(USER_ID);
         auditClientRequest.setUsername(USERNAME);
         auditClientRequest.setSourceWorkstation(SOURCE_WORKSTATION);
-        auditClientRequest.setSourceApplication(SOURCE_APPLICATION_PARAMETRIZED);
+        auditClientRequest.setSourceApplication(SOURCE_APPLICATION);
         auditClientRequest.setContext(CONTEXT);
         auditClientRequest.setAuditType(AUDIT_TYPE);
         auditClientRequest.setSender(SENDER);
@@ -83,18 +89,21 @@ public class RequestConverterTest {
 
     @Test
     public void successRequestConverterTestParametrized() {
-        AuditForm auditForm = requestConverter.toAuditRequest(auditClientRequest);
-
+        auditClientRequest.setUserId(null);
+        auditClientRequest.setUsername(null);
+        auditClientRequest.setSourceWorkstation(null);
         auditClientRequest.setSourceApplication(null);
+
+        AuditForm auditForm = requestConverter.toAuditRequest(auditClientRequest);
 
         assertEquals(auditClientRequest.getEventDate(), auditForm.getEventDate());
         assertEquals(auditClientRequest.getEventType(), auditForm.getEventType());
         assertEquals(auditClientRequest.getObjectType(), auditForm.getObjectType());
         assertEquals(auditClientRequest.getObjectId(), auditForm.getObjectId());
         assertEquals(auditClientRequest.getObjectName(), auditForm.getObjectName());
-        assertEquals(auditClientRequest.getUserId(), auditForm.getUserId());
-        assertEquals(auditClientRequest.getUsername(), auditForm.getUsername());
-        assertEquals(auditClientRequest.getSourceWorkstation(), auditForm.getSourceWorkstation());
+        assertEquals(USER_ID_PARAMETRIZED, auditForm.getUserId());
+        assertEquals(USERNAME_PARAMETRIZED, auditForm.getUsername());
+        assertEquals(SOURCE_WORKSTATION_PARAMETRIZED, auditForm.getSourceWorkstation());
         assertEquals(SOURCE_APPLICATION_PARAMETRIZED, auditForm.getSourceApplication());
         assertEquals(auditClientRequest.getContext(), auditForm.getContext());
         assertEquals(auditClientRequest.getAuditType(), auditForm.getAuditType());
