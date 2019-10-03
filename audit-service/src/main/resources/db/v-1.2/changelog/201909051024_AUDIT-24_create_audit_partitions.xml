@@ -67,6 +67,22 @@
         </sql>
     </changeSet>
 
+    <changeSet id="AUDIT-24_add_primary_key_on_audit_table" author="rizmailov">
+        <preConditions onFail="MARK_RAN">
+            <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
+                               changeLogFile="classpath:/db/v-1.2/changelog/201909051024_AUDIT-24_create_audit_partitions.xml"/>
+            <tableExists tableName="audit" schemaName="audit"/>
+            <columnExists tableName="audit" schemaName="audit" columnName="id"/>
+            <sqlCheck expectedResult="f">
+                SELECT EXISTS(SELECT a.attname
+                              FROM pg_index i
+                              JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey)
+                              WHERE i.indrelid = 'audit.audit'::regclass and a.attname = 'id' AND i.indisprimary);
+            </sqlCheck>
+        </preConditions>
+        <addPrimaryKey tableName="audit" schemaName="audit" columnNames="id" constraintName="audit_pk"/>
+    </changeSet>
+
     <changeSet id="AUDIT-24_audit_event_date_ix" author="elvira.ibragimova">
         <preConditions onFail="MARK_RAN">
             <changeSetExecuted id="AUDIT-24_create_temp_table_audit" author="elvira.ibragimova"
