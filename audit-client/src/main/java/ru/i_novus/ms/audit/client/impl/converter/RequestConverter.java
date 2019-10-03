@@ -3,11 +3,11 @@ package ru.i_novus.ms.audit.client.impl.converter;
 import lombok.AccessLevel;
 import lombok.Setter;
 import net.n2oapp.platform.i18n.Messages;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.i_novus.ms.audit.client.SourceApplicationAccessor;
+import ru.i_novus.ms.audit.client.SourceWorkstationAccessor;
+import ru.i_novus.ms.audit.client.UserAccessor;
 import ru.i_novus.ms.audit.client.model.AuditClientRequest;
 import ru.i_novus.ms.audit.exception.AuditException;
 import ru.i_novus.ms.audit.model.AuditForm;
@@ -18,7 +18,11 @@ import java.time.LocalDateTime;
 @Setter(AccessLevel.PROTECTED)
 public class RequestConverter {
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestConverter.class);
+    @Autowired(required = false)
+    private UserAccessor userAccessor;
+
+    @Autowired(required = false)
+    private SourceWorkstationAccessor workstationAccessor;
 
     @Autowired(required = false)
     private SourceApplicationAccessor applicationAccessor;
@@ -47,19 +51,34 @@ public class RequestConverter {
         auditForm.setObjectType(request.getObjectType());
         auditForm.setObjectId(request.getObjectId());
         auditForm.setObjectName(request.getObjectName());
-        auditForm.setUserId(request.getUserId());
-        auditForm.setUsername(request.getUsername());
-        auditForm.setSourceWorkstation(request.getSourceWorkstation());
         auditForm.setContext(request.getContext());
         auditForm.setHostname(request.getHostname());
         auditForm.setAuditType(request.getAuditType());
         auditForm.setSender(request.getSender());
         auditForm.setReceiver(request.getReceiver());
 
+        if (request.getUserId() != null) {
+            auditForm.setUserId(request.getUserId());
+        } else if (userAccessor != null && userAccessor.get() != null && userAccessor.get().getUserId() != null) {
+            auditForm.setUserId(userAccessor.get().getUserId());
+        }
+
+        if (request.getUsername() != null) {
+            auditForm.setUsername(request.getUsername());
+        } else if (userAccessor != null && userAccessor.get() != null && userAccessor.get().getUsername() != null) {
+            auditForm.setUsername(userAccessor.get().getUsername());
+        }
+
         if (request.getSourceApplication() != null) {
             auditForm.setSourceApplication(request.getSourceApplication());
         } else if (applicationAccessor != null) {
             auditForm.setSourceApplication(applicationAccessor.get());
+        }
+
+        if (request.getSourceWorkstation() != null) {
+            auditForm.setSourceWorkstation(request.getSourceWorkstation());
+        } else if (workstationAccessor != null) {
+            auditForm.setSourceWorkstation(workstationAccessor.get());
         }
 
         return auditForm;

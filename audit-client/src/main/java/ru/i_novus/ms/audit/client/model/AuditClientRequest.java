@@ -49,6 +49,7 @@ public class AuditClientRequest implements Serializable {
                 ", userId='" + userId + '\'' +
                 ", username='" + username + '\'' +
                 ", sourceWorkstation='" + sourceWorkstation + '\'' +
+                ", sourceApplication='" + sourceApplication + '\'' +
                 ", context='" + context + '\'' +
                 ", hostname='" + hostname + '\'' +
                 ", auditType='" + auditType + '\'' +

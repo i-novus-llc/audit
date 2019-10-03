@@ -11,41 +11,65 @@
     <type>pom</type>
 </dependency>
 ----
+.Для работы клиента следует добавить следующую запись в properties: +
+* audit.client.apiUrl = URL где расположен сервис бэкенда +
 
-Для работы клиента в properties следует добавить следующие значения: +
-audit.client.apiUrl=URL где расположен сервис бэкенда +
-audit.client.sourceApplication=Необязательная настройка. Идентификатор системы откуда происходит запись(sourceApplication). Если в запросе будет передан sourceApplication, то значение этой настройки будет игнорироваться.
+.Дополнительные параметры: +
+* audit.client.enabled = Значение по умолчанию true. При значении false вместо AuditClient будет возвращена заглушка (StubAuditClientImpl). +
+* audit.client.send-async = Значение по умолчанию true. При значении false не будет использоваться ActiveMQ и запросы будут идти напрямую. +
+* audit.client.sourceApplication= Идентификатор системы откуда происходит запись(sourceApplication). Если в запросе будет передан sourceApplication, то значение этой настройки будет игнорироваться. +
 
-Для сохранения записи в аудите используются бины simpleAuditClient и asyncAuditClient. Пример:
+Для отправки запроса в аудит используется AuditClientRequest
+[source, java]
+----
+AuditClientRequest auditClientRequest = new AuditClientRequest();
+
+auditClientRequest.setEventDate(LocalDateTime.now().withNano(0));
+auditClientRequest.setEventType("EVENT_TYPE");
+auditClientRequest.setObjectType("OBJECT_TYPE");
+auditClientRequest.setObjectId("OBJECT_ID");
+auditClientRequest.setObjectName("OBJECT_NAME");
+auditClientRequest.setUserId("USER_ID");
+auditClientRequest.setUsername("USERNAME");
+auditClientRequest.setSourceWorkstation("SOURCE_WORKSTATION");
+auditClientRequest.setSourceApplication("SOURCE_APPLICATION");
+auditClientRequest.setContext("CONTEXT");
+auditClientRequest.setAuditType((short)1);
+auditClientRequest.setSender("SENDER");
+auditClientRequest.setReceiver("RECEIVER");
+----
+
+Есть возможность задать поля userId, username, sourceWorkstation, sourceApplication создав бины с соответствющими accessor:
+[source, java]
+----
+    @Bean
+    public UserAccessor userAccessor() {
+        return () -> new User("USER_ID", "USERNAME");
+    }
+
+    @Bean
+    public SourceWorkstationAccessor workstationAccessor() {
+        return () -> "SOURCE_WORKSTATION";
+    }
+
+    @Bean
+    public SourceApplicationAccessor applicationAccessor() {
+        return () -> "SOURCE_APPLICATION";
+    }
+----
+Стоит учесть, что если эти поля были указаны в AuditClientRequest, то значения возьмутся из AuditClientRequest.
+
+Для сохранения записи в аудите достаточно определить AuditClient и передать ему AuditClientRequest. Пример:
 [source, java]
 ----
 @Component
 public class TestClass {
 
     @Autowired
-    private AuditClient asyncAuditClient;
+    private AuditClient auditClient;
 
     public void sendAsync(AuditClientRequest request) {
-        asyncAuditClient.add(request);
-    }
-
-    public void test() {
-        AuditClientRequest auditClientRequest = new AuditClientRequest();
-        auditClientRequest.setEventDate(LocalDateTime.now().withNano(0));
-        auditClientRequest.setEventType("EVENT_TYPE");
-        auditClientRequest.setObjectType("OBJECT_TYPE");
-        auditClientRequest.setObjectId("OBJECT_ID");
-        auditClientRequest.setObjectName("OBJECT_NAME");
-        auditClientRequest.setUserId("USER_ID");
-        auditClientRequest.setUsername("USERNAME");
-        auditClientRequest.setSourceWorkstation("SOURCE_WORKSTATION");
-        auditClientRequest.setSourceApplication("SOURCE_APPLICATION");
-        auditClientRequest.setContext("CONTEXT");
-        auditClientRequest.setAuditType((short)1);
-        auditClientRequest.setSender("SENDER");
-        auditClientRequest.setReceiver("RECEIVER");
-
-        sendAsync(auditClientRequest);
+        auditClient.add(request);
     }
 }
 ----
