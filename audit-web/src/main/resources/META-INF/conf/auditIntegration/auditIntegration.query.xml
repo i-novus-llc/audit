@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<query xmlns="http://n2oapp.net/framework/config/schema/query-4.0"
+       object-id="audit" name="Audit">
+
+    <list count-mapping="[totalElements]" result-mapping="[content]">
+        <rest filters-separator="&amp;">${audit.backend.url}/audit?{filters}&amp;{sorting}&amp;page={page}</rest>
+    </list>
+    <unique filters="id">
+        <rest>${audit.backend.url}/audit/{id}</rest>
+    </unique>
+
+    <fields>
+
+        <field id="id" domain="string">
+            <select/>
+            <filters>
+                <eq filter-id="id">id={id}</eq>
+            </filters>
+        </field>
+
+        <field id="eventDate" domain="localdatetime">
+            <select/>
+            <sorting mapping="['direction']">sortingColumn=eventDate&amp;sortingOrder={direction}</sorting>
+            <filters>
+                <more filter-id="period.begin">eventDateFrom={period.begin}</more>
+                <less filter-id="period.end">eventDateTo={period.end}</less>
+            </filters>
+        </field>
+
+        <field id="eventType" domain="string">
+            <select/>
+        </field>
+
+        <field id="auditEventTypes" domain="string">
+            <select/>
+            <filters>
+                <in filter-id="auditEventTypes*.name">eventType={auditEventTypes*.name}</in>
+            </filters>
+        </field>
+
+        <field id="context" domain="string">
+            <select/>
+        </field>
+
+        <field id="auditTypeId" domain="integer">
+            <select/>
+            <filters>
+                <eq filter-id="auditTypeId">auditType={auditTypeId}</eq>
+            </filters>
+        </field>
+
+        <field id="sender" domain="string">
+            <select/>
+            <filters>
+                <eq filter-id="sender*.code">sender={sender*.code}</eq>
+            </filters>
+        </field>
+
+        <field id="receiver" domain="string">
+            <select/>
+            <filters>
+                <eq filter-id="receiver*.code">receiver={receiver*.code}</eq>
+            </filters>
+        </field>
+    </fields>
+
+</query>

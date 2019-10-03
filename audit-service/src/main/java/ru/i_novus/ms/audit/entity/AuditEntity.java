@@ -1,16 +1,12 @@
 package ru.i_novus.ms.audit.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@TypeDef(name = "JsonbType", typeClass = JsonbType.class)
 @Getter
 @Setter
 @Builder
@@ -18,9 +14,8 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"auditObjectType", "auditObjectName", "auditSourceApplication"})
+@ToString()
 public class AuditEntity {
-
     @Id
     @Access(AccessType.PROPERTY)
     @Column(name = "id", nullable = false)
@@ -32,46 +27,48 @@ public class AuditEntity {
     @Column(name = "event_type", nullable = false)
     private String eventType;
 
-    @ManyToOne
-    @JoinColumn(name = "object_type_id", nullable = false)
-    private AuditObjectTypeEntity auditObjectType;
+    @Column(name = "object_type")
+    private String auditObjectType;
 
-    @ManyToOne
-    @JoinColumn(name = "object_name_id", nullable = false)
-    private AuditObjectNameEntity auditObjectName;
+    @Column(name = "object_name")
+    private String auditObjectName;
 
     @Column(name = "object_id")
     private String objectId;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     private String userId;
 
-    @Column(name = "username", nullable = false)
-    @JsonProperty("username")
+    @Column(name = "username")
     private String username;
 
-    @ManyToOne
-    @JoinColumn(name = "source_application_id", nullable = false)
-    private AuditSourceApplicationEntity auditSourceApplication;
+    @Column(name = "source_application")
+    private String auditSourceApplication;
 
     @Column(name = "source_workstation")
     private String sourceWorkstation;
 
-    @Column(name = "context", columnDefinition = "json")
-    @Type(type = "JsonbType")
+    @Column(name = "context", nullable = false)
     private String context;
 
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 
     @Column(name = "hostname")
-    @JsonProperty("hostname")
     private String hostname;
+
+    @Column(name = "audit_type_id", nullable = false)
+    private Short auditTypeId;
+
+    @Column(name = "sender_id")
+    private String senderId;
+
+    @Column(name = "receiver_id")
+    private String receiverId;
 
     @PrePersist
     public void prePersist() {
         id = id == null ? UUID.randomUUID() : id;
         creationDate = creationDate == null ? LocalDateTime.now(Clock.systemUTC()) : creationDate;
     }
-
 }

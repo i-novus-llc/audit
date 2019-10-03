@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="AUDIT-18_rename_audit_object_type_table" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="audit_object_type" schemaName="audit"/>
+            <not>
+                <tableExists tableName="audit_object" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <renameTable oldTableName="audit_object_type" schemaName="audit" newTableName="audit_object"/>
+        <rollback>
+            <renameTable oldTableName="audit_object" schemaName="audit" newTableName="audit_object_type"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-18_audit_object_rename_column_name_to_type" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="name" tableName="audit_object" schemaName="audit"/>
+            <not>
+                <columnExists tableName="audit_object" columnName="type" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <renameColumn tableName="audit_object" schemaName="audit" oldColumnName="name" newColumnName="type"/>
+        <rollback>
+            <renameColumn tableName="audit_object" schemaName="audit" oldColumnName="type" newColumnName="name"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-18_audit_object_add_column_name" author="elvira.ibragimova">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="name" tableName="audit_object" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="audit_object" schemaName="audit">
+            <column name="name" type="varchar" remarks="Наименование объекта"/>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="audit_object" columnName="name" schemaName="audit"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-18_audit_object_add_table_remark" author="elvira.ibragimova" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="audit_object" schemaName="audit"/>
+        </preConditions>
+        <sql>
+            COMMENT ON TABLE audit.audit_object IS 'Справочник объектов';
+        </sql>
+        <rollback>
+            <sql>
+                COMMENT ON TABLE audit.audit_object IS NULL;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-18_audit_object_add_column_remark" author="elvira.ibragimova" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="type" tableName="audit_object" schemaName="audit"/>
+        </preConditions>
+        <sql>
+            COMMENT ON COLUMN audit.audit_object.type IS 'Тип объекта';
+        </sql>
+        <rollback>
+            <sql>
+                COMMENT ON COLUMN audit.audit_object.type IS NULL;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-18_audit_object_drop_unique_constraint" author="elvira.ibragimova" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="t">
+                SELECT exists(SELECT FROM pg_catalog.pg_constraint
+                    JOIN pg_catalog.pg_class on pg_class.oid =  pg_constraint.conrelid
+                WHERE pg_constraint.conname ilike 'audit_object_type_name_key'
+                    AND pg_class.relname ilike 'audit_object');
+            </sqlCheck>
+        </preConditions>
+        <dropUniqueConstraint tableName="audit_object" schemaName="audit" constraintName="audit_object_type_name_key"/>
+    </changeSet>
+
+    <changeSet id="AUDIT-18_audit_object_add_audit_object_name_type_ak" author="elvira.ibragimova" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="audit_object_name_type_ak"  tableName="audit_object" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <createIndex unique="true" indexName="audit_object_name_type_ak" tableName="audit_object" schemaName="audit">
+            <column name="type"/>
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

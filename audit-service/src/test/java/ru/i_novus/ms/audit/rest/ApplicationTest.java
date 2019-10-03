@@ -8,10 +8,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.i_novus.ms.audit.Application;
+import ru.i_novus.ms.audit.criteria.AuditCriteria;
+import ru.i_novus.ms.audit.exception.NotFoundException;
 import ru.i_novus.ms.audit.model.*;
 import ru.i_novus.ms.audit.service.api.AuditRest;
 
@@ -38,6 +39,7 @@ public class ApplicationTest {
 
     private static final String TEST = "RANOSDADAFAFAGAGSKENGkngskl;fhlksfgnhklsfgnhklsfgnhfgkls";
     private static UUID ID = UUID.fromString("9264b032-ff05-11e8-8eb2-f2801f1b9fd1");
+    private static UUID TEST_ID = UUID.fromString("9264b032-ff05-11e8-8eb2-f2801f1b9fd2");
 
 
     private static AuditForm auditRequest;
@@ -67,6 +69,16 @@ public class ApplicationTest {
         assertNotNull(audit.getId());
         assertNotNull(audit.getCreationDate());
         assertAuditEquals(auditRequest, audit);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddException() {
+        auditRest.add(null);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testGetByIdException() {
+        auditRest.getById(TEST_ID);
     }
 
     @Test
@@ -119,18 +131,6 @@ public class ApplicationTest {
         assertTrue(search.getTotalElements() > 0);
 
         criteria.setObjectId(TEST);
-        search = auditRest.search(criteria);
-        assertEquals(0, search.getTotalElements());
-    }
-
-    @Test
-    public void testSearchByObjectName() {
-        AuditCriteria criteria = new AuditCriteria();
-        criteria.setObjectName(new String[]{auditRequest.getObjectName()});
-        Page<Audit> search = auditRest.search(criteria);
-        assertTrue(search.getTotalElements() > 0);
-
-        criteria.setObjectName(new String[]{TEST});
         search = auditRest.search(criteria);
         assertEquals(0, search.getTotalElements());
     }

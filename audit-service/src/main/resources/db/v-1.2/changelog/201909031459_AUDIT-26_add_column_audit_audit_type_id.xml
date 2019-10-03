@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="AUDIT-26_add_column_audit_type_id" author="agaifutdinov" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="audit" schemaName="audit" columnName="audit_type_id"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="audit" schemaName="audit">
+            <column name="audit_type_id" type="int2" remarks="Идентификатор типа журнала"/>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="audit" schemaName="audit" columnName="audit_type_id"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-26_fill_column_audit_type_id" author="agaifutdinov" dbms="postgresql">
+        <update tableName="audit" schemaName="audit">
+            <column name="audit_type_id" value="1"/>
+        </update>
+    </changeSet>
+
+    <changeSet id="AUDIT-26_add_nonnull_constraint_audit_type_id" author="agaifutdinov" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="f">
+                SELECT EXISTS (SELECT *
+                    FROM information_schema.columns
+                    WHERE (table_schema = 'audit'
+                        AND table_name = 'audit'
+                        AND column_name = 'audit_type_id'
+                        AND is_nullable = 'NO'));
+            </sqlCheck>
+        </preConditions>
+        <addNotNullConstraint tableName="audit" schemaName="audit" columnName="audit_type_id"/>
+        <rollback>
+            <dropNotNullConstraint tableName="audit" schemaName="audit" columnName="audit_type_id"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,35 @@
+version: '3.6'
+
+services:
+
+  audit-service:
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/audit
+      SERVER_PORT: 8080
+      MANAGEMENT_HEALTH_CONSUL_ENABLED: "false"
+      JAVA_OPTS: -Xmx200m
+    ports:
+      - 8080
+    healthcheck:
+      test: curl -f http://localhost:8080/monitoring/health | grep -io '^{"status":"UP"' || exit 1
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 300s
+    depends_on:
+      - db
+
+  audit-webapp:
+    environment:
+      AUDIT_BACKEND_URL: "http://audit-service:8080/api"
+      SERVER_PORT: 8080
+      MANAGEMENT_HEALTH_CONSUL_ENABLED: "false"
+      JAVA_OPTS: -Xmx300m
+    ports:
+      - 8080
+    healthcheck:
+      test: curl -f http://localhost:8080/monitoring/health | grep -io '^{"status":"UP"' || exit 1
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 300s

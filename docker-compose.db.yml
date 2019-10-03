@@ -1,0 +1,16 @@
+version: "3.6"
+
+services:
+  db:
+    ports:
+      - 5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+      placement:
+        constraints:
+          - node.labels.type == db
