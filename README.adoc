@@ -1,0 +1,31 @@
+Модуль "Аудит" (или Подсистема журналирования) предназначен для журналирования :
+
+* Действий пользователей
+* Интеграционных сервисов
+* Авторизации и сессий, а также неудачных попыток доступа
+
+== Локальный запуск модуля в докере
+* Если были изменения в модулях audit-api, audit-web
+----
+mvn -pl audit-api,audit-web clean install
+----
+* Для формирования jar файлов в модулях audit-service, audit-webapp
+----
+mvn -pl audit-service,audit-webapp clean package
+----
+* Для создания образов и запуска контейнеров необходимо запустить плагин docker-compose:up в модуле audit-webapp
+----
+mvn -pl audit-webapp docker-compose:up -P docker-dev
+----
+* Для остановки и удаления контейнеров нужно прогнать плагин docker-compose:down в модуле audit-webapp
+----
+mvn -pl audit-webapp docker-compose:down -P docker-dev
+----
+* Для удаления созданных образов можно выполнить в консоли
+----
+docker rmi audit_db audit_audit-service audit_audit-webapp
+----
+После выполнения docker-compose:up будет поднято три контейнера: +
+audit_db_1 контейнер с бд, подключение к постгресу доступно по порту 8952 +
+audit_audit-service_1 контейнер с бэкендом, доступен по порту 8951 +
+audit_audit-webapp_1 контейнер с вебприложением, доступен по порту 8950

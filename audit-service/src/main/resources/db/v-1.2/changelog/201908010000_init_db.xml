@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="uuid_function" value="gen_random_uuid()" dbms="postgresql"/>
+
+    <changeSet id="NNOP-7-01" author="ekrasulina" dbms="postgresql">
+        <sql>
+            CREATE SCHEMA IF NOT EXISTS audit
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-02" author="ekrasulina" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="audit" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE audit.audit (
+            id                  UUID,
+            event_date          timestamp with time zone NOT NULL,
+            event_type          varchar NOT NULL,
+            object_type         varchar NOT NULL,
+            object_id           varchar,
+            object_name         varchar,
+            user_id             varchar NOT NULL,
+            username            varchar NOT NULL,
+            source_application  varchar,
+            source_workstation  varchar,
+            context             jsonb,
+            creation_date       timestamp NOT NULL
+            )
+            PARTITION BY RANGE (event_date);
+
+            COMMENT ON TABLE audit.audit                      IS 'Аудит';
+            COMMENT ON COLUMN audit.audit.id                  IS 'Идентификатор';
+            COMMENT ON COLUMN audit.audit.event_date          IS 'Дата';
+            COMMENT ON COLUMN audit.audit.event_type          IS 'Тип события';
+            COMMENT ON COLUMN audit.audit.object_type         IS 'Тип объекта';
+            COMMENT ON COLUMN audit.audit.object_id           IS 'Идентификатор объекта';
+            COMMENT ON COLUMN audit.audit.object_name         IS 'Наименование объекта';
+            COMMENT ON COLUMN audit.audit.user_id             IS 'Идентификатор пользователя';
+            COMMENT ON COLUMN audit.audit.username            IS 'Имя пользователя';
+            COMMENT ON COLUMN audit.audit.source_application  IS 'Имя программы';
+            COMMENT ON COLUMN audit.audit.source_workstation  IS 'Рабочая станция';
+            COMMENT ON COLUMN audit.audit.context             IS 'Контекст';
+            COMMENT ON COLUMN audit.audit.creation_date       IS 'Дата создания';
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-03" author="ekrasulina">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="audit" tableName="audit" columnName="event_date"/>
+        </preConditions>
+        <sql>
+            CREATE INDEX IF NOT EXISTS audit_event_date_ix ON audit.audit USING btree (event_date);
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-04" author="ekrasulina">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="audit" tableName="audit" columnName="event_type"/>
+        </preConditions>
+        <sql>
+            CREATE INDEX IF NOT EXISTS audit_event_type_ix ON audit.audit USING btree (event_type);
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-05" author="ekrasulina">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="audit" tableName="audit" columnName="object_type"/>
+        </preConditions>
+        <sql>
+            CREATE INDEX IF NOT EXISTS audit_object_type_ix ON audit.audit USING btree (object_type);
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-06" author="ekrasulina">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="audit" tableName="audit" columnName="object_id"/>
+        </preConditions>
+        <sql>
+            CREATE INDEX IF NOT EXISTS audit_object_id_ix ON audit.audit USING btree (object_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-07" author="ekrasulina">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="audit" tableName="audit" columnName="object_name"/>
+        </preConditions>
+        <sql>
+            CREATE INDEX IF NOT EXISTS audit_object_name_ix ON audit.audit USING btree (object_name);
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-08" author="ekrasulina">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="audit" tableName="audit" columnName="user_id"/>
+        </preConditions>
+        <sql>
+            CREATE INDEX IF NOT EXISTS audit_user_id_ix ON audit.audit USING btree (user_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-09" author="ekrasulina">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="audit" tableName="audit" columnName="username"/>
+        </preConditions>
+        <sql>
+            CREATE INDEX IF NOT EXISTS audit_username_ix ON audit.audit USING btree (username);
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-10" author="ekrasulina">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="audit" tableName="audit" columnName="source_application"/>
+        </preConditions>
+        <sql>
+            CREATE INDEX IF NOT EXISTS audit_source_application_ix ON audit.audit USING btree (source_application);
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-7-11" author="ekrasulina">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="audit" tableName="audit" columnName="source_workstation"/>
+        </preConditions>
+        <sql>
+            CREATE INDEX IF NOT EXISTS audit_source_workstation_ix ON audit.audit USING btree (source_workstation);
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-8-1-1" author="zamaliev">
+        <preConditions onFail="CONTINUE">
+            <not>
+                <columnExists columnName="hostname" tableName="audit" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="audit" schemaName="audit">
+            <column name="hostname" type="varchar"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="NNOP-8-1.1-1" author="esadykov" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="audit" columnName="object_name" schemaName="audit"/>
+        </preConditions>
+        <sql>
+            DELETE FROM audit.audit WHERE audit.object_name is null or audit.object_type is null or audit.source_application is null;
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-8-5-1" author="zamaliev" dbms="postgresql">
+        <sql>
+            CREATE EXTENSION IF NOT EXISTS pgcrypto;
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-8-6-1" author="zamaliev" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="audit_object_name" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <createTable tableName="audit_object_name" schemaName="audit">
+            <column name="id" type="uuid" defaultValueComputed="${uuid_function}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="NNOP-8-7-1" author="zamaliev" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="audit_object_type" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <createTable tableName="audit_object_type" schemaName="audit">
+            <column name="id" type="uuid" autoIncrement="false" defaultValueComputed="${uuid_function}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="NNOP-8-8-1" author="zamaliev" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="audit_source_application" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <createTable tableName="audit_source_application" schemaName="audit">
+            <column name="id" type="uuid" autoIncrement="false" defaultValueComputed="${uuid_function}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="NNOP-8-12-1" author="zamaliev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="audit" columnName="object_name_id" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="audit" schemaName="audit">
+            <column name="object_name_id" type="uuid">
+                <constraints foreignKeyName="object_name_fk" referencedTableName="audit.audit_object_name"
+                             referencedColumnNames="id"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="NNOP-8-13-1" author="zamaliev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="audit" columnName="object_type_id" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="audit" schemaName="audit">
+            <column name="object_type_id" type="uuid" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="NNOP-8-14-1" author="zamaliev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="audit" columnName="source_application_id" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="audit" schemaName="audit">
+            <column name="source_application_id" type="uuid" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="NNOP-8-15-1" author="zamaliev">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="audit" columnName="object_type" schemaName="audit"/>
+        </preConditions>
+        <update tableName="audit" schemaName="audit">
+            <column name="object_type_id"
+                    valueComputed="(select ot.id from audit.audit_object_type ot where object_type=ot.name)"/>
+        </update>
+    </changeSet>
+
+    <changeSet id="NNOP-8-16-1" author="zamaliev">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="audit" columnName="object_name" schemaName="audit"/>
+        </preConditions>
+        <update tableName="audit" schemaName="audit">
+            <column name="object_name_id"
+                    valueComputed="(select obn.id from audit.audit_object_name obn where object_name=obn.name)"/>
+        </update>
+    </changeSet>
+
+    <changeSet id="NNOP-8-17-1" author="zamaliev">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="audit" columnName="audit_source_application" schemaName="audit"/>
+        </preConditions>
+        <update tableName="audit" schemaName="audit">
+            <column name="source_application_id"
+                    valueComputed="(select sw.id from audit.audit_source_application sw where source_application=sw.name)"/>
+        </update>
+    </changeSet>
+
+    <changeSet id="NNOP-8-18-1" author="zamaliev">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="audit" columnName="object_name" schemaName="audit"/>
+        </preConditions>
+        <dropColumn tableName="audit" schemaName="audit" columnName="object_name"/>
+    </changeSet>
+
+    <changeSet id="NNOP-8-19-1" author="zamaliev">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="audit" columnName="object_type" schemaName="audit"/>
+        </preConditions>
+        <dropColumn tableName="audit" schemaName="audit" columnName="object_type"/>
+    </changeSet>
+
+    <changeSet id="NNOP-8-20-1" author="zamaliev">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="audit" columnName="source_application" schemaName="audit"/>
+        </preConditions>
+        <dropColumn tableName="audit" schemaName="audit" columnName="source_application"/>
+    </changeSet>
+
+    <changeSet id="NNOP-8-21-1" author="zamaliev" dbms="postgresql">
+        <sql>
+            DROP EXTENSION IF EXISTS pgcrypto CASCADE;
+        </sql>
+    </changeSet>
+
+    <changeSet id="NNOP-8-22" author="zamaliev" dbms="postgresql">
+        <sql>
+            DROP TABLE IF EXISTS audit.audit_test;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

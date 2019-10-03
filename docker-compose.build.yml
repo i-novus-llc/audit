@@ -2,14 +2,18 @@ version: "3.6"
 
 services:
 
+  db:
+    build:
+      context: "audit-db"
+
   audit-service:
     build:
       context: .
       args:
         JAR_FILE: audit-service/target/audit-service.jar
 
-  audit-web:
+  audit-webapp:
     build:
       context: .
       args:
-        JAR_FILE: audit-web/target/audit-web.jar
+        JAR_FILE: audit-webapp/target/audit-webapp.jar

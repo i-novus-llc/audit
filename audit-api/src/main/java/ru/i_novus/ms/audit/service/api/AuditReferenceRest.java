@@ -4,11 +4,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.data.domain.Page;
+import ru.i_novus.ms.audit.criteria.AuditObjectCriteria;
+import ru.i_novus.ms.audit.criteria.AuditSourceApplicationCriteria;
+import ru.i_novus.ms.audit.model.AuditEventType;
+import ru.i_novus.ms.audit.criteria.AuditEventTypeCriteria;
+import ru.i_novus.ms.audit.model.AuditObject;
+import ru.i_novus.ms.audit.model.AuditSourceApplication;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 
@@ -24,17 +28,22 @@ import java.util.Collection;
 public interface AuditReferenceRest {
 
     @GET
-    @Path("/objectName")
-    @ApiOperation("Получение наименований объектов")
-    Collection getObjectNames();
+    @Path("/objects")
+    @ApiOperation("Получение объектов")
+    Page<AuditObject> getObjects(@BeanParam AuditObjectCriteria criteria);
 
     @GET
-    @Path("/objectType")
+    @Path("/eventType")
     @ApiOperation("Получение типов событий")
-    Collection getObjectTypes();
+    Page<AuditEventType> getEventType(@BeanParam AuditEventTypeCriteria criteria);
 
     @GET
-    @Path("/sourceApplication")
-    @ApiOperation("Получение наименований системы")
-    Collection getSourceApplications();
+    @Path("/sourceApplications")
+    @ApiOperation("Получение наименований систем")
+    Page<AuditSourceApplication> getSourceApplications(@BeanParam AuditSourceApplicationCriteria criteria);
+
+    @GET
+    @Path("/auditTypes")
+    @ApiOperation("Получение типов журналов")
+    Collection getAuditTypes();
 }

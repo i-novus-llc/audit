@@ -1,9 +1,15 @@
 package ru.i_novus.ms.audit.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RestController;
-import ru.i_novus.ms.audit.service.ObjectNameService;
-import ru.i_novus.ms.audit.service.ObjectTypeService;
+import ru.i_novus.ms.audit.criteria.AuditObjectCriteria;
+import ru.i_novus.ms.audit.criteria.AuditSourceApplicationCriteria;
+import ru.i_novus.ms.audit.model.*;
+import ru.i_novus.ms.audit.criteria.AuditEventTypeCriteria;
+import ru.i_novus.ms.audit.service.AuditObjectService;
+import ru.i_novus.ms.audit.service.AuditTypeService;
+import ru.i_novus.ms.audit.service.EventTypeService;
 import ru.i_novus.ms.audit.service.SourceApplicationService;
 import ru.i_novus.ms.audit.service.api.AuditReferenceRest;
 
@@ -13,24 +19,34 @@ import java.util.Collection;
 public class AuditReferenceRestImpl implements AuditReferenceRest {
 
     @Autowired
-    private ObjectNameService objectNameService;
-
-    @Autowired
-    private ObjectTypeService objectTypeService;
+    private AuditObjectService auditObjectService;
 
     @Autowired
     private SourceApplicationService sourceApplicationService;
 
-    public Collection getObjectNames() {
-        return objectNameService.getAll();
+    @Autowired
+    private EventTypeService eventTypeService;
+
+    @Autowired
+    private AuditTypeService auditTypeService;
+
+    @Override
+    public Page<AuditObject> getObjects(AuditObjectCriteria criteria) {
+        return auditObjectService.search(criteria);
     }
 
-    public Collection getObjectTypes() {
-        return objectTypeService.getAll();
+    @Override
+    public Page<AuditEventType> getEventType(AuditEventTypeCriteria criteria) {
+        return eventTypeService.search(criteria);
     }
 
-    public Collection getSourceApplications() {
-        return sourceApplicationService.getAll();
+    @Override
+    public Page<AuditSourceApplication> getSourceApplications(AuditSourceApplicationCriteria criteria) {
+        return sourceApplicationService.search(criteria);
     }
 
+    @Override
+    public Collection<AuditType> getAuditTypes() {
+        return auditTypeService.getAll();
+    }
 }

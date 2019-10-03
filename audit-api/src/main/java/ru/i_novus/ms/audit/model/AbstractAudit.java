@@ -1,9 +1,8 @@
 package ru.i_novus.ms.audit.model;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
@@ -11,11 +10,12 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Validated
-public abstract class AbstractAudit implements Serializable {
-
+@Builder
+public class AbstractAudit implements Serializable {
     @ApiModelProperty(value = "Дата события", required = true)
     @NotNull
     private LocalDateTime eventDate;
@@ -24,28 +24,22 @@ public abstract class AbstractAudit implements Serializable {
     @NotNull
     private String eventType;
 
-    @ApiModelProperty(value = "Тип объекта", required = true)
-    @NotNull
+    @ApiModelProperty(value = "Тип объекта")
     private String objectType;
 
-    @ApiModelProperty(value = "Идентификатор объекта", required = true)
-    @NotNull
+    @ApiModelProperty(value = "Идентификатор объекта")
     private String objectId;
 
-    @ApiModelProperty(value = "Наименование объекта", required = true)
-    @NotNull
+    @ApiModelProperty(value = "Наименование объекта")
     private String objectName;
 
-    @ApiModelProperty(value = "Идентификатор пользователя", required = true)
-    @NotNull
+    @ApiModelProperty(value = "Идентификатор пользователя")
     private String userId;
 
-    @ApiModelProperty(value = "Имя пользователя", required = true)
-    @NotNull
+    @ApiModelProperty(value = "Имя пользователя")
     private String username;
 
-    @ApiModelProperty(value = "Имя программы", required = true)
-    @NotNull
+    @ApiModelProperty(value = "Имя программы")
     private String sourceApplication;
 
     @ApiModelProperty(value = "Рабочая станция")
@@ -60,85 +54,16 @@ public abstract class AbstractAudit implements Serializable {
     @ApiModelProperty(value = "Сервер")
     private String hostname;
 
-    public LocalDateTime getEventDate() {
-        return eventDate;
-    }
+    @ApiModelProperty(value = "Идентификатор типа журнала", required = true)
+    @NotNull
+    @Range(min = 1, max = 32767)
+    private Short auditType;
 
-    public void setEventDate(LocalDateTime eventDate) {
-        this.eventDate = eventDate;
-    }
+    @ApiModelProperty(value = "Код (наименование) системы-отправителя")
+    private String sender;
 
-    public String getEventType() {
-        return eventType;
-    }
-
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
-    }
-
-    public String getObjectType() {
-        return objectType;
-    }
-
-    public void setObjectType(String objectType) {
-        this.objectType = objectType;
-    }
-
-    public String getObjectId() {
-        return objectId;
-    }
-
-    public void setObjectId(String objectId) {
-        this.objectId = objectId;
-    }
-
-    public String getObjectName() {
-        return objectName;
-    }
-
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getSourceApplication() {
-        return sourceApplication;
-    }
-
-    public void setSourceApplication(String sourceApplication) {
-        this.sourceApplication = sourceApplication;
-    }
-
-    public String getSourceWorkstation() {
-        return sourceWorkstation;
-    }
-
-    public void setSourceWorkstation(String sourceWorkstation) {
-        this.sourceWorkstation = sourceWorkstation;
-    }
-
-    public String getContext() {
-        return context;
-    }
-
-    public void setContext(String context) {
-        this.context = context;
-    }
+    @ApiModelProperty(value = "Код (наименование) системы-получателя")
+    private String receiver;
 
     @Override
     public String toString() {
@@ -153,6 +78,7 @@ public abstract class AbstractAudit implements Serializable {
                 ", auditSourceApplication='" + sourceApplication + '\'' +
                 ", auditSourceWorkstations='" + sourceWorkstation + '\'' +
                 ", context='" + context + '\'' +
+                ", auditType='" + auditType + '\'' +
                 '}';
     }
 }

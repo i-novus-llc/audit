@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="AUDIT-54_fill_audit_context" author="agaifutdinov" dbms="postgresql">
+        <sql>
+            UPDATE audit.audit SET context='' WHERE context ISNULL;
+        </sql>
+    </changeSet>
+
+    <changeSet id="AUDIT-54_audit_context_add_not_null_constraint" author="agaifutdinov" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="f">
+                SELECT EXISTS(SELECT * FROM audit.audit WHERE context ISNULL);
+            </sqlCheck>
+        </preConditions>
+        <addNotNullConstraint tableName="audit" schemaName="audit" columnName="context"/>
+        <rollback>
+            <dropNotNullConstraint tableName="audit" schemaName="audit" columnName="context"/>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="AUDIT-54_audit_id_add_not_null_constraint" author="agaifutdinov" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="f">
+                SELECT EXISTS(SELECT * FROM audit.audit WHERE id ISNULL);
+            </sqlCheck>
+        </preConditions>
+        <addNotNullConstraint tableName="audit" schemaName="audit" columnName="id"/>
+        <rollback>
+            <dropNotNullConstraint tableName="audit" schemaName="audit" columnName="id"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

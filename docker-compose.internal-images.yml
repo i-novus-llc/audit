@@ -2,8 +2,11 @@ version: "3.6"
 
 services:
 
-  audit-service:
-    image: 538721144237.dkr.ecr.eu-west-1.amazonaws.com/audit/audit-service:${TAG:-latest}
+  db:
+    image: ${DOCKER_REGISTRY}/postgres:11.5
 
-  audit-web:
-    image: 538721144237.dkr.ecr.eu-west-1.amazonaws.com/audit/audit-web:${TAG:-latest}
+  audit-service:
+    image: ${DOCKER_REGISTRY}/audit/audit-service:${TAG:-latest}
+
+  audit-webapp:
+    image: ${DOCKER_REGISTRY}/audit/audit-webapp:${TAG:-latest}
