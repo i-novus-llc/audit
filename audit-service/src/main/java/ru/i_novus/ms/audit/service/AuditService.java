@@ -31,6 +31,9 @@ public class AuditService {
     @Autowired
     private SourceApplicationService sourceApplicationService;
 
+    @Autowired
+    private EventTypeService eventTypeService;
+
     public Optional<AuditEntity> getById(UUID id) {
         Optional<AuditEntity> optional = auditRepository.searchEntityBylastMonth(id);
         return optional.isEmpty() ? auditRepository.findById(id) : optional;
@@ -47,6 +50,19 @@ public class AuditService {
         }
 
         return (searchEntity(criteria)).map(AuditBuilder::getAuditByEntity);
+    }
+
+    /**
+     * получение последней записи из журнала
+     * @param auditType Тип журнала
+     * @param sourceApplication Идентификатор системы.
+     * @return последняя запись из аудита если есть, иначе null
+     */
+    public Audit getLastAudit(Short auditType, String sourceApplication) {
+        Optional<AuditEntity> auditEntity
+                = auditRepository.findFirstByAuditTypeIdAndAuditSourceApplicationOrderByEventDateDesc(auditType, sourceApplication);
+
+        return auditEntity.map(AuditBuilder::getAuditByEntity).orElse(null);
     }
 
     private Page<AuditEntity> searchEntity(AuditCriteria criteria) {
@@ -69,6 +85,9 @@ public class AuditService {
         }
         if (!StringUtils.isEmpty(request.getReceiver())) {
             sourceApplicationService.createIfNotPresent(request.getReceiver());
+        }
+        if (!StringUtils.isEmpty(request.getEventType()) && request.getAuditType() != null) {
+            eventTypeService.createIfNotPresent(request.getEventType(), request.getAuditType());
         }
 
         return auditRepository.save(AuditEntityBuilder.buildEntity(request));

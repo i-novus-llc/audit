@@ -31,6 +31,7 @@ public class AsyncAuditClientTest {
     private static final String USERNAME = "ekrasulina";
     private static final String SOURCE_WORKSTATION = "Workstation";
     private static final String SOURCE_APPLICATION = "Application";
+    private static final String HOSTNAME = "Hostname";
     private static final String CONTEXT = "{\"field\": \"name\", \"value\": \"Значение\"}";
     private static final short AUDIT_TYPE = 1;
     private static final String SENDER = "Sender";
@@ -46,7 +47,6 @@ public class AsyncAuditClientTest {
 
     @BeforeClass
     public static void initialize() {
-        auditClientRequest = new AuditClientRequest();
         auditClientRequest.setEventDate(LocalDateTime.now().withNano(0));
         auditClientRequest.setEventType(EVENT_TYPE);
         auditClientRequest.setObjectType(OBJECT_TYPE);
@@ -56,6 +56,7 @@ public class AsyncAuditClientTest {
         auditClientRequest.setUsername(USERNAME);
         auditClientRequest.setSourceWorkstation(SOURCE_WORKSTATION);
         auditClientRequest.setSourceApplication(SOURCE_APPLICATION);
+        auditClientRequest.setHostname(HOSTNAME);
         auditClientRequest.setContext(CONTEXT);
         auditClientRequest.setAuditType(AUDIT_TYPE);
         auditClientRequest.setSender(SENDER);

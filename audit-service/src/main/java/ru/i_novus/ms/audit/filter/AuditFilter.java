@@ -30,12 +30,12 @@ public class AuditFilter implements Filter {
     private static final String FIELD_EVENT_DATE_TO = "eventDateTo";
     private static final String FIELD_OBJECT_ID = "objectId";
 
-    private static final String CODE_IS_NUMERIC_NON_ZERO = "auditFilter.isNumericNotZero";
-    private static final String CODE_IS_DATE = "auditFilter.isDate";
-    private static final String CODE_TOO_BIG_PERIOD = "auditFilter.tooBigPeriod";
-    private static final String CODE_NEGATIVE_PERIOD = "auditFilter.negativePeriod";
+    private static final String CODE_IS_NUMERIC_NON_ZERO = "audit.filterError.isNumericNotZero";
+    private static final String CODE_IS_DATE = "audit.filterError.isDate";
+    private static final String CODE_TOO_BIG_PERIOD = "audit.filterError.tooBigPeriod";
+    private static final String CODE_NEGATIVE_PERIOD = "audit.filterError.negativePeriod";
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestWrapper.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuditFilter.class);
     private Messages messages;
 
     AuditFilter(Messages messages) {

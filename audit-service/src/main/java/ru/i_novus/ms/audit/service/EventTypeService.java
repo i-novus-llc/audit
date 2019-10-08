@@ -36,12 +36,12 @@ public class EventTypeService {
         ).map(AuditEventTypeBuilder::buildByEntity);
     }
 
-    public void createIfNotPresent(String name, String auditType) {
+    public void createIfNotPresent(String name, Short auditType) {
         Optional<AuditEventTypeEntity> eventTypeEntity = eventTypeRepository.findByNameAndAuditTypeId(name, auditType);
 
         if (eventTypeEntity.isEmpty()) {
             eventTypeRepository.save(
-                    AuditEventTypeEntityBuilder.buildEntity(name, Short.valueOf(auditType))
+                    AuditEventTypeEntityBuilder.buildEntity(name, auditType)
             );
         }
     }

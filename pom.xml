@@ -30,9 +30,9 @@
         <module>audit-api</module>
         <module>audit-service</module>
         <module>audit-client</module>
-        <module>audit-client-starter</module>
         <module>audit-web</module>
         <module>audit-webapp</module>
+        <module>audit-client-spring-boot-starter</module>
     </modules>
 
     <profiles>

@@ -8,11 +8,10 @@
     <groupId>ru.i-novus.ms.audit</groupId>
     <artifactId>audit-client-spring-boot-starter</artifactId>
     <version>${version}</version>
-    <type>pom</type>
 </dependency>
 ----
 .Для работы клиента следует добавить следующую запись в properties: +
-* audit.client.apiUrl = URL где расположен сервис бэкенда +
+* audit.service.url = URL где расположен сервис бэкенда +
 
 .Дополнительные параметры: +
 * audit.client.enabled = Значение по умолчанию true. При значении false вместо AuditClient будет возвращена заглушка (StubAuditClientImpl). +
@@ -20,7 +19,7 @@
 * audit.client.sourceApplication= Идентификатор системы откуда происходит запись(sourceApplication). Если в запросе будет передан sourceApplication, то значение этой настройки будет игнорироваться. +
 
 Для отправки запроса в аудит используется AuditClientRequest
-[source, java]
+[source]
 ----
 AuditClientRequest auditClientRequest = new AuditClientRequest();
 
@@ -40,7 +39,7 @@ auditClientRequest.setReceiver("RECEIVER");
 ----
 
 Есть возможность задать поля userId, username, sourceWorkstation, sourceApplication создав бины с соответствющими accessor:
-[source, java]
+[source]
 ----
     @Bean
     public UserAccessor userAccessor() {
@@ -60,7 +59,7 @@ auditClientRequest.setReceiver("RECEIVER");
 Стоит учесть, что если эти поля были указаны в AuditClientRequest, то значения возьмутся из AuditClientRequest.
 
 Для сохранения записи в аудите достаточно определить AuditClient и передать ему AuditClientRequest. Пример:
-[source, java]
+[source]
 ----
 @Component
 public class TestClass {

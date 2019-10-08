@@ -13,5 +13,5 @@ public interface EventTypeRepository extends JpaRepository<AuditEventTypeEntity,
     @Query("select id from AuditEventTypeEntity ")
     String[] findAllEventTypeId();
 
-    Optional<AuditEventTypeEntity> findByNameAndAuditTypeId(String name, String auditId);
+    Optional<AuditEventTypeEntity> findByNameAndAuditTypeId(String name, Short auditTypeId);
 }

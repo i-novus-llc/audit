@@ -6,15 +6,12 @@
             <table id="audit_table" query-id="auditAuthorization" size="10">
                 <filters>
                     <row>
-                        <date-interval id="period" label="Дата и время" required="true" time-format="HH:mm:ss">
+                        <date-interval id="period" label="Дата и время" required="true" time-format="HH:mm">
                             <default-value begin="{moment().startOf('month').format('DD.MM.YYYY HH:mm:ss')}"
                                            end="{moment().format('DD.MM.YYYY HH:mm:ss')}"/>
 
                         </date-interval>
                         <input-text id="username" label="Пользователь" domain="string"/>
-                        <input-select id="auditSourceApplications" label="Система" type="multi"
-                                      query-id="auditSourceApplication"
-                                      label-field-id="code"/>
                         <input-select id="auditEventTypes" label="Событие" type="multi" query-id="auditEventType"
                                       label-field-id="name">
                             <pre-filters>
@@ -31,11 +28,6 @@
                         </link>
                     </column>
                     <column text-field-id="id" label="Идентификатор события">
-                        <link>
-                            <show-modal page-id="auditAuthorizationForm" master-field-id="id" detail-field-id="id"/>
-                        </link>
-                    </column>
-                    <column text-field-id="sourceApplication" label="Система">
                         <link>
                             <show-modal page-id="auditAuthorizationForm" master-field-id="id" detail-field-id="id"/>
                         </link>

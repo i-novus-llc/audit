@@ -50,7 +50,6 @@
             </filters>
         </field>
 
-
         <field id="objectType" domain="string">
             <select/>
         </field>
@@ -66,6 +65,10 @@
             <select/>
         </field>
 
+        <field id="objectTypeAndName" domain="string">
+            <select mapping="['objectType'] + ' ' + ['objectName']" normalize="#this.replace('null', '')"/>
+        </field>
+
         <field id="hostname" domain="string">
             <select/>
             <filters/>
@@ -74,7 +77,6 @@
         <field id="sourceWorkstation" domain="string">
             <select/>
         </field>
-
 
         <field id="objectId" domain="string">
             <select/>

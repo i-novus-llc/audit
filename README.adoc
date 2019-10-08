@@ -29,3 +29,41 @@ docker rmi audit_db audit_audit-service audit_audit-webapp
 audit_db_1 контейнер с бд, подключение к постгресу доступно по порту 8952 +
 audit_audit-service_1 контейнер с бэкендом, доступен по порту 8951 +
 audit_audit-webapp_1 контейнер с вебприложением, доступен по порту 8950
+
+
+== Настройки запуска сервиса для получения логов событий Keycloak по расписанию
+Предварительно в Keycloak необходимо включить логирование событий.
+
+.Для работы сервиса следует добавить следующие настройки в properties:
+* URL где расположен сервис бэкенда
+----
+audit.service.url
+----
+* Базовый адрес сервиса аутентификации(например http://localhost:8080/auth/realms/master/protocol/openid-connect)
+----
+audit.security.oauth2.auth-server-uri=
+----
+* Адрес сервиса получения токена аутентификации(например /token)
+----
+audit.security.oauth2.access-token-uri=
+----
+* Идентификатор клиента OAuth2 OpenId Connect
+----
+audit.security.oauth2.client-id=
+----
+* Секретный ключ клиента OAuth2 OpenId Connect
+----
+audit.security.oauth2.client-secret=
+----
+* Адрес до realm, с которого будет происходить получение логов событий (например http://localhost:8080/auth/admin/realms/master)
+----
+audit.security.oauth2.events-url=
+----
+* Код подсистемы, которая будет сохраняться в аудит(например security)
+----
+audit.security.oauth2.code=
+----
+* Крон выражение расписания получения логов событий из OAuth2 (если не указана или указано "-", то сервис не будет запущен)
+----
+audit.security.oauth2.events-schedule=
+----

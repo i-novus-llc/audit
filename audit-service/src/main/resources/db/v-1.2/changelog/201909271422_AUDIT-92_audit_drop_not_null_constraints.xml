@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
     
-    <changeSet id="AUDIT-_drop_audit_user_id_constraint" author="agaifutdinov">
+    <changeSet id="AUDIT-92_drop_audit_user_id_constraint" author="agaifutdinov">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="audit" schemaName="audit" columnName="user_id"/>
         </preConditions>
@@ -15,7 +15,7 @@
         </rollback>
     </changeSet>
 
-    <changeSet id="AUDIT-_drop_audit_username_constraint" author="agaifutdinov">
+    <changeSet id="AUDIT-92_drop_audit_username_constraint" author="agaifutdinov">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="audit" schemaName="audit" columnName="username"/>
         </preConditions>

@@ -6,7 +6,7 @@
             <table id="audit_table" query-id="auditIntegration" size="10">
                 <filters>
                     <row>
-                        <date-interval id="period" label="Дата и время" required="true">
+                        <date-interval id="period" label="Дата и время" required="true" time-format="HH:mm">
                             <default-value begin="{moment().format('DD.MM.YYYY HH:mm:ss')}"
                                            end="{moment().format('DD.MM.YYYY HH:mm:ss')}"/>
                         </date-interval>

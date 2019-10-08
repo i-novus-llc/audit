@@ -20,7 +20,7 @@ import ru.i_novus.ms.audit.service.api.AuditRest;
 @EnableJms
 @Configuration
 @ComponentScan("ru.i_novus.ms.audit.client")
-@EnableJaxRsProxyClient(classes = AuditRest.class, address = "${audit.client.apiUrl}")
+@EnableJaxRsProxyClient(classes = AuditRest.class, address = "${audit.service.url}")
 @PropertySource("classpath:/META-INF/ru/i_novus/ms/audit/client/autoconfigure/default.properties")
 public class AuditClientAutoConfiguration {
 

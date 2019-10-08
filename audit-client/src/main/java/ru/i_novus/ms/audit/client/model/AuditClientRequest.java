@@ -1,60 +1,115 @@
 package ru.i_novus.ms.audit.client.model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import net.n2oapp.platform.i18n.UserException;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
+@Slf4j
 @Getter
-@Setter
-public class AuditClientRequest implements Serializable {
+public class AuditClientRequest {
 
+    @Setter
     private LocalDateTime eventDate;
 
-    private String eventType;
-
-    private String objectType;
-
-    private String objectId;
-
-    private String objectName;
-
-    private String userId;
-
-    private String username;
-
-    private String sourceWorkstation;
-
-    private String sourceApplication;
-
-    private String context;
-
-    private String hostname;
-
+    @Setter
     private Short auditType;
 
-    private String sender;
+    private String context;
+    private AuditClientRequestParam eventType;
+    private AuditClientRequestParam objectType;
+    private AuditClientRequestParam objectId;
+    private AuditClientRequestParam objectName;
+    private AuditClientRequestParam userId;
+    private AuditClientRequestParam username;
+    private AuditClientRequestParam sourceWorkstation;
+    private AuditClientRequestParam sourceApplication;
+    private AuditClientRequestParam hostname;
+    private AuditClientRequestParam sender;
+    private AuditClientRequestParam receiver;
 
-    private String receiver;
+    public void setEventType(String eventType, Object... args) {
+        this.eventType = new AuditClientRequestParam(eventType, args);
+    }
+
+    public void setObjectType(String objectType, Object... args) {
+        this.objectType = new AuditClientRequestParam(objectType, args);
+    }
+
+    public void setObjectId(String objectId, Object... args) {
+        this.objectId = new AuditClientRequestParam(objectId, args);
+    }
+
+    public void setObjectName(String objectName, Object... args) {
+        this.objectName = new AuditClientRequestParam(objectName, args);
+    }
+
+    public void setUserId(String userId, Object... args) {
+        this.userId = new AuditClientRequestParam(userId, args);
+    }
+
+    public void setUsername(String username, Object... args) {
+        this.username = new AuditClientRequestParam(username, args);
+    }
+
+    public void setSourceWorkstation(String sourceWorkstation, Object... args) {
+        this.sourceWorkstation = new AuditClientRequestParam(sourceWorkstation, args);
+    }
+
+    public void setSourceApplication(String sourceApplication, Object... args) {
+        this.sourceApplication = new AuditClientRequestParam(sourceApplication, args);
+    }
+
+    public void setHostname(String hostname, Object... args) {
+        this.hostname = new AuditClientRequestParam(hostname, args);
+    }
+
+    public void setSender(String sender, Object... args) {
+        this.sender = new AuditClientRequestParam(sender, args);
+    }
+
+    public void setReceiver(String receiver, Object... args) {
+        this.receiver = new AuditClientRequestParam(receiver, args);
+    }
+
+    public void setContext(Object contextJson) {
+        if (contextJson instanceof String) {
+            this.context = (String) contextJson;
+        } else if (contextJson == null) {
+            this.context = null;
+        } else {
+            try {
+                this.context = new ObjectMapper().writeValueAsString(contextJson);
+            } catch (JsonProcessingException e) {
+                log.error("Error on parsing context json", e);
+                throw new UserException("audit.clientException.invalidContext");
+            }
+        }
+    }
 
     @Override
     public String toString() {
+        final String formatted = ", %s{value='%s', args=%s}";
         return "AuditClientRequest{" +
                 "eventDate=" + eventDate +
-                ", eventType='" + eventType + '\'' +
-                ", auditObjectType='" + objectType + '\'' +
-                ", auditObjectId='" + objectId + '\'' +
-                ", auditObjectName='" + objectName + '\'' +
-                ", userId='" + userId + '\'' +
-                ", username='" + username + '\'' +
-                ", sourceWorkstation='" + sourceWorkstation + '\'' +
-                ", sourceApplication='" + sourceApplication + '\'' +
-                ", context='" + context + '\'' +
-                ", hostname='" + hostname + '\'' +
-                ", auditType='" + auditType + '\'' +
-                ", sender='" + sender + '\'' +
-                ", receiver='" + receiver + '\'' +
-                '}';
+                String.format(formatted, "eventType", eventType.getValue(), Arrays.toString(eventType.getArgs())) +
+                String.format(formatted, "objectType", objectType.getValue(), Arrays.toString(objectType.getArgs())) +
+                String.format(formatted, "objectId", objectId.getValue(), Arrays.toString(objectId.getArgs())) +
+                String.format(formatted, "objectName", objectName.getValue(), Arrays.toString(objectName.getArgs())) +
+                String.format(formatted, "userId", userId.getValue(), Arrays.toString(userId.getArgs())) +
+                String.format(formatted, "username", username.getValue(), Arrays.toString(username.getArgs())) +
+                String.format(formatted, "sourceWorkstation", sourceWorkstation.getValue(), Arrays.toString(sourceWorkstation.getArgs())) +
+                String.format(formatted, "sourceApplication", sourceApplication.getValue(), Arrays.toString(sourceApplication.getArgs())) +
+                ", context='" + context + "\'" +
+                String.format(formatted, "hostname", hostname.getValue(), Arrays.toString(hostname.getArgs())) +
+                ", auditType='" + auditType + "\'" +
+                String.format(formatted, "sender", sender.getValue(), Arrays.toString(sender.getArgs())) +
+                String.format(formatted, "receiver", receiver.getValue(), Arrays.toString(receiver.getArgs())) +
+                "}";
     }
 }

@@ -3,13 +3,14 @@ package ru.i_novus.ms.audit.client.impl.converter;
 import lombok.AccessLevel;
 import lombok.Setter;
 import net.n2oapp.platform.i18n.Messages;
+import net.n2oapp.platform.i18n.UserException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.i_novus.ms.audit.client.SourceApplicationAccessor;
 import ru.i_novus.ms.audit.client.SourceWorkstationAccessor;
 import ru.i_novus.ms.audit.client.UserAccessor;
 import ru.i_novus.ms.audit.client.model.AuditClientRequest;
-import ru.i_novus.ms.audit.exception.AuditException;
 import ru.i_novus.ms.audit.model.AuditForm;
 
 import java.time.LocalDateTime;
@@ -31,14 +32,14 @@ public class RequestConverter {
     private Messages messages;
 
     private void assertRequiredFields(AuditClientRequest request) {
-        if (request.getEventType() == null || request.getEventType().isBlank())
-            throw new AuditException(messages.getMessage("requestConverter.invalidEventType"));
+        if (request.getEventType() == null || StringUtils.isBlank(request.getEventType().getValue()))
+            throw new UserException("audit.clientException.notSetEventType");
 
-        if (request.getContext() == null || request.getContext().isBlank())
-            throw new AuditException(messages.getMessage("requestConverter.invalidContext"));
+        if (StringUtils.isBlank(request.getContext()))
+            throw new UserException("audit.clientException.notSetContext");
 
         if (request.getAuditType() == null)
-            throw new AuditException(messages.getMessage("requestConverter.invalidAuditType"));
+            throw new UserException("audit.clientException.notSetAuditType");
     }
 
     public AuditForm toAuditRequest(AuditClientRequest request) {
@@ -47,40 +48,55 @@ public class RequestConverter {
         AuditForm auditForm = new AuditForm();
 
         auditForm.setEventDate(request.getEventDate() == null ? LocalDateTime.now() : request.getEventDate());
-        auditForm.setEventType(request.getEventType());
-        auditForm.setObjectType(request.getObjectType());
-        auditForm.setObjectId(request.getObjectId());
-        auditForm.setObjectName(request.getObjectName());
+        auditForm.setEventType(getMessage(request.getEventType().getValue(), request.getEventType().getArgs()));
+        auditForm.setObjectType(getMessage(request.getObjectType().getValue(), request.getObjectType().getArgs()));
+        auditForm.setObjectId(getMessage(request.getObjectId().getValue(), request.getObjectId().getArgs()));
+        auditForm.setObjectName(getMessage(request.getObjectName().getValue(), request.getObjectName().getArgs()));
         auditForm.setContext(request.getContext());
-        auditForm.setHostname(request.getHostname());
+        auditForm.setHostname(getMessage(request.getHostname().getValue(), request.getHostname().getArgs()));
         auditForm.setAuditType(request.getAuditType());
-        auditForm.setSender(request.getSender());
-        auditForm.setReceiver(request.getReceiver());
+        auditForm.setSender(getMessage(request.getSender().getValue(), request.getSender().getArgs()));
+        auditForm.setReceiver(getMessage(request.getReceiver().getValue(), request.getReceiver().getArgs()));
 
-        if (request.getUserId() != null) {
-            auditForm.setUserId(request.getUserId());
+        if (request.getUserId() != null && request.getUserId().getValue() != null) {
+            auditForm.setUserId(getMessage(request.getUserId().getValue(), request.getUserId().getArgs()));
         } else if (userAccessor != null && userAccessor.get() != null && userAccessor.get().getUserId() != null) {
             auditForm.setUserId(userAccessor.get().getUserId());
         }
 
-        if (request.getUsername() != null) {
-            auditForm.setUsername(request.getUsername());
+        if (request.getUsername() != null && request.getUsername().getValue() != null) {
+            auditForm.setUsername(getMessage(request.getUsername().getValue(), request.getUsername().getArgs()));
         } else if (userAccessor != null && userAccessor.get() != null && userAccessor.get().getUsername() != null) {
             auditForm.setUsername(userAccessor.get().getUsername());
         }
 
-        if (request.getSourceApplication() != null) {
-            auditForm.setSourceApplication(request.getSourceApplication());
+        if (request.getSourceApplication() != null && request.getSourceApplication().getValue() != null) {
+            auditForm.setSourceApplication(getMessage(request.getSourceApplication().getValue(), request.getSourceApplication().getArgs()));
         } else if (applicationAccessor != null) {
             auditForm.setSourceApplication(applicationAccessor.get());
         }
 
-        if (request.getSourceWorkstation() != null) {
-            auditForm.setSourceWorkstation(request.getSourceWorkstation());
+        if (request.getSourceWorkstation() != null && request.getSourceWorkstation().getValue() != null) {
+            auditForm.setSourceWorkstation(getMessage(request.getSourceWorkstation().getValue(), request.getSourceWorkstation().getArgs()));
         } else if (workstationAccessor != null) {
             auditForm.setSourceWorkstation(workstationAccessor.get());
         }
 
         return auditForm;
+    }
+
+    /**
+     * Вспомогательный метод для обхода NPE при получении значения из messages
+     *
+     * @param code Код сообщения
+     * @param args Параметры сообщения
+     * @return Локализованное сообщение или null, если code был равен null
+     */
+    private String getMessage(String code, Object[] args) {
+        if (code != null) {
+            return messages.getMessage(code, args);
+        } else {
+            return null;
+        }
     }
 }
