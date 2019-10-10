@@ -6,7 +6,7 @@ services:
     image: ${DOCKER_REGISTRY}/postgres:11.5
 
   audit-service:
-    image: ${DOCKER_REGISTRY}/audit/audit-service:${TAG:-latest}
+    image: ${DOCKER_REGISTRY}/audit/audit-service:${TAG}
 
   audit-webapp:
-    image: ${DOCKER_REGISTRY}/audit/audit-webapp:${TAG:-latest}
+    image: ${DOCKER_REGISTRY}/audit/audit-webapp:${TAG}
