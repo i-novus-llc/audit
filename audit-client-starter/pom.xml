@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>audit</artifactId>
+        <groupId>ru.i-novus.ms.audit</groupId>
+        <version>2.2-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>audit-client-starter</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>audit-client-spring-boot-autoconfigure</module>
+        <module>audit-client-async-spring-boot-starter</module>
+        <module>audit-client-spring-boot-starter</module>
+    </modules>
+</project>
