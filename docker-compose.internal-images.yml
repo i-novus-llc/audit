@@ -9,4 +9,4 @@ services:
     image: ${DOCKER_REGISTRY}/audit/audit-service:${TAG}
 
   audit-webapp:
-    image: ${DOCKER_REGISTRY}/audit/audit-webapp:${TAG}
+    image: ${DOCKER_REGISTRY}/audit/audit-web:${TAG}
