@@ -3,7 +3,7 @@ version: "3.6"
 services:
 
   db:
-    image: ${DOCKER_REGISTRY}/postgres:11.5
+    image: ${DOCKER_REGISTRY}/audit/db:${TAG}
 
   audit-service:
     image: ${DOCKER_REGISTRY}/audit/audit-service:${TAG:-latest}
