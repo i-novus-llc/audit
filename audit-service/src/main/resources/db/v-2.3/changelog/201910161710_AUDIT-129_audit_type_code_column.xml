@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="AUDIT-129_audit_type_code_add_column" author="eibragimova">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="audit_type" schemaName="audit" columnName="code"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="audit_type" schemaName="audit">
+            <column name="code" type="varchar" remarks="Код типа журнала"/>
+        </addColumn>
+        <rollback>
+            <dropColumn columnName="code" tableName="audit_type" schemaName="audit"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-129_insert_user_action_journal_code" author="eibragimova" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="t">
+                SELECT EXISTS (SELECT FROM audit.audit_type WHERE id = 1 AND name = 'Журнал действий пользователей');
+            </sqlCheck>
+        </preConditions>
+        <update tableName="audit_type" schemaName="audit">
+                <column name="code" value="ACTION"/>
+                <where>id = :value</where>
+                <whereParams>
+                    <param valueNumeric="1"/>
+                </whereParams>
+        </update>
+    </changeSet>
+
+    <changeSet id="AUDIT-129_insert_integration_service_journal_code" author="eibragimova" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="t">
+                SELECT EXISTS (SELECT FROM audit.audit_type WHERE id = 2 AND name = 'Журнал работы интеграционных сервисов');
+            </sqlCheck>
+        </preConditions>
+        <update tableName="audit_type" schemaName="audit">
+            <column name="code" value="INTEGRATION"/>
+            <where>id = :value</where>
+            <whereParams>
+                <param valueNumeric="2"/>
+            </whereParams>
+        </update>
+    </changeSet>
+
+    <changeSet id="AUDIT-129_insert_authorization_journal_code" author="eibragimova" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="t">
+                SELECT EXISTS (SELECT FROM audit.audit_type WHERE id = 3 AND name = 'Журнал авторизаций, сессий и неудачных попыток авторизации');
+            </sqlCheck>
+        </preConditions>
+        <update tableName="audit_type" schemaName="audit">
+            <column name="code" value="AUTH"/>
+            <where>id = :value</where>
+            <whereParams>
+                <param valueNumeric="3"/>
+            </whereParams>
+        </update>
+    </changeSet>
+</databaseChangeLog>

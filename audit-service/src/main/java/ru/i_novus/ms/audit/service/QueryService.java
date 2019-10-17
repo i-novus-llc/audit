@@ -16,7 +16,9 @@ import ru.i_novus.ms.audit.entity.QAuditSourceApplicationEntity;
 import ru.i_novus.ms.audit.repository.predicates.EventTypePredicates;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static ru.i_novus.ms.audit.repository.predicates.AuditPredicates.*;
 
@@ -92,8 +94,12 @@ public class QueryService {
             where.and(inSourceApplicationNames(criteria.getSourceApplication()));
         }
 
-        if (ArrayUtils.isNotEmpty(criteria.getAuditTypeId())) {
-            where.and(inAuditTypeIds(criteria.getAuditTypeId()));
+        if (criteria.getAuditTypeId() != null) {
+            where.and(isAuditTypeIdEquals(criteria.getAuditTypeId()));
+            String code = AuditTypeCode.codeAuditType.get(criteria.getAuditTypeId());
+            if(code != null) {
+                where.and(isAuditTypeCodeEquals(code));
+            }
         }
 
         if (ArrayUtils.isNotEmpty(criteria.getSender())) {
@@ -158,4 +164,13 @@ public class QueryService {
         return where.getValue();
     }
 
+    private static class AuditTypeCode {
+        private static Map<Short, String> codeAuditType = new HashMap<>();
+
+        static {
+            codeAuditType.put((short)1, "ACTION");
+            codeAuditType.put((short)2, "INTEGRATION");
+            codeAuditType.put((short)3, "AUTH");
+        }
+    }
 }
