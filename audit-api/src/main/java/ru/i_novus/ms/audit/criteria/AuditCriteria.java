@@ -8,7 +8,6 @@ import lombok.Setter;
 import net.n2oapp.platform.jaxrs.RestCriteria;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.QueryParam;
 import java.time.LocalDateTime;
@@ -79,8 +78,8 @@ public class AuditCriteria extends RestCriteria {
 
     @ApiParam("Идентификатор типа журнала")
     @QueryParam("auditType")
-    @NotEmpty
-    private Short[] auditTypeId;
+    @NotNull
+    private Short auditTypeId;
 
     @ApiParam("Код системы отправителя")
     @QueryParam("sender")
