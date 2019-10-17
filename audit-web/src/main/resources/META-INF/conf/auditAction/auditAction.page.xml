@@ -38,60 +38,33 @@
                         </input-text>
 
                         <input-text id="username" label="Пользователь" domain="string"/>
-                        <hidden id="days_count" no-label="true">
-                            <dependencies>
-                                <set-value on="period" apply-on-init="true">
-                                    var period_begin = moment(period.begin, ["DD.MM.YYYY HH:mm:ss"]);
-                                    var period_end = moment(period.end, ["DD.MM.YYYY HH:mm:ss"]);
-                                    return period_end.diff(period_begin, 'days');
-                                </set-value>
-                            </dependencies>
-                        </hidden>
                     </row>
+                    <hidden id="days_count">
+                        <dependencies>
+                            <set-value on="period" apply-on-init="true">
+                                var period_begin = moment(period.begin, ["DD.MM.YYYY HH:mm:ss"]);
+                                var period_end = moment(period.end, ["DD.MM.YYYY HH:mm:ss"]);
+                                return period_end.diff(period_begin, 'days');
+                            </set-value>
+                        </dependencies>
+                    </hidden>
                 </filters>
                 <columns>
-                    <column text-field-id="eventDate" label="Дата и время">
-                        <link>
-                            <show-modal page-id="auditActionForm" detail-field-id="id" master-field-id="id"/>
-                        </link>
-                    </column>
-                    <column text-field-id="sourceApplication" label="Система/Модуль">
-                        <link>
-                            <show-modal page-id="auditActionForm" detail-field-id="id" master-field-id="id"/>
-                        </link>
-                    </column>
-                    <column text-field-id="sourceWorkstation" label="Рабочая станция">
-                        <link>
-                            <show-modal page-id="auditActionForm" detail-field-id="id" master-field-id="id"/>
-                        </link>
-                    </column>
+                    <column text-field-id="eventDate" label="Дата и время"/>
+                    <column text-field-id="sourceApplication" label="Система/Модуль"/>
+                    <column text-field-id="sourceWorkstation" label="Рабочая станция"/>
                     <column text-field-id="hostname" sorting-field-id="hostname" sorting-direction="desc"
-                            label="Имя сервера">
-                        <link>
-                            <show-modal page-id="auditActionForm" detail-field-id="id" master-field-id="id"/>
-                        </link>
-                    </column>
-                    <column text-field-id="objectId" label="Идентификатор объекта">
-                        <link>
-                            <show-modal page-id="auditActionForm" detail-field-id="id" master-field-id="id"/>
-                        </link>
-                    </column>
-                    <column text-field-id="objectTypeAndName" label="Объект">
-                        <link>
-                            <show-modal page-id="auditActionForm" detail-field-id="id" master-field-id="id"/>
-                        </link>
-                    </column>
-                    <column text-field-id="username" label="Пользователь">
-                        <link>
-                            <show-modal page-id="auditActionForm" detail-field-id="id" master-field-id="id"/>
-                        </link>
-                    </column>
-                    <column text-field-id="eventType" label="Тип события">
-                        <link>
-                            <show-modal page-id="auditActionForm" detail-field-id="id" master-field-id="id"/>
-                        </link>
-                    </column>
+                            label="Имя сервера"/>
+                    <column text-field-id="objectId" label="Идентификатор объекта"/>
+                    <column text-field-id="objectTypeAndName" label="Объект"/>
+                    <column text-field-id="username" label="Пользователь"/>
+                    <column text-field-id="eventType" label="Тип события"/>
                 </columns>
+                <rows>
+                    <click>
+                        <show-modal page-id="auditActionForm" master-field-id="id" detail-field-id="id"/>
+                    </click>
+                </rows>
                 <pre-filters>
                     <eq field-id="auditTypeId" value="1"/>
                 </pre-filters>

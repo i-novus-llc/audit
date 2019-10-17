@@ -25,41 +25,23 @@
                                 <eq field-id="auditTypeId" value="2"/>
                             </pre-filters>
                         </input-select>
+                        <search-buttons id="search"/>
                     </row>
                 </filters>
                 <columns>
                     <column text-field-id="eventDate" label="Дата и время" width="200px"
-                            sorting-direction="desc" sorting-field-id="eventDate">
-                        <link>
-                            <show-modal page-id="auditIntegrationForm" master-field-id="id" detail-field-id="id"/>
-                        </link>
-                    </column>
-                    <column text-field-id="id" label="Идентификатор сообщения">
-                        <link>
-                            <show-modal page-id="auditIntegrationForm" master-field-id="id" detail-field-id="id"/>
-                        </link>
-                    </column>
-                    <column text-field-id="sender" label="Отправитель">
-                        <link>
-                            <show-modal page-id="auditIntegrationForm" master-field-id="id" detail-field-id="id"/>
-                        </link>
-                    </column>
-                    <column text-field-id="receiver" label="Получатель">
-                        <link>
-                            <show-modal page-id="auditIntegrationForm" master-field-id="id" detail-field-id="id"/>
-                        </link>
-                    </column>
-                    <column text-field-id="eventType" label="Действие">
-                        <link>
-                            <show-modal page-id="auditIntegrationForm" master-field-id="id" detail-field-id="id"/>
-                        </link>
-                    </column>
-                    <column text-field-id="context" label="Данные">
-                        <link>
-                            <show-modal page-id="auditIntegrationForm" master-field-id="id" detail-field-id="id"/>
-                        </link>
-                    </column>
+                            sorting-direction="desc" sorting-field-id="eventDate"/>
+                    <column text-field-id="id" label="Идентификатор сообщения"/>
+                    <column text-field-id="sender" label="Отправитель"/>
+                    <column text-field-id="receiver" label="Получатель"/>
+                    <column text-field-id="eventType" label="Действие"/>
+                    <column text-field-id="context" label="Данные"/>
                 </columns>
+                <rows>
+                    <click>
+                        <show-modal page-id="auditIntegrationForm" master-field-id="id" detail-field-id="id"/>
+                    </click>
+                </rows>
                 <pre-filters>
                     <eq field-id="auditTypeId" value="2"/>
                 </pre-filters>
