@@ -12,9 +12,9 @@
                             <default-value begin="{moment().subtract(31, 'days').format('DD.MM.YYYY HH:mm:ss')}"
                                            end="{moment().format('DD.MM.YYYY HH:mm:ss')}"/>
                             <validations>
-                                <condition id="checkDate" client-moment="before-load" severity="danger" side="client"
-                                           message="Чтобы искать записи с интервалом больше 31 дня укажите Идентификатор объекта"
-                                           src="/META-INF/js/validation.js" on="days_count, objectId"/>
+                                <condition id="checkDate" severity="danger" side="client,server" server-moment="before-query"
+                                           message="Укажите даты с интервалом не более 31 дня"
+                                           src="/META-INF/js/validation.js"/>
                             </validations>
                         </date-interval>
                         <input-select id="auditSourceApplications" label="Система/Модуль" type="multi"
@@ -30,13 +30,7 @@
                     <row>
                         <input-select id="auditObjects" label="Объект" type="multi" query-id="auditObject"
                                       label-field-id="name"/>
-                        <input-text id="objectId" label="Идентификатор объекта" domain="string">
-                            <validations>
-                                <condition id="checkDate" client-moment="before-load" severity="danger" side="client"
-                                           message="Укажите значение" src="/META-INF/js/validation.js" on="days_count, period"/>
-                            </validations>
-                        </input-text>
-
+                        <input-text id="objectId" label="Идентификатор объекта" domain="string"/>
                         <input-text id="username" label="Пользователь" domain="string"/>
                     </row>
                     <hidden id="days_count">
