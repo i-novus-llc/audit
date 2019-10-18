@@ -37,7 +37,6 @@
                             <set-value on="period" apply-on-init="true">
                                 var period_begin = moment(period.begin, ["DD.MM.YYYY HH:mm:ss"]);
                                 var period_end = moment(period.end, ["DD.MM.YYYY HH:mm:ss"]);
-                                console.log('diff:' + period_end.diff(period_begin, 'days'));
                                 return period_end.diff(period_begin, 'days');
                             </set-value>
                         </dependencies>
