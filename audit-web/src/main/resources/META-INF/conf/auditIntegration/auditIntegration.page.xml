@@ -4,7 +4,7 @@
     <regions>
         <region place="single">
             <table id="audit_table" query-id="auditIntegration" size="10">
-                <filters>
+                <filters search-buttons="false">
                     <row>
                         <date-interval id="period" label="Дата и время" required="true" time-format="HH:mm">
                             <default-value begin="{moment().format('DD.MM.YYYY HH:mm:ss')}"
