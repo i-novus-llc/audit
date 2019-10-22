@@ -23,5 +23,5 @@ public interface AuditExportRest {
     @GET
     @Path("/export")
     @ApiOperation("Выгрузка журнала аудита по критериям")
-    void auditExport(@NotNull @Valid @BeanParam AuditCriteria auditCriteria) throws IOException;
+    void auditExport(@BeanParam AuditCriteria auditCriteria) throws IOException;
 }
