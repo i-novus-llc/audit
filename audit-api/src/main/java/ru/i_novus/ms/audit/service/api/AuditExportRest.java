@@ -3,8 +3,6 @@ package ru.i_novus.ms.audit.service.api;
 import io.swagger.annotations.*;
 import ru.i_novus.ms.audit.criteria.AuditCriteria;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
@@ -23,5 +21,5 @@ public interface AuditExportRest {
     @GET
     @Path("/export")
     @ApiOperation("Выгрузка журнала аудита по критериям")
-    void auditExport(@NotNull @Valid @BeanParam AuditCriteria auditCriteria) throws IOException;
+    void auditExport(@BeanParam AuditCriteria auditCriteria) throws IOException;
 }
