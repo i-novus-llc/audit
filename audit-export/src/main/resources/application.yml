@@ -1,0 +1,97 @@
+export:
+  config:
+    if-null-value: ""
+    date-format: dd.MM.yyyy HH:mm:ss
+    file-name: "audit_export"
+  query:
+    #escape this property if value is 0
+    limit-select-row: 0
+    hint-fetch-size: 10
+  csv:
+    field-delimiter: ","
+    print-field-name: true
+  journals:
+    action:
+      - name: event_date
+        caption: Дата и время
+        order: 1
+      - name: source_application
+        caption: Система/Модуль
+        order: 2
+      - name: source_workstation
+        caption: Рабочая станция
+        order: 3
+      - name: id
+        caption: Идентификатор события
+        order: 4
+      - name: hostname
+        caption: Имя сервера
+        order: 5
+      - name: object_id
+        caption: Идентификатор объекта
+        order: 6
+      - name: object_type
+        caption: Тип объекта
+        order: 7
+      - name: object_name
+        caption: Наименование объекта
+        order: 8
+      - name: username
+        caption: Имя пользователя
+        order: 9
+      - name: user_id
+        caption: Идентификатор пользователя
+        order: 10
+      - name: event_type
+        caption: Тип события
+        order: 11
+      - name: context
+        caption: Данные
+        order: 12
+    integration:
+      - name: event_date
+        caption: Дата и время
+        order: 1
+      - name: id
+        caption: Идентификатор сообщения
+        order: 2
+      - name: sender_id
+        caption: Отправитель
+        order: 3
+      - name: receiver_id
+        caption: Получатель
+        order: 4
+      - name: event_type
+        caption: Действие
+        order: 5
+      - name: context
+        caption: Данные
+        order: 6
+    auth:
+      - name: event_date
+        caption: Дата и время
+        order: 1
+      - name: id
+        caption: Идентификатор события
+        order: 2
+      - name: source_application
+        caption: Система
+        order: 3
+      - name: source_workstation
+        caption: Рабочая станция
+        order: 4
+      - name: username
+        caption: Имя пользователя
+        order: 5
+      - name: user_id
+        caption: Идентификатор пользователя
+        order: 6
+      - name: event_type
+        caption: Событие
+        order: 7
+      - name: hostname
+        caption: Имя сервера
+        order: 8
+      - name: context
+        caption: Данные
+        order: 9

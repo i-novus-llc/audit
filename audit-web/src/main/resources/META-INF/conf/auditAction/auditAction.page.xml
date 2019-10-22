@@ -6,6 +6,20 @@
     <regions>
         <region place="single">
             <table id="audit_table" query-id="auditAction" size="10" name="Аудит Данных">
+                <toolbar>
+                    <button id="export" label="Выгрузить" icon="fa fa-download" model="filter">
+                        <a href="${audit.backend.url}/audit/export" target="newWindow">
+                            <query-param name="auditType" value="1"/>
+                            <query-param name="eventDateFrom" value="{moment(period.begin, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DDTHH:mm')}"/>
+                            <query-param name="eventDateTo" value="{moment(period.end, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DDTHH:mm')}"/>
+                            <query-param name="sourceApplication" value="{auditSourceApplications*.code}"/>
+                            <query-param name="eventType" value="{auditEventTypes*.name}"/>
+                            <query-param name="objectType" value="{auditObjects*.name}"/>
+                            <query-param name="objectId" value="{objectId}"/>
+                            <query-param name="username" value="{username}"/>
+                        </a>
+                    </button>
+                </toolbar>
                 <filters>
                     <row>
                         <date-interval id="period" label="Дата и время" required="true" time-format="HH:mm">
