@@ -1,3 +1,6 @@
+:toc:
+:toc-title: Содержание
+
 Стартер для работы с audit-client
 
 == Подключение
@@ -21,7 +24,7 @@
 ----
 
 .Для работы клиента следует добавить следующую запись в properties: +
-* audit.service.url = URL где расположен сервис бэкенда +
+* audit.service.url = URL где расположен сервис аудита +
 
 .Дополнительные параметры: +
 * audit.client.enabled = При значении false вместо AuditClient будет возвращена заглушка (StubAuditClientImpl). +
@@ -80,4 +83,49 @@ public class TestClass {
         auditClient.add(request);
     }
 }
+----
+
+== Подключение для модулей ЛКБ
+Постановка https://wiki.i-novus.ru/pages/viewpage.action?pageId=67929247 +
+Клиент расчитан для использования в модулях АРМ(arm-bank, arm-domrf) +
+Для использования простого клиента:
+[source,xml]
+----
+<dependency>
+    <groupId>ru.i-novus.ms.audit</groupId>
+    <artifactId>audit-client-spring-boot-starter</artifactId>
+    <version>${version}</version>
+</dependency>
+----
+Для использования асинхронного клиента:
+[source,xml]
+----
+<dependency>
+    <groupId>ru.i-novus.ms.audit</groupId>
+    <artifactId>audit-client-async-spring-boot-starter</artifactId>
+    <version>${version}</version>
+</dependency>
+----
+
+.Для работы клиента следует добавить следующие записи в properties: +
+* audit.service.url = URL где расположен сервис аудита +
+* audit.client.filter-url-pattern = паттерн, запросы по которому будут обрабатываться фильтром клиента (вероятнее всего /n2o/data/*) +
+* audit.client.sourceApplication = Наименование системы откуда происходит запись(значения для ЛКБ LKB-BANK /LKB-DOMRF) +
+
+
+.Дополнительные параметры: +
+* audit.client.enabled = При значении false вместо AuditClient будет возвращена заглушка (StubAuditClientImpl). +
+
+Для получения данных пользователя(userId, username) в самом АРМ необходимо будет определить бин UserAccessor. Например:
+[source]
+----
+    @Bean
+    public UserAccessor auditUser() {
+        return () -> {
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            return new ru.i_novus.ms.audit.client.model.User(
+                    user.getUserId() == null ? null : user.getUserId().toString(),
+                    user.getUsername());
+        };
+    }
 ----
