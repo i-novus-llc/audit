@@ -62,7 +62,7 @@
                     <column text-field-id="sender" label="Отправитель"/>
                     <column text-field-id="receiver" label="Получатель"/>
                     <column text-field-id="eventType" label="Действие"/>
-                    <column text-field-id="context" label="Данные"/>
+                    <column text-field-id="contextGrid" label="Данные"/>
                 </columns>
                 <rows>
                     <click>

@@ -50,7 +50,7 @@
                     <column text-field-id="id" label="Идентификатор события"/>
                     <column text-field-id="username" label="Пользователь"/>
                     <column text-field-id="eventType" label="Событие"/>
-                    <column text-field-id="context" label="Данные"/>
+                    <column text-field-id="contextGrid" label="Данные"/>
                 </columns>
                 <rows>
                     <click>

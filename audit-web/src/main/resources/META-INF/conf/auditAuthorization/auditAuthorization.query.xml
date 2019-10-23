@@ -42,6 +42,10 @@
             <select/>
         </field>
 
+        <field id="contextGrid" domain="string">
+            <select mapping="['context']" normalize="#this.length() > 110 ? #this.substring(0,110).concat('...') : #this"/>
+        </field>
+
         <field id="auditTypeId" domain="integer">
             <select/>
             <filters>
