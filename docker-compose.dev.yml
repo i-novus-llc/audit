@@ -21,7 +21,8 @@ services:
 
   audit-webapp:
     environment:
-      AUDIT_BACKEND_URL: "http://audit-service:8080/api"
+      AUDIT_BACKEND_URL: http://audit-service:8080/api
+      AUDIT_EXPORT_URL: http://localhost:8951/api
       SERVER_PORT: 8080
       MANAGEMENT_HEALTH_CONSUL_ENABLED: "false"
       JAVA_OPTS: -Xmx300m
