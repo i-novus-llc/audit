@@ -6,7 +6,7 @@
             <table id="audit_table" query-id="auditIntegration" size="10">
                 <toolbar>
                     <button id="export" label="Выгрузить" icon="fa fa-download" model="filter">
-                        <a href="${audit.backend.url}/audit/export" target="newWindow">
+                        <a href="${audit.export.url}/audit/export" target="newWindow">
                             <query-param name="auditType" value="2"/>
                             <query-param name="eventDateFrom" value="{moment(period.begin, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DDTHH:mm')}"/>
                             <query-param name="eventDateTo" value="{moment(period.end, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DDTHH:mm')}"/>
