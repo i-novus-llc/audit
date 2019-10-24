@@ -29,7 +29,7 @@ services:
   audit-webapp:
     environment:
       AUDIT_BACKEND_URL: http://audit-service:8080/api
-      AUDIT_EXPORT_URL: http://localhost:8080/api
+      AUDIT_EXPORT_URL: ${audit_export_url}
       JAVA_OPTS: -Xmx300m
     ports:
       - 8080
