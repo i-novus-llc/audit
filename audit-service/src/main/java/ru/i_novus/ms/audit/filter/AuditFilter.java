@@ -3,6 +3,7 @@ package ru.i_novus.ms.audit.filter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.n2oapp.platform.i18n.Messages;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.cxf.common.util.CollectionUtils;
 import org.slf4j.Logger;
@@ -138,6 +139,10 @@ public class AuditFilter implements Filter {
         }
 
         try {
+            //Для обработки даты с zulu timezone (2019-09-30T13:15:48.809Z)
+            if (StringUtils.endsWithIgnoreCase(date, "z")) {
+                date = date.substring(0, date.length() - 1);
+            }
             LocalDateTime.parse(date);
             return true;
         } catch (DateTimeParseException e) {
