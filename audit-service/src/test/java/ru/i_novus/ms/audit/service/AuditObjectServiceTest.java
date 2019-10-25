@@ -52,7 +52,7 @@ public class AuditObjectServiceTest {
     public void testSearchEmpty() {
         AuditObjectCriteria criteria = beforeSearch();
         doReturn(Page.empty()).when(repository)
-                .findAll(ArgumentCaptor.forClass(Predicate.class).capture(), ArgumentCaptor.forClass(Pageable.class).capture());
+                .findAll((Predicate) isNull(), any(Pageable.class));
         Page<AuditObject> page = service.search(criteria);
 
         assertEquals(0, page.getTotalElements());
