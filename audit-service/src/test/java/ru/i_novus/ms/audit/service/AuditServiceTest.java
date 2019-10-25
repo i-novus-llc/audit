@@ -104,9 +104,11 @@ public class AuditServiceTest {
 
     @Test
     public void testSearchEmpty() {
+        AuditCriteria criteria = new AuditCriteria();
+        criteria.setPageSize(10);
         doReturn(Page.empty()).when(auditRepository)
-                .findAll(ArgumentCaptor.forClass(Predicate.class).capture(), ArgumentCaptor.forClass(Pageable.class).capture());
-        Page<Audit> auditPage = service.search(new AuditCriteria());
+                .findAll((Predicate) isNull(), any(Pageable.class));
+        Page<Audit> auditPage = service.search(criteria);
 
         assertEquals(Page.empty(), auditPage);
     }
@@ -122,7 +124,7 @@ public class AuditServiceTest {
         );
 
         doReturn(new PageImpl<>(entityList)).when(auditRepository)
-                .findAll(ArgumentCaptor.forClass(Predicate.class).capture(), ArgumentCaptor.forClass(Pageable.class).capture());
+                .findAll((Predicate) isNull(), any(Pageable.class));
         Page<Audit> page = service.search(criteria);
 
         assertEquals(3, page.getTotalElements());
