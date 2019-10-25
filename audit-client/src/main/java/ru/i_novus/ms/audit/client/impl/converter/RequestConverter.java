@@ -31,6 +31,33 @@ public class RequestConverter {
     @Autowired
     private Messages messages;
 
+    public AuditForm toAuditRequest(AuditClientRequest request) {
+        assertRequiredFields(request);
+
+        AuditForm auditForm = convertAccessorFields(request);
+
+        auditForm.setEventDate(request.getEventDate() == null ? LocalDateTime.now() : request.getEventDate());
+        auditForm.setContext(request.getContext());
+        auditForm.setAuditType(request.getAuditType());
+
+        if (request.getEventType() != null)
+            auditForm.setEventType(getMessage(request.getEventType().getValue(), request.getEventType().getArgs()));
+        if (request.getObjectType() != null)
+            auditForm.setObjectType(getMessage(request.getObjectType().getValue(), request.getObjectType().getArgs()));
+        if (request.getObjectId() != null)
+            auditForm.setObjectId(getMessage(request.getObjectId().getValue(), request.getObjectId().getArgs()));
+        if (request.getObjectName() != null)
+            auditForm.setObjectName(getMessage(request.getObjectName().getValue(), request.getObjectName().getArgs()));
+        if (request.getHostname() != null)
+            auditForm.setHostname(getMessage(request.getHostname().getValue(), request.getHostname().getArgs()));
+        if (request.getSender() != null)
+            auditForm.setSender(getMessage(request.getSender().getValue(), request.getSender().getArgs()));
+        if (request.getReceiver() != null)
+            auditForm.setReceiver(getMessage(request.getReceiver().getValue(), request.getReceiver().getArgs()));
+
+        return auditForm;
+    }
+
     private void assertRequiredFields(AuditClientRequest request) {
         if (request.getEventType() == null || StringUtils.isBlank(request.getEventType().getValue()))
             throw new UserException("audit.clientException.notSetEventType");
@@ -42,21 +69,8 @@ public class RequestConverter {
             throw new UserException("audit.clientException.notSetAuditType");
     }
 
-    public AuditForm toAuditRequest(AuditClientRequest request) {
-        assertRequiredFields(request);
-
+    private AuditForm convertAccessorFields(AuditClientRequest request) {
         AuditForm auditForm = new AuditForm();
-
-        auditForm.setEventDate(request.getEventDate() == null ? LocalDateTime.now() : request.getEventDate());
-        auditForm.setEventType(getMessage(request.getEventType().getValue(), request.getEventType().getArgs()));
-        auditForm.setObjectType(getMessage(request.getObjectType().getValue(), request.getObjectType().getArgs()));
-        auditForm.setObjectId(getMessage(request.getObjectId().getValue(), request.getObjectId().getArgs()));
-        auditForm.setObjectName(getMessage(request.getObjectName().getValue(), request.getObjectName().getArgs()));
-        auditForm.setContext(request.getContext());
-        auditForm.setHostname(getMessage(request.getHostname().getValue(), request.getHostname().getArgs()));
-        auditForm.setAuditType(request.getAuditType());
-        auditForm.setSender(getMessage(request.getSender().getValue(), request.getSender().getArgs()));
-        auditForm.setReceiver(getMessage(request.getReceiver().getValue(), request.getReceiver().getArgs()));
 
         if (request.getUserId() != null && request.getUserId().getValue() != null) {
             auditForm.setUserId(getMessage(request.getUserId().getValue(), request.getUserId().getArgs()));

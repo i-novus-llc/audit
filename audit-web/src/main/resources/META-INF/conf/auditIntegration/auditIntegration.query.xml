@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <query xmlns="http://n2oapp.net/framework/config/schema/query-4.0"
-       object-id="audit" name="Audit">
+       object-id="auditBase" name="Audit">
 
     <list count-mapping="[totalElements]" result-mapping="[content]">
         <rest filters-separator="&amp;">${audit.backend.url}/audit?{filters}&amp;{sorting}&amp;page={page}</rest>
@@ -40,6 +40,10 @@
 
         <field id="context" domain="string">
             <select/>
+        </field>
+
+        <field id="contextGrid" domain="string">
+            <select mapping="['context']" normalize="#this.length() > 110 ? #this.substring(0,110).concat('...') : #this"/>
         </field>
 
         <field id="auditTypeId" domain="integer">

@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page xmlns="http://n2oapp.net/framework/config/schema/page-2.0"
+      object-id="auditBase"
+      name="Журнал действий пользователей">
+
+    <regions>
+        <region place="single">
+            <table id="audit_table" query-id="auditAction" size="10" name="Аудит Данных">
+                <toolbar>
+                    <button id="export" label="Выгрузить" icon="fa fa-download" model="filter">
+                        <a href="${audit.export.url}/audit/export" target="newWindow">
+                            <query-param name="auditType" value="1"/>
+                            <query-param name="eventDateFrom" value="{moment(period.begin, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DDTHH:mm')}"/>
+                            <query-param name="eventDateTo" value="{moment(period.end, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DDTHH:mm')}"/>
+                            <query-param name="sourceApplication" value="{auditSourceApplications*.code}"/>
+                            <query-param name="eventType" value="{auditEventTypes*.name}"/>
+                            <query-param name="objectType" value="{auditObjects*.name}"/>
+                            <query-param name="objectId" value="{objectId}"/>
+                            <query-param name="username" value="{username}"/>
+                        </a>
+                    </button>
+                </toolbar>
+                <filters>
+                    <row>
+                        <date-interval id="period" label="Дата и время" required="true" time-format="HH:mm">
+                            <default-value begin="{moment().subtract(31, 'days').format('DD.MM.YYYY HH:mm:ss')}"
+                                           end="{moment().format('DD.MM.YYYY HH:mm:ss')}"/>
+                            <validations>
+                                <condition id="checkDate" severity="danger" side="client,server" server-moment="before-query"
+                                           message="Укажите даты с интервалом не более 31 дня"
+                                           src="/META-INF/js/validation.js"/>
+                            </validations>
+                        </date-interval>
+                        <input-select id="auditSourceApplications" label="Система/Модуль" type="multi"
+                                      query-id="auditSourceApplication"
+                                      label-field-id="code"/>
+                        <input-select id="auditEventTypes" label="Тип события" type="multi" query-id="auditEventType"
+                                      label-field-id="name">
+                            <pre-filters>
+                                <eq field-id="auditTypeId" value="1"/>
+                            </pre-filters>
+                        </input-select>
+                    </row>
+                    <row>
+                        <input-select id="auditObjects" label="Объект" type="multi" query-id="auditObject"
+                                      label-field-id="name"/>
+                        <input-text id="objectId" label="Идентификатор объекта" domain="string"/>
+                        <input-text id="username" label="Пользователь" domain="string"/>
+                    </row>
+                    <hidden id="days_count">
+                        <dependencies>
+                            <set-value on="period">
+                                var period_begin = moment(period.begin, ["DD.MM.YYYY HH:mm:ss"]);
+                                var period_end = moment(period.end, ["DD.MM.YYYY HH:mm:ss"]);
+                                return period_end.diff(period_begin, 'days');
+                            </set-value>
+                        </dependencies>
+                    </hidden>
+                </filters>
+                <columns>
+                    <column text-field-id="eventDate" label="Дата и время"/>
+                    <column text-field-id="sourceApplication" label="Система/Модуль"/>
+                    <column text-field-id="sourceWorkstation" label="Рабочая станция"/>
+                    <column text-field-id="hostname" sorting-field-id="hostname" sorting-direction="desc"
+                            label="Имя сервера"/>
+                    <column text-field-id="objectId" label="Идентификатор объекта"/>
+                    <column text-field-id="objectTypeAndName" label="Объект"/>
+                    <column text-field-id="username" label="Пользователь"/>
+                    <column text-field-id="eventType" label="Тип события"/>
+                </columns>
+                <rows>
+                    <click>
+                        <show-modal page-id="auditActionForm" master-field-id="id" detail-field-id="id"/>
+                    </click>
+                </rows>
+                <pre-filters>
+                    <eq field-id="auditTypeId" value="1"/>
+                </pre-filters>
+            </table>
+        </region>
+    </regions>
+</page>

@@ -28,7 +28,6 @@ public class AuditFilter implements Filter {
     private static final String FIELD_EVENT_DATE = "eventDate";
     private static final String FIELD_EVENT_DATE_FROM = "eventDateFrom";
     private static final String FIELD_EVENT_DATE_TO = "eventDateTo";
-    private static final String FIELD_OBJECT_ID = "objectId";
 
     private static final String CODE_IS_NUMERIC_NON_ZERO = "audit.filterError.isNumericNotZero";
     private static final String CODE_IS_DATE = "audit.filterError.isDate";
@@ -92,7 +91,6 @@ public class AuditFilter implements Filter {
         String auditType = request.getParameter(FIELD_AUDIT_TYPE);
         String eventDateFrom = request.getParameter(FIELD_EVENT_DATE_FROM);
         String eventDateTo = request.getParameter(FIELD_EVENT_DATE_TO);
-        String objectId = request.getParameter(FIELD_OBJECT_ID);
 
         List<String> errors = new ArrayList<>();
         if (!isDate(eventDateFrom)) {
@@ -109,7 +107,7 @@ public class AuditFilter implements Filter {
 
         if (isDate(eventDateFrom) && isDate(eventDateTo)) {
             long daysBetweenDates = Duration.between(LocalDateTime.parse(eventDateFrom), LocalDateTime.parse(eventDateTo)).toDays();
-            if (daysBetweenDates > 31 && StringUtils.isBlank(objectId)) {
+            if (daysBetweenDates > 31) {
                 errors.add(
                         messages.getMessage(
                                 CODE_TOO_BIG_PERIOD, FIELD_EVENT_DATE_FROM, eventDateFrom, FIELD_EVENT_DATE_TO, eventDateTo));
@@ -141,6 +139,10 @@ public class AuditFilter implements Filter {
         }
 
         try {
+            //Для обработки даты с zulu timezone (2019-09-30T13:15:48.809Z)
+            if (StringUtils.endsWithIgnoreCase(date, "z")) {
+                date = date.substring(0, date.length() - 1);
+            }
             LocalDateTime.parse(date);
             return true;
         } catch (DateTimeParseException e) {

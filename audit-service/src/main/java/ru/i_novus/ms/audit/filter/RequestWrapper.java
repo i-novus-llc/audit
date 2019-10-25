@@ -8,7 +8,11 @@ import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Обертка запроса для сохранения данных полученных через getInputStream() и возможности повторного его вызова
@@ -24,7 +28,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
         body = new StringBuilder();
         try (
                 InputStream bounded = new BoundedInputStream(request.getInputStream(), MAX_BYTE_SIZE);
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(bounded))) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(bounded, StandardCharsets.UTF_8))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 body.append(line);
@@ -36,7 +40,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 
     @Override
     public ServletInputStream getInputStream() {
-        final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(body.toString().getBytes());
+        final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(body.toString().getBytes(StandardCharsets.UTF_8));
         return new ServletInputStream() {
             public int read() {
                 return byteArrayInputStream.read();

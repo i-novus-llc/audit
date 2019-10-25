@@ -73,8 +73,12 @@ public final class AuditPredicates {
         return QAuditEntity.auditEntity.hostname.equalsIgnoreCase(value.trim());
     }
 
-    public static BooleanExpression inAuditTypeIds(Short[] value) {
-        return QAuditEntity.auditEntity.auditTypeId.in(value);
+    public static BooleanExpression isAuditTypeIdEquals(Short value) {
+        return QAuditEntity.auditEntity.auditType.id.eq(value);
+    }
+
+    public static BooleanExpression isAuditTypeCodeEquals(String value) {
+        return QAuditEntity.auditEntity.auditType.code.equalsIgnoreCase(value);
     }
 
     public static BooleanExpression inSenders(String[] value) {

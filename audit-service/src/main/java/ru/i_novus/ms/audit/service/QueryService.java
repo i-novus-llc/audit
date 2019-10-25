@@ -1,5 +1,6 @@
 package ru.i_novus.ms.audit.service;
 
+import com.google.common.collect.Lists;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import lombok.AccessLevel;
@@ -13,10 +14,8 @@ import ru.i_novus.ms.audit.criteria.AuditObjectCriteria;
 import ru.i_novus.ms.audit.criteria.AuditSourceApplicationCriteria;
 import ru.i_novus.ms.audit.entity.QAuditObjectEntity;
 import ru.i_novus.ms.audit.entity.QAuditSourceApplicationEntity;
+import ru.i_novus.ms.audit.model.AuditTypeCode;
 import ru.i_novus.ms.audit.repository.predicates.EventTypePredicates;
-
-import java.util.Collections;
-import java.util.List;
 
 import static ru.i_novus.ms.audit.repository.predicates.AuditPredicates.*;
 
@@ -92,8 +91,12 @@ public class QueryService {
             where.and(inSourceApplicationNames(criteria.getSourceApplication()));
         }
 
-        if (ArrayUtils.isNotEmpty(criteria.getAuditTypeId())) {
-            where.and(inAuditTypeIds(criteria.getAuditTypeId()));
+        if (criteria.getAuditTypeId() != null) {
+            where.and(isAuditTypeIdEquals(criteria.getAuditTypeId()));
+            String code = AuditTypeCode.getCodeAuditType(criteria.getAuditTypeId());
+            if (code != null) {
+                where.and(isAuditTypeCodeEquals(code));
+            }
         }
 
         if (ArrayUtils.isNotEmpty(criteria.getSender())) {
@@ -118,11 +121,21 @@ public class QueryService {
     }
 
     static Sort toSort(AuditCriteria criteria) {
-        List<Sort.Order> orders = criteria.getOrders();
-        if (CollectionUtils.isEmpty(orders)) {
-            orders = Collections.singletonList(new Sort.Order(Sort.Direction.DESC, "eventDate"));
+        if (!CollectionUtils.isEmpty(criteria.getOrders())) {
+            return Sort.by(criteria.getOrders());
         }
-        return Sort.by(orders);
+
+        Sort.Order order;
+        if (criteria.getSortingColumn() == null) {
+            order = new Sort.Order(Sort.Direction.fromString("DESC"), "eventDate");
+        } else {
+            order = new Sort.Order(
+                    Sort.Direction.fromString(criteria.getSortingOrder() == null ? "ASC" : criteria.getSortingOrder()),
+                    criteria.getSortingColumn());
+        }
+        criteria.setOrders(Lists.newArrayList(order));
+
+        return Sort.by(criteria.getOrders());
     }
 
     static Sort sort(Sort.Order order) {

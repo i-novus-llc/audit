@@ -1,0 +1,131 @@
+:toc:
+:toc-title: Содержание
+
+Стартер для работы с audit-client
+
+== Подключение
+Для использования простого клиента:
+[source,xml]
+----
+<dependency>
+    <groupId>ru.i-novus.ms.audit</groupId>
+    <artifactId>audit-client-spring-boot-starter</artifactId>
+    <version>${version}</version>
+</dependency>
+----
+Для использования асинхронного клиента:
+[source,xml]
+----
+<dependency>
+    <groupId>ru.i-novus.ms.audit</groupId>
+    <artifactId>audit-client-async-spring-boot-starter</artifactId>
+    <version>${version}</version>
+</dependency>
+----
+
+.Для работы клиента следует добавить следующую запись в properties: +
+* audit.service.url = URL где расположен сервис аудита +
+
+.Дополнительные параметры: +
+* audit.client.enabled = При значении false вместо AuditClient будет возвращена заглушка (StubAuditClientImpl). +
+* audit.client.sourceApplication= Идентификатор системы откуда происходит запись(sourceApplication). Если в запросе будет передан sourceApplication, то значение этой настройки будет игнорироваться. +
+
+Для отправки запроса в аудит используется AuditClientRequest
+[source]
+----
+AuditClientRequest auditClientRequest = new AuditClientRequest();
+
+auditClientRequest.setEventDate(LocalDateTime.now().withNano(0));
+auditClientRequest.setEventType("EVENT_TYPE");
+auditClientRequest.setObjectType("OBJECT_TYPE");
+auditClientRequest.setObjectId("OBJECT_ID");
+auditClientRequest.setObjectName("OBJECT_NAME");
+auditClientRequest.setUserId("USER_ID");
+auditClientRequest.setUsername("USERNAME");
+auditClientRequest.setSourceWorkstation("SOURCE_WORKSTATION");
+auditClientRequest.setSourceApplication("SOURCE_APPLICATION");
+auditClientRequest.setContext("CONTEXT");
+auditClientRequest.setAuditType((short)1);
+auditClientRequest.setSender("SENDER");
+auditClientRequest.setReceiver("RECEIVER");
+----
+
+Есть возможность задать поля userId, username, sourceWorkstation, sourceApplication создав бины с соответствющими accessor:
+[source]
+----
+    @Bean
+    public UserAccessor userAccessor() {
+        return () -> new User("USER_ID", "USERNAME");
+    }
+
+    @Bean
+    public SourceWorkstationAccessor workstationAccessor() {
+        return () -> "SOURCE_WORKSTATION";
+    }
+
+    @Bean
+    public SourceApplicationAccessor applicationAccessor() {
+        return () -> "SOURCE_APPLICATION";
+    }
+----
+Стоит учесть, что если эти поля были указаны в AuditClientRequest, то значения возьмутся из AuditClientRequest.
+
+Для сохранения записи в аудите достаточно определить AuditClient и передать ему AuditClientRequest. Пример:
+[source]
+----
+@Component
+public class TestClass {
+
+    @Autowired
+    private AuditClient auditClient;
+
+    public void send(AuditClientRequest request) {
+        auditClient.add(request);
+    }
+}
+----
+
+== Подключение для модулей ЛКБ
+Постановка https://wiki.i-novus.ru/pages/viewpage.action?pageId=67929247 +
+Клиент расчитан для использования в модулях АРМ(arm-bank, arm-domrf) +
+Для использования простого клиента:
+[source,xml]
+----
+<dependency>
+    <groupId>ru.i-novus.ms.audit</groupId>
+    <artifactId>audit-client-spring-boot-starter</artifactId>
+    <version>${version}</version>
+</dependency>
+----
+Для использования асинхронного клиента:
+[source,xml]
+----
+<dependency>
+    <groupId>ru.i-novus.ms.audit</groupId>
+    <artifactId>audit-client-async-spring-boot-starter</artifactId>
+    <version>${version}</version>
+</dependency>
+----
+
+.Для работы клиента следует добавить следующие записи в properties: +
+* audit.service.url = URL где расположен сервис аудита +
+* audit.client.filter-url-pattern = паттерн, запросы по которому будут обрабатываться фильтром клиента (вероятнее всего /n2o/data/*) +
+* audit.client.sourceApplication = Наименование системы откуда происходит запись(значения для ЛКБ LKB-BANK /LKB-DOMRF) +
+
+
+.Дополнительные параметры: +
+* audit.client.enabled = При значении false вместо AuditClient будет возвращена заглушка (StubAuditClientImpl). +
+
+Для получения данных пользователя(userId, username) в самом АРМ необходимо будет определить бин UserAccessor. Например:
+[source]
+----
+    @Bean
+    public UserAccessor auditUser() {
+        return () -> {
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            return new ru.i_novus.ms.audit.client.model.User(
+                    user.getUserId() == null ? null : user.getUserId().toString(),
+                    user.getUsername());
+        };
+    }
+----

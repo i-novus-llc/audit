@@ -4,12 +4,27 @@
     <regions>
         <region place="single">
             <table id="audit_table" query-id="auditAuthorization" size="10">
+                <toolbar>
+                    <button id="export" label="Выгрузить" icon="fa fa-download" model="filter">
+                        <a href="${audit.export.url}/audit/export" target="newWindow">
+                            <query-param name="auditType" value="3"/>
+                            <query-param name="eventDateFrom" value="{moment(period.begin, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DDTHH:mm')}"/>
+                            <query-param name="eventDateTo" value="{moment(period.end, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DDTHH:mm')}"/>
+                            <query-param name="username" value="{username}"/>
+                            <query-param name="eventType" value="{auditEventTypes*.name}"/>
+                        </a>
+                    </button>
+                </toolbar>
                 <filters>
                     <row>
                         <date-interval id="period" label="Дата и время" required="true" time-format="HH:mm">
                             <default-value begin="{moment().startOf('month').format('DD.MM.YYYY HH:mm:ss')}"
                                            end="{moment().format('DD.MM.YYYY HH:mm:ss')}"/>
-
+                            <validations>
+                                <condition id="checkDate" severity="danger" side="client,server" server-moment="before-query"
+                                           message="Укажите даты с интервалом не более 31 дня"
+                                           src="/META-INF/js/validation.js"/>
+                            </validations>
                         </date-interval>
                         <input-text id="username" label="Пользователь" domain="string"/>
                         <input-select id="auditEventTypes" label="Событие" type="multi" query-id="auditEventType"
@@ -19,35 +34,29 @@
                             </pre-filters>
                         </input-select>
                     </row>
+                    <hidden id="days_count">
+                        <dependencies>
+                            <set-value on="period" apply-on-init="true">
+                                var period_begin = moment(period.begin, ["DD.MM.YYYY HH:mm:ss"]);
+                                var period_end = moment(period.end, ["DD.MM.YYYY HH:mm:ss"]);
+                                return period_end.diff(period_begin, 'days');
+                            </set-value>
+                        </dependencies>
+                    </hidden>
                 </filters>
                 <columns>
                     <column text-field-id="eventDate" label="Дата и время" width="200px"
-                            sorting-direction="desc" sorting-field-id="eventDate">
-                        <link>
-                            <show-modal page-id="auditAuthorizationForm" master-field-id="id" detail-field-id="id"/>
-                        </link>
-                    </column>
-                    <column text-field-id="id" label="Идентификатор события">
-                        <link>
-                            <show-modal page-id="auditAuthorizationForm" master-field-id="id" detail-field-id="id"/>
-                        </link>
-                    </column>
-                    <column text-field-id="username" label="Пользователь">
-                        <link>
-                            <show-modal page-id="auditAuthorizationForm" master-field-id="id" detail-field-id="id"/>
-                        </link>
-                    </column>
-                    <column text-field-id="eventType" label="Событие">
-                        <link>
-                            <show-modal page-id="auditAuthorizationForm" master-field-id="id" detail-field-id="id"/>
-                        </link>
-                    </column>
-                    <column text-field-id="context" label="Данные">
-                        <link>
-                            <show-modal page-id="auditAuthorizationForm" master-field-id="id" detail-field-id="id"/>
-                        </link>
-                    </column>
+                            sorting-direction="desc" sorting-field-id="eventDate"/>
+                    <column text-field-id="id" label="Идентификатор события"/>
+                    <column text-field-id="username" label="Пользователь"/>
+                    <column text-field-id="eventType" label="Событие"/>
+                    <column text-field-id="contextGrid" label="Данные"/>
                 </columns>
+                <rows>
+                    <click>
+                        <show-modal page-id="auditAuthorizationForm" master-field-id="id" detail-field-id="id"/>
+                    </click>
+                </rows>
                 <pre-filters>
                     <eq field-id="auditTypeId" value="3"/>
                 </pre-filters>

@@ -1,8 +1,6 @@
-if (typeof period === 'undefined' || period === null
-        || typeof days_count === 'undefined' || days_count === null || days_count <= 31) {
-    return true;
+var result = false;
+var days_count_local = typeof days_count === 'undefined' || days_count === null ? 31 : days_count;
+if (typeof period !== 'undefined' && period !== null && days_count_local <= 31) {
+    result = true;
 }
-if (days_count > 31 && typeof objectId !== 'undefined' && objectId !== null && objectId !== '') {
-    return true;
-}
-return false;
+return result;

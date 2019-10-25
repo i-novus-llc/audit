@@ -67,3 +67,30 @@ audit.security.oauth2.code=
 ----
 audit.security.oauth2.events-schedule=
 ----
+
+== Сервис экспорта журналов audit-export в зависимости у audit-service
+Выгружает записи с соответствующими полями для каждого из журналов, согласно примененной фильтрации.
+Действуют такие же ограничения по периоду выборки, т.е. 31 день.
+Выгрузка происходит в csv формате.
+
+
+Настройки
+Доступность по адресу задается переменной
+audit.export.url = #example http://localhost:8951/api
+
+Доступны для переопределения некоторые настройки
+# Замена null начений на заданное
+export.config.if-null-value = #default null
+# Формат даты для поля даты события
+export.config.date-format = #default dd.MM.yyyy HH:mm:ss
+# Имя файла, формируемого при выгрузке
+export.config.file-name = #default audit_export
+
+# Принудительный лимит при получении строк журналов, 0 для игнорирования настройки
+export.query.limit-select-row = #default 0
+# Возможно требует уточнение на сервере, в зависимости от ресурсов
+export.query.hint-fetch-size = #default 10
+# Разделитель значений
+export.csv.field-delimiter =  #default ,
+# Признак вывода в файл заголовкой полей
+export.csv.print-field-name = #default true

@@ -1,15 +1,25 @@
 package ru.i_novus.ms.audit.service;
 
+import com.querydsl.core.types.Predicate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import ru.i_novus.ms.audit.criteria.AuditObjectCriteria;
 import ru.i_novus.ms.audit.entity.AuditObjectEntity;
+import ru.i_novus.ms.audit.model.AuditObject;
 import ru.i_novus.ms.audit.repository.AuditObjectRepository;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -21,13 +31,12 @@ public class AuditObjectServiceTest {
 
     @Mock
     private AuditObjectRepository repository;
-
     @InjectMocks
     private AuditObjectService service;
 
     @Test
     public void testCreateIfNotPresent() {
-        doReturn(Optional.of(new AuditObjectEntity())).when(repository).findByNameAndType(anyString(), anyString());
+        doReturn(Optional.of(AuditObjectEntity.class)).when(repository).findByNameAndType(anyString(), anyString());
         service.createIfNotPresent(TEXT, TEXT);
         verify(repository, never()).save(any());
     }
@@ -37,5 +46,37 @@ public class AuditObjectServiceTest {
         doReturn(Optional.empty()).when(repository).findByNameAndType(anyString(), anyString());
         service.createIfNotPresent(TEXT, TEXT);
         verify(repository, times(1)).save(any());
+    }
+
+    @Test
+    public void testSearchEmpty() {
+        AuditObjectCriteria criteria = beforeSearch();
+        doReturn(Page.empty()).when(repository)
+                .findAll((Predicate) isNull(), any(Pageable.class));
+        Page<AuditObject> page = service.search(criteria);
+
+        assertEquals(0, page.getTotalElements());
+    }
+
+    @Test
+    public void testSearch() {
+        AuditObjectCriteria criteria = beforeSearch();
+        List<AuditObjectEntity> entityList = Arrays.asList(
+                new AuditObjectEntity(),
+                new AuditObjectEntity(),
+                new AuditObjectEntity()
+        );
+
+        doReturn(new PageImpl<>(entityList)).when(repository)
+                .findAll(ArgumentCaptor.forClass(Predicate.class).capture(), ArgumentCaptor.forClass(Pageable.class).capture());
+        Page<AuditObject> page = service.search(criteria);
+
+        assertEquals(3, page.getTotalElements());
+    }
+
+    private AuditObjectCriteria beforeSearch() {
+        AuditObjectCriteria criteria = new AuditObjectCriteria();
+        criteria.setPageSize(10);
+        return criteria;
     }
 }

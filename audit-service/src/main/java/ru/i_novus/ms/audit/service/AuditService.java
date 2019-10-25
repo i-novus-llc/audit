@@ -1,11 +1,9 @@
 package ru.i_novus.ms.audit.service;
 
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import ru.i_novus.ms.audit.builder.entity.AuditEntityBuilder;
@@ -41,14 +39,6 @@ public class AuditService {
 
 
     public Page<Audit> search(AuditCriteria criteria) {
-        if (criteria.getSortingColumn() != null) {
-            Sort.Order order = new Sort.Order(
-                    Sort.Direction.fromString(criteria.getSortingOrder() == null ? "DESC" : criteria.getSortingOrder()),
-                    criteria.getSortingColumn()
-            );
-            criteria.setOrders(Lists.newArrayList(order));
-        }
-
         return (searchEntity(criteria)).map(AuditBuilder::getAuditByEntity);
     }
 
@@ -66,9 +56,7 @@ public class AuditService {
     }
 
     private Page<AuditEntity> searchEntity(AuditCriteria criteria) {
-        int size = criteria.getPageSize() > 0 ? criteria.getPageSize() : 10;
-        int pageNum = criteria.getPageNumber() > 0 ? criteria.getPageNumber() - 1 : 0;
-        Pageable pageable = PageRequest.of(pageNum, size, QueryService.toSort(criteria));
+        Pageable pageable = PageRequest.of(criteria.getPageNumber(), criteria.getPageSize(), QueryService.toSort(criteria));
 
         return auditRepository.findAll(QueryService.toPredicate(criteria), pageable);
     }
