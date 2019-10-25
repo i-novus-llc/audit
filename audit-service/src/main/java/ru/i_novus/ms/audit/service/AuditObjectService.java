@@ -11,21 +11,13 @@ import ru.i_novus.ms.audit.entity.AuditObjectEntity;
 import ru.i_novus.ms.audit.model.AuditObject;
 import ru.i_novus.ms.audit.repository.AuditObjectRepository;
 
-import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class AuditObjectService {
 
     @Autowired
     private AuditObjectRepository auditObjectRepository;
-
-    public Collection<AuditObject> getAll() {
-        return auditObjectRepository.findAll().stream()
-                .map(AuditObjectBuilder::buildByEntity)
-                .collect(Collectors.toList());
-    }
 
     public Page<AuditObject> search(AuditObjectCriteria criteria) {
         return auditObjectRepository.findAll(
@@ -40,9 +32,5 @@ public class AuditObjectService {
         if (auditObjectEntity.isEmpty()) {
             auditObjectRepository.save(AuditObjectEntityBuilder.buildEntity(name, type));
         }
-    }
-
-    public AuditObject getById(Integer id) {
-        return AuditObjectBuilder.buildByEntity(auditObjectRepository.getOne(id));
     }
 }

@@ -97,19 +97,27 @@ public class AuditClientRequest {
         final String formatted = ", %s{value='%s', args=%s}";
         return "AuditClientRequest{" +
                 "eventDate=" + eventDate +
-                String.format(formatted, "eventType", eventType.getValue(), Arrays.toString(eventType.getArgs())) +
-                String.format(formatted, "objectType", objectType.getValue(), Arrays.toString(objectType.getArgs())) +
-                String.format(formatted, "objectId", objectId.getValue(), Arrays.toString(objectId.getArgs())) +
-                String.format(formatted, "objectName", objectName.getValue(), Arrays.toString(objectName.getArgs())) +
-                String.format(formatted, "userId", userId.getValue(), Arrays.toString(userId.getArgs())) +
-                String.format(formatted, "username", username.getValue(), Arrays.toString(username.getArgs())) +
-                String.format(formatted, "sourceWorkstation", sourceWorkstation.getValue(), Arrays.toString(sourceWorkstation.getArgs())) +
-                String.format(formatted, "sourceApplication", sourceApplication.getValue(), Arrays.toString(sourceApplication.getArgs())) +
+                String.format(formatted, "eventType", paramValueToString(eventType), paramArgsToString(eventType)) +
+                String.format(formatted, "objectType", paramValueToString(objectType), paramArgsToString(objectType)) +
+                String.format(formatted, "objectId", paramValueToString(objectId), paramArgsToString(objectId)) +
+                String.format(formatted, "objectName", paramValueToString(objectName), paramArgsToString(objectName)) +
+                String.format(formatted, "userId", paramValueToString(userId), paramArgsToString(userId)) +
+                String.format(formatted, "username", paramValueToString(username), paramArgsToString(username)) +
+                String.format(formatted, "sourceWorkstation", paramValueToString(sourceWorkstation), paramArgsToString(sourceWorkstation)) +
+                String.format(formatted, "sourceApplication", paramValueToString(sourceApplication), paramArgsToString(sourceApplication)) +
                 ", context='" + context + "\'" +
-                String.format(formatted, "hostname", hostname.getValue(), Arrays.toString(hostname.getArgs())) +
+                String.format(formatted, "hostname", paramValueToString(hostname), paramArgsToString(hostname)) +
                 ", auditType='" + auditType + "\'" +
-                String.format(formatted, "sender", sender.getValue(), Arrays.toString(sender.getArgs())) +
-                String.format(formatted, "receiver", receiver.getValue(), Arrays.toString(receiver.getArgs())) +
+                String.format(formatted, "sender", paramValueToString(sender), paramArgsToString(sender)) +
+                String.format(formatted, "receiver", paramValueToString(receiver), paramArgsToString(receiver)) +
                 "}";
+    }
+
+    private String paramValueToString(AuditClientRequestParam param) {
+        return param == null ? null : param.getValue();
+    }
+
+    private String paramArgsToString(AuditClientRequestParam param) {
+        return param == null ? null : Arrays.toString(param.getArgs());
     }
 }

@@ -11,22 +11,13 @@ import ru.i_novus.ms.audit.model.AuditEventType;
 import ru.i_novus.ms.audit.criteria.AuditEventTypeCriteria;
 import ru.i_novus.ms.audit.repository.EventTypeRepository;
 
-import java.util.Collection;
 import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class EventTypeService {
 
     @Autowired
     private EventTypeRepository eventTypeRepository;
-
-    public Collection<AuditEventType> getAll() {
-        return eventTypeRepository.findAll().stream()
-                .map(AuditEventTypeBuilder::buildByEntity)
-                .collect(Collectors.toList());
-    }
 
     public Page<AuditEventType> search(AuditEventTypeCriteria criteria) {
 
@@ -44,9 +35,5 @@ public class EventTypeService {
                     AuditEventTypeEntityBuilder.buildEntity(name, auditType)
             );
         }
-    }
-
-    public AuditEventType getById(UUID id) {
-        return AuditEventTypeBuilder.buildByEntity(eventTypeRepository.getOne(id));
     }
 }
