@@ -56,7 +56,12 @@
             <version>${security-admin.version}</version>
         </dependency>
 
-    </dependencies>
+        <dependency>
+            <groupId>net.n2oapp.platform</groupId>
+            <artifactId>n2o-platform-jaxrs-commons</artifactId>
+        </dependency>
+
+</dependencies>
 
     <build>
         <finalName>${project.artifactId}</finalName>
