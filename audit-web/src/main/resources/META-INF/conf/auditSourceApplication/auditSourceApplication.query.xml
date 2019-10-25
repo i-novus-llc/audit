@@ -6,9 +6,6 @@
     <fields>
         <field id="id" domain="string">
             <select/>
-            <filters>
-                <eq filter-id="id">:id</eq>
-            </filters>
         </field>
         <field id="code" domain="string">
             <select/>
