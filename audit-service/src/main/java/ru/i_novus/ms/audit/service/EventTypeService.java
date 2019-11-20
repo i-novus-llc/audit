@@ -23,7 +23,7 @@ public class EventTypeService {
 
         return eventTypeRepository.findAll(
                         QueryService.toPredicate(criteria),
-                        PageRequest.of(0, criteria.getPageSize())
+                        PageRequest.of(criteria.getPageNumber(), criteria.getPageSize())
         ).map(AuditEventTypeBuilder::buildByEntity);
     }
 
