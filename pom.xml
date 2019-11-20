@@ -23,7 +23,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <config.server.enable>false</config.server.enable>
-        <n2o.version>7.4.6</n2o.version>
+        <n2o.version>7.4.7</n2o.version>
     </properties>
 
     <modules>
