@@ -16,4 +16,7 @@ public class AuditObject {
 
     @ApiModelProperty("Наименование")
     private String name;
+
+    @ApiModelProperty("Тип")
+    private String type;
 }

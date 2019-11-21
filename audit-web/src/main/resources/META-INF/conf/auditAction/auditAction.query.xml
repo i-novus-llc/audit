@@ -57,6 +57,7 @@
         <field id="auditObjects" domain="string">
             <select/>
             <filters>
+                <in filter-id="auditObjects*.type">objectType={auditObjects*.type}</in>
                 <in filter-id="auditObjects*.name">objectName={auditObjects*.name}</in>
             </filters>
         </field>

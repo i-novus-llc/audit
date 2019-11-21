@@ -22,7 +22,7 @@ public class AuditObjectService {
     public Page<AuditObject> search(AuditObjectCriteria criteria) {
         return auditObjectRepository.findAll(
                 QueryService.toPredicate(criteria),
-                PageRequest.of(criteria.getPageNumber(), criteria.getPageSize())
+                PageRequest.of(criteria.getPageNumber(), criteria.getPageSize(), criteria.getSort())
         ).map(AuditObjectBuilder::buildByEntity);
     }
 

@@ -43,7 +43,7 @@
                     </row>
                     <row>
                         <input-select id="auditObjects" label="Объект" type="multi" query-id="auditObject"
-                                      label-field-id="name"/>
+                                      label-field-id="typeAndName"/>
                         <input-text id="objectId" label="Идентификатор объекта" domain="string"/>
                         <input-text id="username" label="Пользователь" domain="string"/>
                     </row>

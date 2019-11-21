@@ -1,17 +1,21 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <query xmlns="http://n2oapp.net/framework/config/schema/query-4.0" name="Тип события">
-    <list count-mapping="[totalElements]" result-mapping="[content]">
-        <rest filters-separator="&amp;">${audit.backend.url}/audit/objects?{filters}&amp;size={limit}&amp;page={page}</rest>
+    <list result-mapping="['content']" count-mapping="['totalElements']">
+        <java method="findAllObjects" class="ru.i_novus.ms.audit.controller.AuditReferenceFrontendController">
+            <spring/>
+            <arguments>
+                <argument class="ru.i_novus.ms.audit.criteria.AuditObjectCriteria" type="criteria"/>
+            </arguments>
+        </java>
     </list>
     <fields>
         <field id="id" domain="string">
             <select/>
         </field>
-        <field id="name" domain="string">
-            <select/>
-            <sorting/>
+        <field id="typeAndName" domain="string">
+            <select mapping="['type'] + ' ' + ['name']" normalize="#this.replace('null', '')"/>
             <filters>
-                <eq filter-id="name" mapping="['name']">name={name}</eq>
+                <eq filter-id="typeAndName" mapping="typeOrName"/>
             </filters>
         </field>
     </fields>
