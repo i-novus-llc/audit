@@ -28,7 +28,7 @@
                         </date-interval>
                         <input-text id="username" label="Пользователь" domain="string"/>
                         <input-select id="auditEventTypes" label="Событие" type="multi" query-id="auditEventType"
-                                      label-field-id="name">
+                                      label-field-id="name" search-field-id="name">
                             <pre-filters>
                                 <eq field-id="auditTypeId" value="3"/>
                             </pre-filters>

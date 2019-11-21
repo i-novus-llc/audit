@@ -32,7 +32,7 @@
             <select/>
         </field>
 
-        <field id="auditEventTypes" domain="string">
+        <field id="auditEventTypes.name" domain="string">
             <select/>
             <filters>
                 <in filter-id="auditEventTypes*.name">eventType={auditEventTypes*.name}</in>

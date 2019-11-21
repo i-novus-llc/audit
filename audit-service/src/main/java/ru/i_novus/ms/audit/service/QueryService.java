@@ -36,8 +36,9 @@ public class QueryService {
                 where.and(isEventDateBeforeOrEquals(criteria.getEventDateTo()));
             }
         }
-        if (criteria.getEventType() != null) {
-            where.and(isEventTypeEquals(criteria.getEventType()));
+
+        if (ArrayUtils.isNotEmpty(criteria.getAuditEventType())) {
+            where.and(inEventTypeNames(criteria.getAuditEventType()));
         }
 
         return where.getValue();
