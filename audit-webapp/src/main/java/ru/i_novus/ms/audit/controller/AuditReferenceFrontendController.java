@@ -1,6 +1,5 @@
 package ru.i_novus.ms.audit.controller;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import ru.i_novus.ms.audit.criteria.AuditObjectCriteria;
@@ -25,8 +24,6 @@ public class AuditReferenceFrontendController {
             new Sort.Order(Sort.Direction.ASC, "name"),
             new Sort.Order(Sort.Direction.ASC, "id"))
         );
-        Page<AuditObject> result = auditReferenceRest.getObjects(criteria);
-        result.getContent().forEach(x -> x.setName(String.join(" ", x.getType(), ObjectUtils.defaultIfNull(x.getName(), ""))));
-        return result;
+        return auditReferenceRest.getObjects(criteria);
     }
 }

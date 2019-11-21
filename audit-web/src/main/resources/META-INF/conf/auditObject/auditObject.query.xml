@@ -12,6 +12,12 @@
         <field id="id" domain="string">
             <select/>
         </field>
+        <field id="type" domain="string">
+            <select/>
+        </field>
+        <field id="name" domain="string">
+            <select/>
+        </field>
         <field id="typeAndName" domain="string">
             <select mapping="['type'] + ' ' + ['name']" normalize="#this.replace('null', '')"/>
             <filters>
