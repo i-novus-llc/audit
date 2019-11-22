@@ -89,14 +89,17 @@ public class ApplicationTest {
 
     @Test
     public void testSearchByEventType() {
+        String[] auditEventTypeFromReq = new String[] {auditRequest.getEventType()};
+        String[] auditEventTypeTest= new String[] {TEST};
+
         AuditCriteria criteria = new AuditCriteria();
         criteria.setPageNumber(1);
         criteria.setPageSize(10);
-        criteria.setEventType(auditRequest.getEventType());
+        criteria.setAuditEventType(auditEventTypeFromReq);
         Page<Audit> search = auditRest.search(criteria);
         assertTrue(search.getTotalElements() > 0);
 
-        criteria.setEventType(TEST);
+        criteria.setAuditEventType(auditEventTypeTest);
         search = auditRest.search(criteria);
         assertEquals(0, search.getTotalElements());
     }
