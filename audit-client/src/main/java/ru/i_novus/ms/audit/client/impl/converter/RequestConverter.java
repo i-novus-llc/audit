@@ -13,7 +13,6 @@ import ru.i_novus.ms.audit.client.UserAccessor;
 import ru.i_novus.ms.audit.client.model.AuditClientRequest;
 import ru.i_novus.ms.audit.model.AuditForm;
 
-import java.time.Clock;
 import java.time.LocalDateTime;
 
 @Component
@@ -37,7 +36,7 @@ public class RequestConverter {
 
         AuditForm auditForm = convertAccessorFields(request);
 
-        auditForm.setEventDate(request.getEventDate() == null ? LocalDateTime.now(Clock.systemUTC()) : request.getEventDate());
+        auditForm.setEventDate(request.getEventDate() == null ? LocalDateTime.now() : request.getEventDate());
         auditForm.setContext(request.getContext());
         auditForm.setAuditType(request.getAuditType());
 
