@@ -13,6 +13,7 @@ public class AuditObjectBuilder {
     public static AuditObject buildByEntity(AuditObjectEntity entity) {
         return AuditObject.builder()
                 .id(entity.getId())
+                .type(entity.getType())
                 .name(entity.getName())
                 .build();
     }

@@ -32,10 +32,6 @@ public class AuditCriteria extends RestCriteria {
     @NotNull
     private LocalDateTime eventDateTo;
 
-    @ApiParam("Тип события")
-    @QueryParam("eventType")
-    private String eventType;
-
     @ApiParam(value = "Объект")
     @QueryParam("objectType")
     private String[] objectType;

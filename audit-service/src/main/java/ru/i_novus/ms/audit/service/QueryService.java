@@ -6,6 +6,7 @@ import com.querydsl.core.types.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.CollectionUtils;
 import ru.i_novus.ms.audit.criteria.AuditCriteria;
@@ -35,8 +36,9 @@ public class QueryService {
                 where.and(isEventDateBeforeOrEquals(criteria.getEventDateTo()));
             }
         }
-        if (criteria.getEventType() != null) {
-            where.and(isEventTypeEquals(criteria.getEventType()));
+
+        if (ArrayUtils.isNotEmpty(criteria.getAuditEventType())) {
+            where.and(inEventTypeNames(criteria.getAuditEventType()));
         }
 
         return where.getValue();
@@ -164,8 +166,11 @@ public class QueryService {
 
     static Predicate toPredicate(AuditObjectCriteria criteria) {
         BooleanBuilder where = new BooleanBuilder();
-        if (criteria.getName() != null) {
-            where.and(QAuditObjectEntity.auditObjectEntity.name.containsIgnoreCase(criteria.getName().trim()));
+        if (StringUtils.isNotBlank(criteria.getTypeOrName())) {
+            String str = criteria.getTypeOrName().trim();
+            where
+                .and(QAuditObjectEntity.auditObjectEntity.type.containsIgnoreCase(str))
+                .or(QAuditObjectEntity.auditObjectEntity.name.containsIgnoreCase(str));
         }
 
         return where.getValue();

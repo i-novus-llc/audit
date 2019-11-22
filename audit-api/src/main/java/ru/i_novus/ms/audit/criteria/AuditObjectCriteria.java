@@ -14,7 +14,7 @@ import javax.ws.rs.QueryParam;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuditObjectCriteria extends RestCriteria {
-    @ApiParam("Наименование")
-    @QueryParam("name")
-    private String name;
+    @ApiParam("Тип/Наименование")
+    @QueryParam("typeOrName")
+    private String typeOrName;
 }

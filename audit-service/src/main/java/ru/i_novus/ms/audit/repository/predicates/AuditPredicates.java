@@ -89,4 +89,8 @@ public final class AuditPredicates {
         return QAuditEntity.auditEntity.receiverId.in(value);
     }
 
+    public static BooleanExpression inEventTypeNames(String[] typeNames) {
+        return QAuditEntity.auditEntity.eventType.in(typeNames);
+    }
+
 }
