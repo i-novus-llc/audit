@@ -19,7 +19,7 @@
                 </toolbar>
                 <filters search-buttons="false">
                     <row>
-                        <date-interval id="period" label="Дата и время" required="true" time-format="HH:mm" date-format="DD.MM.YYYY">
+                        <date-interval id="period" label="Дата и время" required="true" time-format="HH:mm:ss" date-format="DD.MM.YYYY">
                             <default-value begin="{moment().startOf('month').format('YYYY-MM-DDTHH:mm:ss')}"
                                            end="{moment().format('YYYY-MM-DDTHH:mm:ss')}"/>
                             <validations>
@@ -57,7 +57,9 @@
                 </filters>
                 <columns>
                     <column text-field-id="eventDate" label="Дата и время" width="200px"
-                            sorting-direction="desc" sorting-field-id="eventDate"/>
+                            sorting-direction="desc" sorting-field-id="eventDate">
+                        <text format="date DD.MM.YYYY HH:mm:ss"/>
+                    </column>
                     <column text-field-id="id" label="Идентификатор сообщения"/>
                     <column text-field-id="sender" label="Отправитель"/>
                     <column text-field-id="receiver" label="Получатель"/>

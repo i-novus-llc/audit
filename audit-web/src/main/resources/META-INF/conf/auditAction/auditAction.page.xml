@@ -22,7 +22,7 @@
                 </toolbar>
                 <filters>
                     <row>
-                        <date-interval id="period" label="Дата и время" required="true" time-format="HH:mm" date-format="DD.MM.YYYY">
+                        <date-interval id="period" label="Дата и время" required="true" time-format="HH:mm:ss" date-format="DD.MM.YYYY">
                             <default-value begin="{moment().subtract(31, 'days').format('YYYY-MM-DDTHH:mm:ss')}"
                                            end="{moment().format('YYYY-MM-DDTHH:mm:ss')}"/>
                             <validations>
@@ -58,7 +58,9 @@
                     </hidden>
                 </filters>
                 <columns>
-                    <column text-field-id="eventDate" label="Дата и время"/>
+                    <column text-field-id="eventDate" label="Дата и время">
+                        <text format="date DD.MM.YYYY HH:mm:ss"/>
+                    </column>
                     <column text-field-id="sourceApplication" label="Система/Модуль"/>
                     <column text-field-id="sourceWorkstation" label="Рабочая станция"/>
                     <column text-field-id="hostname" sorting-field-id="hostname" sorting-direction="desc"
