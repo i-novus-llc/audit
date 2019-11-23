@@ -3,6 +3,7 @@
     <list count-mapping="[totalElements]" result-mapping="[content]">
         <rest filters-separator="&amp;">${audit.backend.url}/audit/objects?{filters}&amp;size={limit}&amp;page={page}&amp;{sorting}</rest>
     </list>
+
     <fields>
         <field id="id" domain="string">
             <select/>
