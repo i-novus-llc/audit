@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import net.n2oapp.platform.jaxrs.RestCriteria;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
@@ -17,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Setter
 @Validated
-public class AuditCriteria extends RestCriteria {
+public class AuditCriteria extends AuditRestCriteria {
 
     @QueryParam("id")
     private String id;
@@ -84,12 +83,4 @@ public class AuditCriteria extends RestCriteria {
     @ApiParam("Код системы получателя")
     @QueryParam("receiver")
     private String[] receiver;
-
-    @ApiParam("Поле сортировки")
-    @QueryParam("sortingColumn")
-    private String sortingColumn;
-
-    @ApiParam(value = "Порядок сортировки", allowableValues = "DESC, ASC")
-    @QueryParam("sortingOrder")
-    private String sortingOrder;
 }
