@@ -20,13 +20,9 @@
                 <filters search-buttons="false">
                     <row>
                         <date-interval id="period" label="Дата и время" required="true" time-format="HH:mm">
-                            <default-value begin="{moment().startOf('month').format('DD.MM.YYYY HH:mm:ss')}"
+                            <default-value begin="{moment().subtract(30, 'days').format('DD.MM.YYYY HH:mm:ss')}"
                                            end="{moment().format('DD.MM.YYYY HH:mm:ss')}"/>
-                            <validations>
-                                <condition id="checkDate" severity="danger" side="client,server" server-moment="before-query"
-                                           message="Укажите даты с интервалом не более 31 дня"
-                                           src="/META-INF/js/validation.js"/>
-                            </validations>
+                            <validations white-list="checkDate"/>
                         </date-interval>
                         <input-select id="sender" label="Отправитель" type="multi"
                                       query-id="auditSourceApplication"
@@ -45,15 +41,6 @@
                         </input-select>
                         <search-buttons id="search"/>
                     </row>
-                    <hidden id="days_count">
-                        <dependencies>
-                            <set-value on="period" apply-on-init="true">
-                                var period_begin = moment(period.begin, ["DD.MM.YYYY HH:mm:ss"]);
-                                var period_end = moment(period.end, ["DD.MM.YYYY HH:mm:ss"]);
-                                return period_end.diff(period_begin, 'days');
-                            </set-value>
-                        </dependencies>
-                    </hidden>
                 </filters>
                 <columns>
                     <column text-field-id="eventDate" label="Дата и время" width="200px"
