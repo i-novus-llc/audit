@@ -23,13 +23,9 @@
                 <filters>
                     <row>
                         <date-interval id="period" label="Дата и время" required="true" time-format="HH:mm:ss" date-format="DD.MM.YYYY">
-                            <default-value begin="{moment().subtract(31, 'days').format('YYYY-MM-DDTHH:mm:ss')}"
+                            <default-value begin="{moment().subtract(30, 'days').format('YYYY-MM-DDTHH:mm:ss')}"
                                            end="{moment().format('YYYY-MM-DDTHH:mm:ss')}"/>
-                            <validations>
-                                <condition id="checkDate" severity="danger" side="client,server" server-moment="before-query"
-                                           message="Укажите даты с интервалом не более 31 дня"
-                                           src="/META-INF/js/validation.js"/>
-                            </validations>
+                            <validations white-list="checkDate"/>
                         </date-interval>
                         <input-select id="auditSourceApplications" label="Система/Модуль" type="multi"
                                       query-id="auditSourceApplication"
@@ -47,15 +43,6 @@
                         <input-text id="objectId" label="Идентификатор объекта" domain="string"/>
                         <input-text id="username" label="Пользователь" domain="string"/>
                     </row>
-                    <hidden id="days_count">
-                        <dependencies>
-                            <set-value on="period">
-                                var period_begin = moment(period.begin, ["YYYY-MM-DD'T'HH:mm:ss"]);
-                                var period_end = moment(period.end, ["YYYY-MM-DD'T'HH:mm:ss"]);
-                                return period_end.diff(period_begin, 'days');
-                            </set-value>
-                        </dependencies>
-                    </hidden>
                 </filters>
                 <columns>
                     <column text-field-id="eventDate" label="Дата и время">
