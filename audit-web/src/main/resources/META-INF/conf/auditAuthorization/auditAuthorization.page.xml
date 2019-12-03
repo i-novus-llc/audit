@@ -8,8 +8,8 @@
                     <button id="export" label="Выгрузить" icon="fa fa-download" model="filter">
                         <a href="${audit.export.url}/audit/export" target="newWindow">
                             <query-param name="auditType" value="3"/>
-                            <query-param name="eventDateFrom" value="{moment(period.begin, 'YYYY-MM-DDTHH:mm:ss').format('YYYY-MM-DDTHH:mm:ss')}"/>
-                            <query-param name="eventDateTo" value="{moment(period.end, 'YYYY-MM-DDTHH:mm:ss').format('YYYY-MM-DDTHH:mm:ss')}"/>
+                            <query-param name="eventDateFrom" value="{moment(period.begin, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DDTHH:mm')}"/>
+                            <query-param name="eventDateTo" value="{moment(period.end, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DDTHH:mm')}"/>
                             <query-param name="username" value="{username}"/>
                             <query-param name="eventType" value="{auditEventTypes*.name}"/>
                         </a>
@@ -17,14 +17,14 @@
                 </toolbar>
                 <filters>
                     <row>
-                        <date-interval id="period" label="Дата и время" required="true" time-format="HH:mm:ss" date-format="DD.MM.YYYY">
-                            <default-value begin="{moment().subtract(30, 'days').format('YYYY-MM-DDTHH:mm:ss')}"
-                                           end="{moment().format('YYYY-MM-DDTHH:mm:ss')}"/>
+                        <date-interval id="period" label="Дата и время" required="true" time-format="HH:mm">
+                            <default-value begin="{moment().subtract(30, 'days').format('DD.MM.YYYY HH:mm:ss')}"
+                                           end="{moment().format('DD.MM.YYYY HH:mm:ss')}"/>
                             <validations white-list="checkDate"/>
                         </date-interval>
                         <input-text id="username" label="Пользователь" domain="string"/>
                         <input-select id="auditEventTypes" label="Событие" type="multi" query-id="auditEventType"
-                                      label-field-id="name" search-field-id="name">
+                                      label-field-id="name">
                             <pre-filters>
                                 <eq field-id="auditTypeId" value="3"/>
                             </pre-filters>
@@ -33,9 +33,7 @@
                 </filters>
                 <columns>
                     <column text-field-id="eventDate" label="Дата и время" width="200px"
-                            sorting-direction="desc" sorting-field-id="eventDate">
-                        <text format="date DD.MM.YYYY HH:mm:ss"/>
-                    </column>
+                            sorting-direction="desc" sorting-field-id="eventDate"/>
                     <column text-field-id="id" label="Идентификатор события"/>
                     <column text-field-id="username" label="Пользователь"/>
                     <column text-field-id="eventType" label="Событие"/>

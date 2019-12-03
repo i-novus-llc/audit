@@ -23,8 +23,8 @@
                    message="Максимальный интервал поиска не может превышать 31 дня">
             <![CDATA[(function(){
                     if (typeof period !== 'undefined' && period !== null) {
-                        var min_begin = moment(period.end, ["YYYY-MM-DD'T'HH:mm:ss"]).subtract(31, 'days');
-                        var begin = moment(period.begin, ["YYYY-MM-DD'T'HH:mm:ss"]);
+                        var min_begin = moment(period.end, ["DD.MM.YYYY HH:mm:ss"]).subtract(31, 'days');
+                        var begin = moment(period.begin, ["DD.MM.YYYY HH:mm:ss"]);
                         return min_begin.diff(begin) <= 0;
                    } else {
                         return false;
