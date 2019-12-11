@@ -38,8 +38,8 @@
             </filters>
         </field>
 
-        <field id="contextGrid" domain="string">
-            <select mapping="['context']" normalize="#this.length() > 110 ? #this.substring(0,110).concat('...') : #this"/>
+        <field id="context" domain="string">
+            <select/>
         </field>
 
         <field id="auditTypeId" domain="integer">
@@ -49,18 +49,30 @@
             </filters>
         </field>
 
-        <field id="sender" domain="string">
+        <field id="sourceApplication" domain="string">
             <select/>
             <filters>
-                <eq filter-id="sender*.code">sender={sender*.code}</eq>
+                <in filter-id="auditSourceApplications*.code">sourceApplication={auditSourceApplications*.code}</in>
             </filters>
         </field>
 
-        <field id="receiver" domain="string">
+        <field id="username" domain="string">
             <select/>
             <filters>
-                <eq filter-id="receiver*.code">receiver={receiver*.code}</eq>
+                <like filter-id="username">username={username}</like>
             </filters>
+        </field>
+
+        <field id="sourceWorkstation" domain="string">
+            <select/>
+        </field>
+
+        <field id="userId" domain="string">
+            <select/>
+        </field>
+
+        <field id="hostname" domain="string">
+            <select/>
         </field>
     </fields>
 

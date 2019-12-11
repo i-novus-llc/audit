@@ -39,10 +39,6 @@
             </filters>
         </field>
 
-        <field id="context" domain="string">
-            <select/>
-        </field>
-
         <field id="sourceApplication" domain="string">
             <select/>
             <filters>
