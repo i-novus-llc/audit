@@ -13,8 +13,9 @@
 
         <field id="id" domain="string">
             <select/>
+            <sorting mapping="['direction']">sortingColumn=id&amp;sortingOrder={direction}</sorting>
             <filters>
-                <eq filter-id="id">id={id}</eq>
+                <eq filter-id="id"/>
             </filters>
         </field>
 
@@ -31,22 +32,15 @@
             <select/>
         </field>
 
-        <field id="auditEventTypes" domain="string">
+        <field id="auditEventTypes.name" domain="string">
             <select/>
             <filters>
                 <in filter-id="auditEventTypes*.name">eventType={auditEventTypes*.name}</in>
             </filters>
         </field>
 
-        <field id="contextGrid" domain="string">
-            <select mapping="['context']" normalize="#this.length() > 110 ? #this.substring(0,110).concat('...') : #this"/>
-        </field>
-
-        <field id="auditTypeId" domain="integer">
+        <field id="context" domain="string">
             <select/>
-            <filters>
-                <eq filter-id="auditTypeId">auditType={auditTypeId}</eq>
-            </filters>
         </field>
 
         <field id="sourceApplication" domain="string">
@@ -56,6 +50,49 @@
             </filters>
         </field>
 
+        <field id="objectType" domain="string">
+            <select/>
+        </field>
+
+        <field id="auditObjects.type" domain="string">
+            <filters>
+                <in filter-id="auditObjects*.type">objectType={auditObjects*.type}</in>
+            </filters>
+        </field>
+        <field id="auditObjects.name" domain="string">
+            <filters>
+                <in filter-id="auditObjects*.name">objectName={auditObjects*.name}</in>
+            </filters>
+        </field>
+
+        <field id="objectName" domain="string">
+            <select/>
+        </field>
+
+        <field id="objectTypeAndName" domain="string">
+            <select mapping="['objectType'] + ' ' + ['objectName']" normalize="#this.replace('null', '')"/>
+        </field>
+
+        <field id="hostname" domain="string">
+            <select/>
+            <filters/>
+        </field>
+
+        <field id="sourceWorkstation" domain="string">
+            <select/>
+        </field>
+
+        <field id="objectId" domain="string">
+            <select/>
+            <filters>
+                <like filter-id="objectId">objectId={objectId}</like>
+            </filters>
+        </field>
+
+        <field id="userId" domain="string">
+            <select/>
+        </field>
+
         <field id="username" domain="string">
             <select/>
             <filters>
@@ -63,16 +100,11 @@
             </filters>
         </field>
 
-        <field id="sourceWorkstation" domain="string">
+        <field id="auditTypeId" domain="integer">
             <select/>
-        </field>
-
-        <field id="userId" domain="string">
-            <select/>
-        </field>
-
-        <field id="hostname" domain="string">
-            <select/>
+            <filters>
+                <eq filter-id="auditTypeId">auditType={auditTypeId}</eq>
+            </filters>
         </field>
     </fields>
 
