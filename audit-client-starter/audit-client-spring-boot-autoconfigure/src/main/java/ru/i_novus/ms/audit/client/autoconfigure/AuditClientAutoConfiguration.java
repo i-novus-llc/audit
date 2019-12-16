@@ -13,6 +13,8 @@ import ru.i_novus.ms.audit.client.filter.AuditClientFilter;
 import ru.i_novus.ms.audit.client.impl.StubAuditClientImpl;
 import ru.i_novus.ms.audit.service.api.AuditRest;
 
+import java.util.List;
+
 @Configuration
 @EnableJaxRsProxyClient(classes = AuditRest.class, address = "${audit.service.url}")
 public class AuditClientAutoConfiguration {
@@ -20,8 +22,8 @@ public class AuditClientAutoConfiguration {
     @Value("${audit.client.sourceApplication:#{null}}")
     private String sourceApplication;
 
-    @Value("${audit.client.filter-url-pattern:#{null}}")
-    private String filterUrlPattern;
+    @Value("${audit.client.filter-url-pattern:}")
+    private List<String> filterUrlPattern;
 
     @Bean
     @ConditionalOnProperty(prefix = "audit.client", name = "sourceApplication")
@@ -41,7 +43,7 @@ public class AuditClientAutoConfiguration {
         FilterRegistrationBean<AuditClientFilter> registrationBean = new FilterRegistrationBean<>();
 
         registrationBean.setFilter(new AuditClientFilter(auditClient));
-        registrationBean.addUrlPatterns(filterUrlPattern);
+        registrationBean.addUrlPatterns(filterUrlPattern.toArray(new String[0]));
 
         return registrationBean;
     }
