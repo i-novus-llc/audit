@@ -3,7 +3,6 @@ package ru.i_novus.ms.audit.service;
 import com.querydsl.core.types.Predicate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -16,6 +15,7 @@ import ru.i_novus.ms.audit.model.Audit;
 import ru.i_novus.ms.audit.model.AuditForm;
 import ru.i_novus.ms.audit.repository.AuditRepository;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -81,6 +81,28 @@ public class AuditServiceTest {
         Audit audit = service.getLastAudit((short) 1, "access");
 
         assertNotNull(audit);
+    }
+
+    @Test
+    public void testGetAuditExists() {
+        doReturn(true)
+                .when(auditRepository).existsByAuditTypeIdAndEventDateAndEventTypeAndUserIdAndAuditSourceApplicationAndContext
+                (anyShort(), any(LocalDateTime.class), anyString(), anyString(), anyString(), anyString());
+
+        boolean auditExists = service.auditExists((short) 1, LocalDateTime.now(), "eventType", "user", "access", "context");
+
+        assertTrue(auditExists);
+    }
+
+    @Test
+    public void testGetAuditNotExists() {
+        doReturn(false)
+                .when(auditRepository).existsByAuditTypeIdAndEventDateAndEventTypeAndUserIdAndAuditSourceApplicationAndContext
+                (anyShort(), any(LocalDateTime.class), anyString(), anyString(), anyString(), anyString());
+
+        boolean auditExists = service.auditExists((short) 1, LocalDateTime.now(), "eventType", "user", "access", "context");
+
+        assertFalse(auditExists);
     }
 
     @Test
