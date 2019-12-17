@@ -85,9 +85,10 @@ public class SsoEventsService {
     }
 
     private boolean sendEvents(List<OpenIdEventLog> openIdEventLogs, LocalDateTime lastEventDate) {
-        ObjectMapper mapper = new ObjectMapper();
 
         if (!CollectionUtils.isEmpty(openIdEventLogs)) {
+            ObjectMapper mapper = new ObjectMapper();
+
             for (OpenIdEventLog event : openIdEventLogs) {
                 if (lastEventDate != null
                         && lastEventDate.isAfter(event.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())) {
