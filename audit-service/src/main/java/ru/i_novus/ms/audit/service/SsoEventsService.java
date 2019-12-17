@@ -122,8 +122,9 @@ public class SsoEventsService {
     }
 
     private void constructEventDetails(OpenIdEventLog event) {
-        if (event.getDetails() == null)
+        if (event.getDetails() == null) {
             event.setDetails(new HashMap<>());
+        }
 
         if (!StringUtils.isEmpty(event.getError())) {
             event.getDetails().put("error", event.getError());
