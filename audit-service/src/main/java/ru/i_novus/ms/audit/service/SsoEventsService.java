@@ -51,7 +51,7 @@ public class SsoEventsService {
     }
 
     @Scheduled(cron = "#{getScheduleCronSyntax}")
-    public void main() {
+    public void startSynchronization() {
         Audit audit = auditService.getLastAudit(AUDIT_TYPE_AUTHORIZATION, openIdProperties.getCode());
         LocalDateTime lastEventDate = audit == null ? null : audit.getEventDate();
         int pageNumber = 0;
