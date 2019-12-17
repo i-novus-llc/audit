@@ -14,6 +14,7 @@ import ru.i_novus.ms.audit.model.Audit;
 import ru.i_novus.ms.audit.model.AuditForm;
 import ru.i_novus.ms.audit.repository.AuditRepository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -53,6 +54,11 @@ public class AuditService {
                 = auditRepository.findFirstByAuditTypeIdAndAuditSourceApplicationOrderByEventDateDesc(auditType, sourceApplication);
 
         return auditEntity.map(AuditBuilder::getAuditByEntity).orElse(null);
+    }
+
+    public boolean auditExists(Short auditTypeId, LocalDateTime eventDate, String eventType, String userId, String auditSourceApplication, String context) {
+        return auditRepository.existsByAuditTypeIdAndEventDateAndEventTypeAndUserIdAndAuditSourceApplicationAndContext
+                (auditTypeId, eventDate, eventType, userId, auditSourceApplication, context);
     }
 
     private Page<AuditEntity> searchEntity(AuditCriteria criteria) {

@@ -3,6 +3,7 @@ package ru.i_novus.ms.audit.service;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,8 +20,10 @@ import ru.i_novus.ms.audit.model.OpenIdEventLog;
 import ru.i_novus.ms.audit.service.api.OpenIdEventLogRest;
 
 import javax.ws.rs.core.MediaType;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -48,10 +51,10 @@ public class SsoEventsService {
     }
 
     @Scheduled(cron = "#{getScheduleCronSyntax}")
-    public void main() {
+    public void startSynchronization() {
         Audit audit = auditService.getLastAudit(AUDIT_TYPE_AUTHORIZATION, openIdProperties.getCode());
         LocalDateTime lastEventDate = audit == null ? null : audit.getEventDate();
-        int pageNumber = 1;
+        int pageNumber = 0;
         OpenIdEventLogCriteria criteria = OpenIdEventLogCriteria.builder()
                 .dateFrom(lastEventDate)
                 .first(pageNumber)
@@ -71,17 +74,21 @@ public class SsoEventsService {
         boolean isActual = true;
         while (isActual) {
             List<OpenIdEventLog> openIdEventLogs = openIdEventLogRest.get(criteria);
+
             if (CollectionUtils.isEmpty(openIdEventLogs)) {
                 break;
             }
             isActual = sendEvents(openIdEventLogs, lastEventDate);
-            criteria.setFirst(pageNumber * PAGE_SIZE);
             pageNumber++;
+            criteria.setFirst(pageNumber * PAGE_SIZE);
         }
     }
 
     private boolean sendEvents(List<OpenIdEventLog> openIdEventLogs, LocalDateTime lastEventDate) {
+
         if (!CollectionUtils.isEmpty(openIdEventLogs)) {
+            ObjectMapper mapper = new ObjectMapper();
+
             for (OpenIdEventLog event : openIdEventLogs) {
                 if (lastEventDate != null
                         && lastEventDate.isAfter(event.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())) {
@@ -96,14 +103,30 @@ public class SsoEventsService {
                 auditClientRequest.setEventDate(event.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
                 auditClientRequest.setSourceWorkstation(event.getIpAddress());
                 auditClientRequest.setUsername(event.getDetails().getOrDefault("username", null));
-                auditClientRequest.setContext(StringUtils.join(event.getDetails()));
-                asyncAuditClient.add(auditClientRequest);
+
+                String context;
+                try {
+                    context = mapper.writeValueAsString(event.getDetails());
+                } catch (IOException e) {
+                    context = StringUtils.join(event.getDetails());
+                }
+                auditClientRequest.setContext(context);
+
+                if (lastEventDate == null ||
+                        !auditService.auditExists(AUDIT_TYPE_AUTHORIZATION, auditClientRequest.getEventDate(), auditClientRequest.getEventType().getValue(),
+                                auditClientRequest.getUserId().getValue(), auditClientRequest.getSourceApplication().getValue(), auditClientRequest.getContext())) {
+                    asyncAuditClient.add(auditClientRequest);
+                }
             }
         }
         return true;
     }
 
     private void constructEventDetails(OpenIdEventLog event) {
+        if (event.getDetails() == null) {
+            event.setDetails(new HashMap<>());
+        }
+
         if (!StringUtils.isEmpty(event.getError())) {
             event.getDetails().put("error", event.getError());
         }
