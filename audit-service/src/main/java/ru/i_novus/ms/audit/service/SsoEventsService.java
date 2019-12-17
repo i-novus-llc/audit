@@ -2,29 +2,31 @@ package ru.i_novus.ms.audit.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.oauth2.client.OAuth2RestOperations;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.client.HttpClientErrorException;
 import ru.i_novus.ms.audit.OpenIdProperties;
 import ru.i_novus.ms.audit.client.AuditClient;
 import ru.i_novus.ms.audit.client.model.AuditClientRequest;
-import ru.i_novus.ms.audit.criteria.OpenIdEventLogCriteria;
 import ru.i_novus.ms.audit.model.Audit;
 import ru.i_novus.ms.audit.model.OpenIdEventLog;
 import ru.i_novus.ms.audit.service.api.OpenIdEventLogRest;
 
-import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+
+import static org.springframework.http.HttpMethod.GET;
 
 @Service
 @EnableScheduling
@@ -37,7 +39,7 @@ public class SsoEventsService {
     private AuditService auditService;
 
     @Autowired
-    private OAuth2RestOperations restTemplate;
+    private OAuth2RestTemplate restTemplate;
 
     @Autowired
     private OpenIdEventLogRest openIdEventLogRest;
@@ -55,32 +57,14 @@ public class SsoEventsService {
         Audit audit = auditService.getLastAudit(AUDIT_TYPE_AUTHORIZATION, openIdProperties.getCode());
         LocalDateTime lastEventDate = audit == null ? null : audit.getEventDate();
         int pageNumber = 0;
-        OpenIdEventLogCriteria criteria = OpenIdEventLogCriteria.builder()
-                .dateFrom(lastEventDate)
-                .first(pageNumber)
-                .max(PAGE_SIZE)
-                .build();
-
-        try {
-            WebClient.client(openIdEventLogRest)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .authorization(
-                            String.format("%s %s", OAuth2AccessToken.BEARER_TYPE, restTemplate.getAccessToken().getValue()));
-        } catch (Exception e) {
-            log.error(String.format("SSO Server %s authorization error!", openIdProperties.getAuthServerUri()), e);
-            return;
-        }
-
         boolean isActual = true;
         while (isActual) {
-            List<OpenIdEventLog> openIdEventLogs = openIdEventLogRest.get(criteria);
-
+            List<OpenIdEventLog> openIdEventLogs = getEvents(pageNumber);
             if (CollectionUtils.isEmpty(openIdEventLogs)) {
                 break;
             }
             isActual = sendEvents(openIdEventLogs, lastEventDate);
             pageNumber++;
-            criteria.setFirst(pageNumber * PAGE_SIZE);
         }
     }
 
@@ -139,5 +123,21 @@ public class SsoEventsService {
         if (!StringUtils.isEmpty(event.getClientId())) {
             event.getDetails().put("clientId", event.getClientId());
         }
+    }
+
+    private List<OpenIdEventLog> getEvents(int pageNumber) {
+        try {
+            return doGetSsoEvents(pageNumber);
+        } catch (HttpClientErrorException.Unauthorized e) {
+            //сброс access-токена для повторной авторизации
+            restTemplate.getOAuth2ClientContext().setAccessToken(null);
+            return doGetSsoEvents(pageNumber);
+        }
+    }
+
+    private List<OpenIdEventLog> doGetSsoEvents(int pageNumber) {
+        String url = openIdProperties.getEventsUrl() + "/events?first=" + pageNumber * PAGE_SIZE + "&max=" + PAGE_SIZE;
+        ResponseEntity<List<OpenIdEventLog>> response = restTemplate.exchange(url, GET, null, new ParameterizedTypeReference<List<OpenIdEventLog>>() {});
+        return response.hasBody() ? response.getBody() : Collections.emptyList();
     }
 }
