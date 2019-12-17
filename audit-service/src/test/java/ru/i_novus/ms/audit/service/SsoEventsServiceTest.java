@@ -67,7 +67,7 @@ public class SsoEventsServiceTest {
     }
 
     @Test
-    public void testMain() {
+    public void testStartSynchronization() {
         ObjectMapper mapper = new ObjectMapper();
 
         // подготовка данных, которые mock будут возвращать при доступе к БД аудита
@@ -173,7 +173,7 @@ public class SsoEventsServiceTest {
             return null;
         }).when(asyncAuditClient).add(any());
 
-        ssoEventsService.main();
+        ssoEventsService.startSynchronization();
 
         // какое-то из событий должно было попасть в asyncAuditClient, но не попало
         assertTrue(expected.isEmpty());
