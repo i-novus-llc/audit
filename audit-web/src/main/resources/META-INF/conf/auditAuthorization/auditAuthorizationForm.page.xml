@@ -16,17 +16,7 @@
                         </visibility>
                     </dependencies>
                 </output-text>
-                <text-area id="context_json" label="Данные: " label-class="w-50" enabled="false" rows="10">
-                    <dependencies>
-                        <set-value>
-                            str = context;
-                            str = str.split("'").join("\"");
-                            str = str.replace("{", "{\n\t");
-                            str = str.replace("}", "\n}");
-                            return str.split(",").join(",\n\t");
-                        </set-value>
-                    </dependencies>
-                </text-area>
+                <code-editor id="context" label="Данные: " rows="10" enabled="false" label-class="w-50"/>
             </set>
         </fields>
     </form>
