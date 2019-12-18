@@ -1,7 +1,5 @@
 package ru.i_novus.ms.audit;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
-import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
