@@ -132,7 +132,7 @@ public class SsoEventsService {
     }
 
     private List<OpenIdEventLog> doGetEvents(int pageNumber) {
-        String url = openIdProperties.getEventsUrl() + "/events?first=" + pageNumber * PAGE_SIZE + "&max=" + PAGE_SIZE;
+        String url = String.format("%s/events?first=%s&max=%s", openIdProperties.getEventsUrl(), pageNumber * PAGE_SIZE, PAGE_SIZE);
         ResponseEntity<List<OpenIdEventLog>> response = restTemplate.exchange(url, GET, null, new ParameterizedTypeReference<List<OpenIdEventLog>>() {});
         return response.hasBody() ? response.getBody() : Collections.emptyList();
     }
