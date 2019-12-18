@@ -1,27 +1,24 @@
 package ru.i_novus.ms.audit.service;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.cxf.jaxrs.client.AbstractClient;
-import org.apache.cxf.message.Exchange;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.security.oauth2.client.OAuth2RestOperations;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import ru.i_novus.ms.audit.OpenIdProperties;
 import ru.i_novus.ms.audit.client.AuditClient;
 import ru.i_novus.ms.audit.client.model.AuditClientRequest;
-import ru.i_novus.ms.audit.criteria.OpenIdEventLogCriteria;
 import ru.i_novus.ms.audit.model.Audit;
 import ru.i_novus.ms.audit.model.OpenIdEventLog;
-import ru.i_novus.ms.audit.service.api.OpenIdEventLogRest;
 
-import javax.ws.rs.core.MultivaluedMap;
 import java.io.IOException;
-import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
@@ -43,28 +40,7 @@ public class SsoEventsServiceTest {
     @Mock
     private AuditService auditService;
     @Mock
-    private OAuth2RestOperations restTemplate;
-    @Mock
-    private OpenIdEventLogRestClient openIdEventLogRest;
-
-    // для заглушки авторизации в KeyCloak
-    static class OpenIdEventLogRestClient extends AbstractClient implements OpenIdEventLogRest {
-
-        public OpenIdEventLogRestClient() {
-            super(null);
-        }
-
-        @Override
-        protected Object retryInvoke(URI uri, MultivaluedMap<String, String> multivaluedMap, Object o, Exchange exchange, Map<String, Object> map) {
-            return null;
-        }
-
-        @Override
-        public List<OpenIdEventLog> get(OpenIdEventLogCriteria eventCriteria) {
-            return null;
-        }
-
-    }
+    private OAuth2RestTemplate restTemplate;
 
     @Test
     public void testStartSynchronization() {
@@ -81,11 +57,6 @@ public class SsoEventsServiceTest {
 
         doReturn(false).when(auditService).auditExists(any(), any(), any(), any(), any(), any());
         doReturn(true).when(auditService).auditExists(AUDIT_TYPE_AUTHORIZATION, lastEventLocalDateTime, "LOGIN", "user1", openIdProperties.getCode(), "{\"a\":\"A\"}");
-
-        // для заглушки авторизации в KeyCloak
-        doReturn(openIdEventLogRest).when(openIdEventLogRest).accept(anyString());
-        doReturn(openIdEventLogRest).when(openIdEventLogRest).authorization(any());
-        doReturn(mock(OAuth2AccessToken.class)).when(restTemplate).getAccessToken();
 
         // подготовка данных, которые mock будет возвращать при доступе к REST сервису логов KeyCloak
         OpenIdEventLog eventLog1 = new OpenIdEventLog();
@@ -120,7 +91,8 @@ public class SsoEventsServiceTest {
 
         List<OpenIdEventLog> openIdEventLogs = List.of(eventLog1, eventLog2, eventLog3, eventLog4, eventLog5);
 
-        doReturn(openIdEventLogs, List.of()).when(openIdEventLogRest).get(any());
+        doReturn(new ResponseEntity<>(openIdEventLogs, HttpStatus.OK), new ResponseEntity<List<OpenIdEventLog>>(List.of(), HttpStatus.OK))
+                .when(restTemplate).exchange(any(), any(), any(), ArgumentMatchers.<ParameterizedTypeReference<List<OpenIdEventLog>>>any(), any(Object[].class));
 
         // подготовка результата, который, как ожидается, будет направлен в asyncAuditClient
         ArrayList<AuditClientRequest> expected = new ArrayList<>();

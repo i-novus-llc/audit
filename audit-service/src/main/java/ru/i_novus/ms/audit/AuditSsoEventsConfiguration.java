@@ -14,9 +14,6 @@ import org.springframework.security.oauth2.client.token.grant.client.ClientCrede
 import org.springframework.util.StringUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import ru.i_novus.ms.audit.service.SsoEventsService;
-import ru.i_novus.ms.audit.service.api.OpenIdEventLogRest;
-
-import java.util.Collections;
 
 @SpringBootConfiguration
 @EnableConfigurationProperties(OpenIdProperties.class)
@@ -39,14 +36,6 @@ public class AuditSsoEventsConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     SsoEventsService ssoEventsService(OpenIdProperties openIdProperties) {
         return new SsoEventsService(openIdProperties);
-    }
-
-    @Bean
-    OpenIdEventLogRest openIdEventLogRest(OpenIdProperties openIdProperties) {
-        return JAXRSClientFactory.create(
-                openIdProperties.getEventsUrl(),
-                OpenIdEventLogRest.class,
-                Collections.singletonList(new JacksonJaxbJsonProvider()));
     }
 
     @Bean

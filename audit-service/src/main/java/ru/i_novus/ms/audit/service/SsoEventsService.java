@@ -17,7 +17,6 @@ import ru.i_novus.ms.audit.client.AuditClient;
 import ru.i_novus.ms.audit.client.model.AuditClientRequest;
 import ru.i_novus.ms.audit.model.Audit;
 import ru.i_novus.ms.audit.model.OpenIdEventLog;
-import ru.i_novus.ms.audit.service.api.OpenIdEventLogRest;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -40,9 +39,6 @@ public class SsoEventsService {
 
     @Autowired
     private OAuth2RestTemplate restTemplate;
-
-    @Autowired
-    private OpenIdEventLogRest openIdEventLogRest;
 
     private OpenIdProperties openIdProperties;
     private static final short AUDIT_TYPE_AUTHORIZATION = 3;
@@ -127,15 +123,15 @@ public class SsoEventsService {
 
     private List<OpenIdEventLog> getEvents(int pageNumber) {
         try {
-            return doGetSsoEvents(pageNumber);
+            return doGetEvents(pageNumber);
         } catch (HttpClientErrorException.Unauthorized e) {
             //сброс access-токена для повторной авторизации
             restTemplate.getOAuth2ClientContext().setAccessToken(null);
-            return doGetSsoEvents(pageNumber);
+            return doGetEvents(pageNumber);
         }
     }
 
-    private List<OpenIdEventLog> doGetSsoEvents(int pageNumber) {
+    private List<OpenIdEventLog> doGetEvents(int pageNumber) {
         String url = openIdProperties.getEventsUrl() + "/events?first=" + pageNumber * PAGE_SIZE + "&max=" + PAGE_SIZE;
         ResponseEntity<List<OpenIdEventLog>> response = restTemplate.exchange(url, GET, null, new ParameterizedTypeReference<List<OpenIdEventLog>>() {});
         return response.hasBody() ? response.getBody() : Collections.emptyList();
