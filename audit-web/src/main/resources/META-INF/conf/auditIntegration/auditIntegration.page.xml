@@ -33,7 +33,7 @@
                     </row>
                     <row>
                         <input-text id="id" label="Идентификатор сообщения" domain="string"/>
-                        <input-select id="auditEventTypes" label="Тип события" type="multi" query-id="auditEventType"
+                        <input-select id="auditEventTypes" label="Действие" type="multi" query-id="auditEventType"
                                       label-field-id="name" search-field-id="name">
                             <pre-filters>
                                 <eq field-id="auditTypeId" value="2"/>
