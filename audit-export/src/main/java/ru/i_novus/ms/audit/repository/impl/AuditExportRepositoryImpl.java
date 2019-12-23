@@ -52,7 +52,8 @@ public class AuditExportRepositoryImpl implements AuditExportRepository {
             predicates.add(auditEntityRoot.get("auditObjectName").in(Arrays.asList(auditCriteria.getObjectName())));
         }
         if (auditCriteria.getObjectId() != null) {
-            predicates.add(criteriaBuilder.like(auditEntityRoot.get("objectId"), "%"+auditCriteria.getObjectId().trim()+"%"));
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(auditEntityRoot.get("objectId")),
+                "%"+auditCriteria.getObjectId().trim()+"%"));
         }
         if (auditCriteria.getUserId() != null) {
             predicates.add(criteriaBuilder.equal(auditEntityRoot.get("userId"), auditCriteria.getUserId()));
