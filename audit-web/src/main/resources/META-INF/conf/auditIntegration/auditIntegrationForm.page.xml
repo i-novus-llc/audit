@@ -2,7 +2,7 @@
     <form query-id="auditIntegrationForm">
         <fields>
             <set field-label-location="left">
-                <output-text id="id" label="Идентификатор: "  label-class="w-25"/>
+                <output-text id="id" label="Идентификатор события: "  label-class="w-25"/>
                 <output-text id="eventType" label="Действие: " label-class="w-25"/>
                 <output-text id="sender" label="Отправитель: " label-class="w-25" />
                 <output-text id="receiver" label="Получатель: " label-class="w-25"/>
