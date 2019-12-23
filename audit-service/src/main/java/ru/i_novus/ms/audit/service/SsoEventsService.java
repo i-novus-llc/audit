@@ -88,6 +88,7 @@ public class SsoEventsService {
                 try {
                     context = mapper.writeValueAsString(event.getDetails());
                 } catch (IOException e) {
+                    log.info("Context parsing error", e);
                     context = StringUtils.join(event.getDetails());
                 }
                 auditClientRequest.setContext(context);
@@ -125,6 +126,7 @@ public class SsoEventsService {
         try {
             return doGetEvents(pageNumber);
         } catch (HttpClientErrorException.Unauthorized e) {
+            log.info("Client unauthorized", e);
             //сброс access-токена для повторной авторизации
             restTemplate.getOAuth2ClientContext().setAccessToken(null);
             return doGetEvents(pageNumber);
@@ -133,7 +135,8 @@ public class SsoEventsService {
 
     private List<OpenIdEventLog> doGetEvents(int pageNumber) {
         String url = String.format("%s/events?first=%s&max=%s", openIdProperties.getEventsUrl(), pageNumber * PAGE_SIZE, PAGE_SIZE);
-        ResponseEntity<List<OpenIdEventLog>> response = restTemplate.exchange(url, GET, null, new ParameterizedTypeReference<List<OpenIdEventLog>>() {});
+        ResponseEntity<List<OpenIdEventLog>> response = restTemplate.exchange(url, GET, null, new ParameterizedTypeReference<List<OpenIdEventLog>>() {
+        });
         return response.hasBody() ? response.getBody() : Collections.emptyList();
     }
 }
