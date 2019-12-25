@@ -6,6 +6,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 import ru.i_novus.ms.audit.entity.AuditEntity;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,5 +17,8 @@ public interface AuditRepository extends JpaRepository<AuditEntity, UUID>, Query
 
     Optional<AuditEntity> findFirstByAuditTypeIdAndAuditSourceApplicationOrderByEventDateDesc(Short auditType,
                                                                                               String auditSourceApplication);
+
+    boolean existsByAuditTypeIdAndEventDateAndEventTypeAndUserIdAndAuditSourceApplicationAndContext
+            (Short auditTypeId, LocalDateTime eventDate, String eventType, String userId, String auditSourceApplication, String context);
 
 }

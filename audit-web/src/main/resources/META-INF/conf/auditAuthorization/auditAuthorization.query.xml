@@ -38,10 +38,6 @@
             </filters>
         </field>
 
-        <field id="context" domain="string">
-            <select/>
-        </field>
-
         <field id="contextGrid" domain="string">
             <select mapping="['context']" normalize="#this.length() > 110 ? #this.substring(0,110).concat('...') : #this"/>
         </field>

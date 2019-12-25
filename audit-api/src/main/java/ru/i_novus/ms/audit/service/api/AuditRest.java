@@ -34,4 +34,9 @@ public interface AuditRest {
     @POST
     @ApiOperation("Добавить событие")
     Audit add(@ApiParam("Событие") @Valid AuditForm request);
+
+    @POST
+    @Path("/sso-events-synchronize")
+    @ApiOperation("Синхронизация журнала авторизаций")
+    void startEventsSynchronize();
 }

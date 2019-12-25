@@ -4,7 +4,7 @@
 
     <groupId>ru.i-novus.ms.audit</groupId>
     <artifactId>audit</artifactId>
-    <version>2.3.5-SNAPSHOT</version>
+    <version>2.3.6-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <parent>
