@@ -14,6 +14,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +37,8 @@ public class AuditClientFilter implements Filter {
                          ServletResponse response,
                          FilterChain chain)
             throws IOException, ServletException {
-        ContentCachingRequestWrapper cachedRequest = new ContentCachingRequestWrapper((HttpServletRequest) request);
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        ContentCachingRequestWrapper cachedRequest = new ContentCachingRequestWrapper(httpServletRequest);
         ContentCachingResponseWrapper cachedResponse = new ContentCachingResponseWrapper((HttpServletResponse) response);
 
         chain.doFilter(cachedRequest, cachedResponse);
@@ -46,7 +48,13 @@ public class AuditClientFilter implements Filter {
         auditClientRequest.setObjectType(OBJECT_TYPE);
         auditClientRequest.setObjectId(cachedRequest.getRequestURL() == null ? null : cachedRequest.getRequestURL().toString());
         auditClientRequest.setObjectName(OBJECT_NAME);
-        auditClientRequest.setSourceWorkstation(cachedRequest.getHeader("User-Agent"));
+
+        String ipAddress = httpServletRequest.getHeader("X-Forwarded-For");
+        if (ipAddress == null) {
+            ipAddress = httpServletRequest.getRemoteAddr();
+        }
+
+        auditClientRequest.setSourceWorkstation(ipAddress);
         auditClientRequest.setAuditType(AUDIT_TYPE);
         auditClientRequest.setHostname(cachedRequest.getServerName());
 
