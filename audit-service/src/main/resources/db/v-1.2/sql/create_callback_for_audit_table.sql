@@ -6,7 +6,7 @@ DECLARE
  new_relname text;
  field_id text;
 BEGIN
- range_min := (params->>'range_min')::timestamp;
+ range_min := (params->>'range_min')::timestamp + interval '1 day';
  field_id := 'audit_type_id';
  -- generate new name for partition based
  -- on its parent name and lower bound
