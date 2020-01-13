@@ -37,8 +37,7 @@ public class AuditClientFilter implements Filter {
                          ServletResponse response,
                          FilterChain chain)
             throws IOException, ServletException {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        ContentCachingRequestWrapper cachedRequest = new ContentCachingRequestWrapper(httpServletRequest);
+        ContentCachingRequestWrapper cachedRequest = new ContentCachingRequestWrapper((HttpServletRequest) request);
         ContentCachingResponseWrapper cachedResponse = new ContentCachingResponseWrapper((HttpServletResponse) response);
 
         chain.doFilter(cachedRequest, cachedResponse);
@@ -48,13 +47,8 @@ public class AuditClientFilter implements Filter {
         auditClientRequest.setObjectType(OBJECT_TYPE);
         auditClientRequest.setObjectId(cachedRequest.getRequestURL() == null ? null : cachedRequest.getRequestURL().toString());
         auditClientRequest.setObjectName(OBJECT_NAME);
-
-        String ipAddress = httpServletRequest.getHeader("X-Forwarded-For");
-        if (ipAddress == null) {
-            ipAddress = httpServletRequest.getRemoteAddr();
-        }
-
-        auditClientRequest.setSourceWorkstation(ipAddress);
+        String ipAddressXFF = cachedRequest.getHeader("X-Forwarded-For");
+        auditClientRequest.setSourceWorkstation((ipAddressXFF == null) ? cachedRequest.getRemoteAddr() : ipAddressXFF);
         auditClientRequest.setAuditType(AUDIT_TYPE);
         auditClientRequest.setHostname(cachedRequest.getServerName());
 
