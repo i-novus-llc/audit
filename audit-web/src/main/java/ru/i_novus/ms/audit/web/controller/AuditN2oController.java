@@ -27,7 +27,7 @@ public class AuditN2oController {
             JsonNode json = mapper.readTree(audit.getContext());
             JsonNode requestHeader = ((ObjectNode) json).get("RequestHeaders");
 
-            if(requestHeader != null) {
+            if (requestHeader != null) {
                 ((ObjectNode) requestHeader).put("cookie", "");
             }
             ctx = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
