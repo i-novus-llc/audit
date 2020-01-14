@@ -10,8 +10,8 @@
                     <button id="export" label="Выгрузить" icon="fa fa-download" model="filter">
                         <a href="${audit.export.url}/audit/export" target="newWindow">
                             <query-param name="auditType" value="1"/>
-                            <query-param name="eventDateFrom" value="{moment(period.begin, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DDTHH:mm')}"/>
-                            <query-param name="eventDateTo" value="{moment(period.end, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DDTHH:mm')}"/>
+                            <query-param name="eventDateFrom" value="{moment(period.begin, 'YYYY-MM-DDTHH:mm:ss').format('YYYY-MM-DDTHH:mm:ss')}"/>
+                            <query-param name="eventDateTo" value="{moment(period.end, 'YYYY-MM-DDTHH:mm:ss').format('YYYY-MM-DDTHH:mm:ss')}"/>
                             <query-param name="sourceApplication" value="{auditSourceApplications*.code}"/>
                             <query-param name="eventType" value="{auditEventTypes*.name}"/>
                             <query-param name="objectType" value="{auditObjects*.type}"/>
@@ -29,9 +29,9 @@
                         </date-interval>
                         <input-select id="auditSourceApplications" label="Система/Модуль" type="multi"
                                       query-id="auditSourceApplication"
-                                      label-field-id="code"/>
+                                      label-field-id="code" search-field-id="code"/>
                         <input-select id="auditEventTypes" label="Тип события" type="multi" query-id="auditEventType"
-                                      label-field-id="name">
+                                      label-field-id="name" search-field-id="name">
                             <pre-filters>
                                 <eq field-id="auditTypeId" value="1"/>
                             </pre-filters>
@@ -45,7 +45,9 @@
                     </row>
                 </filters>
                 <columns>
-                    <column text-field-id="eventDate" label="Дата и время"/>
+                    <column text-field-id="eventDate" label="Дата и время">
+                        <text format="date DD.MM.YYYY HH:mm:ss"/>
+                    </column>
                     <column text-field-id="sourceApplication" label="Система/Модуль"/>
                     <column text-field-id="sourceWorkstation" label="Рабочая станция"/>
                     <column text-field-id="hostname" sorting-field-id="hostname" sorting-direction="desc"
