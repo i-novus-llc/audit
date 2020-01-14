@@ -3,6 +3,7 @@ package ru.i_novus.ms.audit.web.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import lombok.extern.slf4j.Slf4j;
 import ru.i_novus.ms.audit.model.Audit;
 import ru.i_novus.ms.audit.service.api.AuditRest;
 
@@ -12,6 +13,7 @@ import java.util.UUID;
 /**
  * Контроллер данных аудита для страниц n2o
  */
+@Slf4j
 public class AuditN2oController {
     private AuditRest auditRest;
 
@@ -32,6 +34,7 @@ public class AuditN2oController {
             }
             ctx = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
         } catch (IOException e) {
+            log.info("Context parsing error", e);
             ctx = audit.getContext();
         }
         audit.setContext(ctx);
