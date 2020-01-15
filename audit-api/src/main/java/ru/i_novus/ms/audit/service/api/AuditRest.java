@@ -18,6 +18,9 @@ import java.util.UUID;
         @ApiResponse(code = 404, message = "Нет ресурса"),
         @ApiResponse(code = 500, message = "Ошибка и текст ошибки"),
 })
+@ApiImplicitParams({
+        @ApiImplicitParam(name = "sort", value = "Сортировка, sort=<код атрибута>, <asc|desc>", dataType = "string", paramType = "query")
+})
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public interface AuditRest {

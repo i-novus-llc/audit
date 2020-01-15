@@ -20,7 +20,7 @@
 
         <field id="eventDate" domain="localdatetime">
             <select/>
-            <sorting mapping="['direction']">sortingColumn=eventDate&amp;sortingOrder={direction}</sorting>
+            <sorting mapping="['direction']">sort=eventDate,{direction}</sorting>
             <filters>
                 <more filter-id="period.begin">eventDateFrom={period.begin}</more>
                 <less filter-id="period.end">eventDateTo={period.end}</less>
