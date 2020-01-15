@@ -1,14 +1,11 @@
 package ru.i_novus.ms.audit.service;
 
-import com.google.common.collect.Lists;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Sort;
-import org.springframework.util.CollectionUtils;
 import ru.i_novus.ms.audit.criteria.AuditCriteria;
 import ru.i_novus.ms.audit.criteria.AuditEventTypeCriteria;
 import ru.i_novus.ms.audit.criteria.AuditObjectCriteria;
@@ -120,28 +117,6 @@ public class QueryService {
                 .and(getAuditPredicate(criteria));
 
         return where.getValue();
-    }
-
-    static Sort toSort(AuditCriteria criteria) {
-        if (!CollectionUtils.isEmpty(criteria.getOrders())) {
-            return Sort.by(criteria.getOrders());
-        }
-
-        Sort.Order order;
-        if (criteria.getSortingColumn() == null) {
-            order = new Sort.Order(Sort.Direction.fromString("DESC"), "eventDate");
-        } else {
-            order = new Sort.Order(
-                    Sort.Direction.fromString(criteria.getSortingOrder() == null ? "ASC" : criteria.getSortingOrder()),
-                    criteria.getSortingColumn());
-        }
-        criteria.setOrders(Lists.newArrayList(order));
-
-        return Sort.by(criteria.getOrders());
-    }
-
-    static Sort sort(Sort.Order order) {
-        return new Sort(order.getDirection(), order.getProperty());
     }
 
     static Predicate toPredicate(AuditEventTypeCriteria criteria) {

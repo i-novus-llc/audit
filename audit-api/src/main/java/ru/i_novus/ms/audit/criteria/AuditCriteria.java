@@ -1,10 +1,9 @@
 package ru.i_novus.ms.audit.criteria;
 
 import io.swagger.annotations.ApiParam;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.Sort;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
@@ -12,8 +11,6 @@ import javax.ws.rs.QueryParam;
 import java.time.LocalDateTime;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 @Setter
 @Validated
 public class AuditCriteria extends AuditRestCriteria {
@@ -83,4 +80,9 @@ public class AuditCriteria extends AuditRestCriteria {
     @ApiParam("Код системы получателя")
     @QueryParam("receiver")
     private String[] receiver;
+
+    @SuppressWarnings("squid:S2637")
+    public AuditCriteria() {
+        defaultOrders.add(new Sort.Order(Sort.Direction.DESC, "eventDate"));
+    }
 }

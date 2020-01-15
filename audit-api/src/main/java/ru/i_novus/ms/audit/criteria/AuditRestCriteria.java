@@ -1,11 +1,14 @@
 package ru.i_novus.ms.audit.criteria;
 
-import io.swagger.annotations.ApiParam;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import net.n2oapp.platform.jaxrs.RestCriteria;
+import org.springframework.data.domain.Sort;
+import org.springframework.util.CollectionUtils;
 
-import javax.ws.rs.QueryParam;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author akuznetcov
@@ -14,11 +17,11 @@ import javax.ws.rs.QueryParam;
 @Setter
 public class AuditRestCriteria extends RestCriteria {
 
-    @ApiParam("Поле сортировки")
-    @QueryParam("sortingColumn")
-    private String sortingColumn;
+    @JsonIgnore
+    protected List<Sort.Order> defaultOrders = new ArrayList<>();
 
-    @ApiParam(value = "Порядок сортировки", allowableValues = "DESC, ASC")
-    @QueryParam("sortingOrder")
-    private String sortingOrder;
+    @JsonIgnore
+    public List<Sort.Order> getOrdersOrDefault() {
+        return CollectionUtils.isEmpty(super.getOrders()) ? defaultOrders : super.getOrders();
+    }
 }

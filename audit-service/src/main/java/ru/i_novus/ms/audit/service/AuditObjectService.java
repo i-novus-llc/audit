@@ -3,6 +3,7 @@ package ru.i_novus.ms.audit.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.i_novus.ms.audit.builder.entity.AuditObjectEntityBuilder;
 import ru.i_novus.ms.audit.builder.model.AuditObjectBuilder;
@@ -22,7 +23,7 @@ public class AuditObjectService {
     public Page<AuditObject> search(AuditObjectCriteria criteria) {
         return auditObjectRepository.findAll(
                 QueryService.toPredicate(criteria),
-                PageRequest.of(criteria.getPageNumber(), criteria.getPageSize(), criteria.getSort())
+                PageRequest.of(criteria.getPageNumber(), criteria.getPageSize(), Sort.by(criteria.getOrdersOrDefault()))
         ).map(AuditObjectBuilder::buildByEntity);
     }
 
