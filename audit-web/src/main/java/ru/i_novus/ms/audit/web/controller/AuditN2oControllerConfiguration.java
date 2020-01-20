@@ -10,7 +10,7 @@ import ru.i_novus.ms.audit.service.api.AuditRest;
  * Контроллеры, используемые на страницах n2o.
  */
 @Configuration
-@EnableJaxRsProxyClient(classes = {AuditRest.class}, address = "${audit.backend.url}")
+@EnableJaxRsProxyClient(classes = {AuditRest.class}, address = "${audit.service.url}")
 public class AuditN2oControllerConfiguration {
     @Bean
     public AuditN2oController auditReferenceFrontendController(@Qualifier("auditRestJaxRsProxyClient")AuditRest auditRest) {
