@@ -3,10 +3,13 @@ package ru.i_novus.ms.audit.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RestController;
+import ru.i_novus.ms.audit.criteria.AuditEventTypeCriteria;
 import ru.i_novus.ms.audit.criteria.AuditObjectCriteria;
 import ru.i_novus.ms.audit.criteria.AuditSourceApplicationCriteria;
-import ru.i_novus.ms.audit.model.*;
-import ru.i_novus.ms.audit.criteria.AuditEventTypeCriteria;
+import ru.i_novus.ms.audit.model.AuditEventType;
+import ru.i_novus.ms.audit.model.AuditObject;
+import ru.i_novus.ms.audit.model.AuditSourceApplication;
+import ru.i_novus.ms.audit.model.AuditType;
 import ru.i_novus.ms.audit.service.AuditObjectService;
 import ru.i_novus.ms.audit.service.AuditTypeService;
 import ru.i_novus.ms.audit.service.EventTypeService;
@@ -47,6 +50,6 @@ public class AuditReferenceRestImpl implements AuditReferenceRest {
 
     @Override
     public Collection<AuditType> getAuditTypes() {
-        return auditTypeService.getAll();
+        return auditTypeService.getDefaultAuditTypes();
     }
 }
