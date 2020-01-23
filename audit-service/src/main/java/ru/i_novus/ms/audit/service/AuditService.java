@@ -34,6 +34,9 @@ public class AuditService {
     @Autowired
     private EventTypeService eventTypeService;
 
+    @Autowired
+    private AuditTypeService auditTypeService;
+
     public Optional<AuditEntity> getById(UUID id) {
         Optional<AuditEntity> optional = auditRepository.searchEntityBylastMonth(id);
         return optional.isEmpty() ? auditRepository.findById(id) : optional;
@@ -83,6 +86,9 @@ public class AuditService {
         }
         if (!StringUtils.isEmpty(request.getEventType()) && request.getAuditType() != null) {
             eventTypeService.createIfNotPresent(request.getEventType(), request.getAuditType());
+        }
+        if (request.getAuditType() != null) {
+            auditTypeService.createIfNotPresent(request.getAuditType());
         }
 
         return auditRepository.save(AuditEntityBuilder.buildEntity(request));
