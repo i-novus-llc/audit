@@ -6,6 +6,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/audit
       JAVA_OPTS: -Xmx200m
+      LOGGING_LEVEL_ROOT: ERROR
     ports:
       - 8080
     deploy:
@@ -32,6 +33,7 @@ services:
       AUDIT_BACKEND_URL: http://audit-service:8080/api
       AUDIT_EXPORT_URL: ${audit_export_url}
       JAVA_OPTS: -Xmx300m
+      LOGGING_LEVEL_ROOT: ERROR
     ports:
       - 8080
     deploy:

@@ -18,9 +18,6 @@ import java.util.UUID;
         @ApiResponse(code = 404, message = "Нет ресурса"),
         @ApiResponse(code = 500, message = "Ошибка и текст ошибки"),
 })
-@ApiImplicitParams({
-        @ApiImplicitParam(name = "sort", value = "Сортировка, sort=<код атрибута>, <asc|desc>", dataType = "string", paramType = "query")
-})
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public interface AuditRest {
@@ -28,10 +25,16 @@ public interface AuditRest {
     @GET
     @Path("/{id}")
     @ApiOperation("Поиск события по идентификатору")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "sort", value = "Сортировка, sort=<код атрибута>, <asc|desc>", dataType = "string", paramType = "query")
+    })
     Audit getById(@ApiParam("Идентификатор события") @PathParam("id") UUID id);
 
     @GET
     @ApiOperation("Поиск событий")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "sort", value = "Сортировка, sort=<код атрибута>, <asc|desc>", dataType = "string", paramType = "query")
+    })
     Page<Audit> search(@BeanParam @Valid AuditCriteria criteria);
 
     @POST
