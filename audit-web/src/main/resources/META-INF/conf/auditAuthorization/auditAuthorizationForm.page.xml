@@ -16,7 +16,7 @@
                         </visibility>
                     </dependencies>
                 </output-text>
-                <code-editor id="context" label="Данные: " rows="10" enabled="false" label-class="w-50"/>
+                <code-editor id="context" label="Данные: " max-lines="10" enabled="false" label-class="w-50"/>
             </set>
         </fields>
     </form>
