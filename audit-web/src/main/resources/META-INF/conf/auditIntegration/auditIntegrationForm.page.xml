@@ -6,7 +6,8 @@
                 <output-text id="eventType" label="Действие: " label-class="w-25"/>
                 <output-text id="sender" label="Отправитель: " label-class="w-25" />
                 <output-text id="receiver" label="Получатель: " label-class="w-25"/>
-                <output-text id="eventDate" label="Дата и время: " label-class="w-25"/>
+                <output-text id="eventDate" label="Дата и время: " label-class="w-25"
+                             format="date DD.MM.YYYY HH:mm:ss"/>
                 <code-editor id="context" label="Данные: " max-lines="10" enabled="false" label-class="w-25"/>
             </set>
         </fields>

@@ -7,7 +7,8 @@
                 <output-text id="sourceApplication" label="Система: " label-class="w-50" />
                 <output-text id="username" label="Имя пользователя: " label-class="w-50"/>
                 <output-text id="userId" label="Идентификатор  пользователя: " label-class="w-50"/>
-                <output-text id="eventDate" label="Дата и время: " label-class="w-50"/>
+                <output-text id="eventDate" label="Дата и время: " label-class="w-50"
+                             format="date DD.MM.YYYY HH:mm:ss"/>
                 <output-text id="sourceWorkstation" label="Рабочая станция: " label-class="w-50"/>
                 <output-text id="hostname" label="Имя сервера: " label-class="w-50">
                     <dependencies>
