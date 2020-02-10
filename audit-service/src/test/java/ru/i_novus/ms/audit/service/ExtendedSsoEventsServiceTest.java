@@ -26,7 +26,6 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ExtendedSsoEventsServiceTest {
-    private static final short AUDIT_TYPE_AUTHORIZATION = 3;
 
     private OpenIdProperties openIdProperties = new OpenIdProperties();
     @InjectMocks
