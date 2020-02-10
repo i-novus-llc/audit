@@ -11,7 +11,9 @@ import org.springframework.security.oauth2.client.token.DefaultAccessTokenReques
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.cors.CorsConfiguration;
-import ru.i_novus.ms.audit.service.SsoEventsService;
+import ru.i_novus.ms.audit.service.AbstractSsoEventsService;
+import ru.i_novus.ms.audit.service.BaseSsoEventsService;
+import ru.i_novus.ms.audit.service.ExtendedSsoEventsService;
 
 @SpringBootConfiguration
 @EnableConfigurationProperties(OpenIdProperties.class)
@@ -32,8 +34,12 @@ public class AuditSsoEventsConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    SsoEventsService ssoEventsService(OpenIdProperties openIdProperties) {
-        return new SsoEventsService(openIdProperties);
+    AbstractSsoEventsService ssoEventsService(OpenIdProperties openIdProperties) {
+        if (Boolean.TRUE.equals(openIdProperties.getUseEventsExtension())) {
+            return new ExtendedSsoEventsService(openIdProperties);
+        }
+
+        return new BaseSsoEventsService(openIdProperties);
     }
 
     @Bean

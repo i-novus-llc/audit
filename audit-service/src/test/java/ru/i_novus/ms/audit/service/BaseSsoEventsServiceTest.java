@@ -29,12 +29,12 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SsoEventsServiceTest {
+public class BaseSsoEventsServiceTest {
     private static final short AUDIT_TYPE_AUTHORIZATION = 3;
 
     private OpenIdProperties openIdProperties = new OpenIdProperties();
     @InjectMocks
-    private SsoEventsService ssoEventsService = new SsoEventsService(openIdProperties);
+    private BaseSsoEventsService ssoEventsService = new BaseSsoEventsService(openIdProperties);
     @Mock
     private AuditClient asyncAuditClient;
     @Mock

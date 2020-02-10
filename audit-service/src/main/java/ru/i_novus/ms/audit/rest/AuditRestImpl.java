@@ -10,7 +10,7 @@ import ru.i_novus.ms.audit.exception.NotFoundException;
 import ru.i_novus.ms.audit.model.Audit;
 import ru.i_novus.ms.audit.model.AuditForm;
 import ru.i_novus.ms.audit.service.AuditService;
-import ru.i_novus.ms.audit.service.SsoEventsService;
+import ru.i_novus.ms.audit.service.AbstractSsoEventsService;
 import ru.i_novus.ms.audit.service.api.AuditRest;
 
 import java.util.Optional;
@@ -25,7 +25,7 @@ public class AuditRestImpl implements AuditRest {
     private AuditService auditService;
 
     @Autowired
-    private SsoEventsService ssoEventsService;
+    private AbstractSsoEventsService ssoEventsService;
 
     @Override
     public Audit getById(UUID id) {
