@@ -1,6 +1,7 @@
 package ru.i_novus.ms.audit.entity;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnTransformer;
 
 import javax.persistence.*;
 import java.time.Clock;
@@ -20,6 +21,10 @@ public class AuditEntity {
     @Access(AccessType.PROPERTY)
     @Column(name = "id", nullable = false)
     private UUID id;
+
+    @Column(name = "id", insertable = false, updatable = false)
+    @ColumnTransformer(read = "id::text")
+    private String idAsText;
 
     @Column(name = "event_date", nullable = false)
     private LocalDateTime eventDate;
