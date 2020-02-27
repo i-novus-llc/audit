@@ -1,7 +1,6 @@
 package ru.i_novus.ms.audit.client;
 
 import net.n2oapp.platform.i18n.Messages;
-import net.n2oapp.platform.i18n.UserException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -10,6 +9,7 @@ import ru.i_novus.ms.audit.client.model.AuditClientRequest;
 import ru.i_novus.ms.audit.client.model.User;
 import ru.i_novus.ms.audit.model.AuditForm;
 
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertEquals;
@@ -132,21 +132,21 @@ public class RequestConverterTest {
         assertEquals(auditClientRequest.getReceiver().getValue(), auditForm.getReceiver());
     }
 
-    @Test(expected = UserException.class)
+    @Test(expected = ConstraintViolationException.class)
     public void invalidEventTypeTest() {
         auditClientRequest.setEventType(null);
 
         requestConverter.toAuditRequest(auditClientRequest);
     }
 
-    @Test(expected = UserException.class)
+    @Test(expected = ConstraintViolationException.class)
     public void invalidContextTest() {
         auditClientRequest.setContext(null);
 
         requestConverter.toAuditRequest(auditClientRequest);
     }
 
-    @Test(expected = UserException.class)
+    @Test(expected = ConstraintViolationException.class)
     public void invalidAuditTypeTest() {
         auditClientRequest.setAuditType(null);
 
