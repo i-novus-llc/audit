@@ -37,7 +37,7 @@ public class AuditFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(AuditFilter.class);
     private Messages messages;
 
-    AuditFilter(Messages messages) {
+    public AuditFilter(Messages messages) {
         this.messages = messages;
     }
 
