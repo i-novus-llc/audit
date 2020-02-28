@@ -10,7 +10,7 @@ import ru.i_novus.ms.audit.client.impl.SimpleAuditClientImpl;
 import ru.i_novus.ms.audit.service.api.AuditRest;
 
 @Configuration
-@ComponentScan("ru.i_novus.ms.audit.client")
+@ComponentScan({"ru.i_novus.ms.audit.client.impl", "ru.i_novus.ms.audit.client.util.json"})
 public class AuditSimpleClientAutoConfiguration {
 
     @Bean

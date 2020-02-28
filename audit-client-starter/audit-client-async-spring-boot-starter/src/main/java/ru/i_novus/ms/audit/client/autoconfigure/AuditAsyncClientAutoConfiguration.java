@@ -14,7 +14,7 @@ import ru.i_novus.ms.audit.service.api.AuditRest;
 
 @EnableJms
 @Configuration
-@ComponentScan("ru.i_novus.ms.audit.client")
+@ComponentScan({"ru.i_novus.ms.audit.client.impl", "ru.i_novus.ms.audit.client.util.json"})
 @PropertySource("classpath:/META-INF/ru/i_novus/ms/audit/client/autoconfigure/async-client.properties")
 public class AuditAsyncClientAutoConfiguration {
 
