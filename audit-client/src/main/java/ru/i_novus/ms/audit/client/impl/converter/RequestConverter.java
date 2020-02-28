@@ -3,8 +3,7 @@ package ru.i_novus.ms.audit.client.impl.converter;
 import lombok.AccessLevel;
 import lombok.Setter;
 import net.n2oapp.platform.i18n.Messages;
-import net.n2oapp.platform.i18n.UserException;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.cxf.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.i_novus.ms.audit.client.SourceApplicationAccessor;
@@ -13,7 +12,12 @@ import ru.i_novus.ms.audit.client.UserAccessor;
 import ru.i_novus.ms.audit.client.model.AuditClientRequest;
 import ru.i_novus.ms.audit.model.AuditForm;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Component
 @Setter(AccessLevel.PROTECTED)
@@ -32,7 +36,6 @@ public class RequestConverter {
     private Messages messages;
 
     public AuditForm toAuditRequest(AuditClientRequest request) {
-        assertRequiredFields(request);
 
         AuditForm auditForm = convertAccessorFields(request);
 
@@ -55,18 +58,9 @@ public class RequestConverter {
         if (request.getReceiver() != null)
             auditForm.setReceiver(getMessage(request.getReceiver().getValue(), request.getReceiver().getArgs()));
 
+        validateAuditForm(auditForm);
+
         return auditForm;
-    }
-
-    private void assertRequiredFields(AuditClientRequest request) {
-        if (request.getEventType() == null || StringUtils.isBlank(request.getEventType().getValue()))
-            throw new UserException("audit.clientException.notSetEventType");
-
-        if (StringUtils.isBlank(request.getContext()))
-            throw new UserException("audit.clientException.notSetContext");
-
-        if (request.getAuditType() == null)
-            throw new UserException("audit.clientException.notSetAuditType");
     }
 
     private AuditForm convertAccessorFields(AuditClientRequest request) {
@@ -97,6 +91,19 @@ public class RequestConverter {
         }
 
         return auditForm;
+    }
+
+    /**
+     * Вспомогательный метод для прогона bean validations на форме аудита
+     *
+     * @param auditForm валидируемая форма аудита
+     */
+    private void validateAuditForm(AuditForm auditForm) {
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        Set<ConstraintViolation<AuditForm>> constraintViolations = validator.validate(auditForm);
+        if (!CollectionUtils.isEmpty(constraintViolations)) {
+            throw new ConstraintViolationException(constraintViolations);
+        }
     }
 
     /**
