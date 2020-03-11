@@ -1,7 +1,10 @@
 package ru.i_novus.ms.audit.client.aspect;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -34,13 +37,16 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Аспект для обработки ответов методов с аннотацией {@link Audit} и отправки их через клиент аудита
+ */
 @Aspect
 @Slf4j
 @Order
 public class AuditAspect {
 
     @Autowired
-    private AuditClient safeKidsAuditClient;
+    private AuditClient auditClient;
     @Autowired
     private MessageSourceAccessor messageSourceAccessor;
     @Autowired
@@ -55,6 +61,12 @@ public class AuditAspect {
         this.properties = properties;
     }
 
+    /**
+     * Обработка ответа метода с аннотацией @Audit и отправка через клиент аудита
+     *
+     * @param joinPoint joinPoint вызова аспекта
+     * @param result    объект возвращаемый методом с аннотацией {@link Audit}
+     */
     @AfterReturning(pointcut = "@annotation(ru.i_novus.ms.audit.client.annotation.Audit)", returning = "result")
     public void audit(JoinPoint joinPoint, Object result) {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
@@ -65,6 +77,13 @@ public class AuditAspect {
         }
     }
 
+    /**
+     * Обработка ответа и отправка через клиент аудита
+     *
+     * @param action параметр action из аннотации {@link Audit}. Используется для заполнения поля eventType аудита.
+     * @param object параметр object из аннотации {@link Audit}. Используется для заполнения полей objectType, objectName аудита.
+     * @param result объект возвращаемый методом с аннотацией {@link Audit}
+     */
     private void audit(String action, String object, Object result) {
         if (result instanceof Response) {
             try {
@@ -76,17 +95,11 @@ public class AuditAspect {
 
         AuditClientRequest request = new AuditClientRequest();
         setUser(request);
-        setAuditIgnore(result);
         setObject(request, object, result);
 
         request.setHostname(ServerContext.getServerName());
         request.setSourceWorkstation(ServerContext.getSourceWorkStation());
-        try {
-            request.setContext(mapper.writeValueAsString(result));
-        } catch (JsonProcessingException e) {
-            log.error("Error set context", e);
-            request.setContext(result.toString());
-        }
+        request.setContext(getAuditContext(result));
         try {
             request.setEventType(messageSourceAccessor.getMessage(action));
         } catch (NoSuchMessageException e) {
@@ -95,53 +108,132 @@ public class AuditAspect {
         }
         request.setEventDate(LocalDateTime.now());
         request.setAuditType(AUDIT_TYPE_USER_ACTION);
-        safeKidsAuditClient.add(request);
+        auditClient.add(request);
     }
 
-    private void setAuditIgnore(Object object) {
-        List<Field> fields = FieldUtils.getAllFieldsList(object.getClass());
+    /**
+     * Формирование контекста аудита.
+     *
+     * @param result объект возвращаемый методом с аннотацией {@link Audit}
+     * @return строка в json формате если объект корректно обрабатывается через ObjectMapper или
+     * результат {@link Object#toString()} в ином случае.
+     */
+    private String getAuditContext(Object result) {
+        List<Field> fields = FieldUtils.getAllFieldsList(result.getClass());
         if (CollectionUtils.isEmpty(fields)) {
-            return;
+            return null;
         }
-        List<Field> ignoreFields = FieldUtils.getFieldsListWithAnnotation(object.getClass(), AuditIgnore.class);
-        if (!CollectionUtils.isEmpty(ignoreFields)) {
-            ignoreFields.forEach(field -> {
-                try {
-                    FieldUtils.writeField(field, object, null, true);
-                } catch (Exception e) {
-                    log.error("Error set null to AuditIgnore field", e);
-                }
-            });
-        }
+        ObjectNode contextJson = mapper.valueToTree(result);
+        checkAuditIgnore(contextJson, result);
 
-        checkAuditIgnorableFields(object, ignoreFields);
+        try {
+            return mapper.writeValueAsString(contextJson);
+        } catch (JsonProcessingException e) {
+            log.error("Error set context", e);
+            return result.toString();
+        }
     }
 
-    private void checkAuditIgnorableFields(Object object, List<Field> ignoreFields) {
-        List<Field> ignorableFields = FieldUtils.getFieldsListWithAnnotation(object.getClass(), AuditIgnorable.class);
-        ignorableFields.removeAll(ignoreFields);
+    /**
+     * Удаление нод из json соответствующих полям с аннотацией {@link AuditIgnore}
+     *
+     * @param jsonNode JsonNode соответствующий обрабатываему объекту
+     * @param result   обрабатываемый объект
+     */
+    private void checkAuditIgnore(ObjectNode jsonNode, Object result) {
+        List<Field> ignoreFields = FieldUtils.getFieldsListWithAnnotation(result.getClass(), AuditIgnore.class);
+        if (!CollectionUtils.isEmpty(ignoreFields)) {
+            ignoreFields.forEach(field -> jsonNode.remove(field.getName()));
+        }
+
+        checkAuditIgnorable(jsonNode, result);
+    }
+
+    /**
+     * Нахождение полей с аннотацией {@link AuditIgnorable} и дальнейший вызов {@link #checkAuditIgnore(ObjectNode, Object)}
+     *
+     * @param jsonNode JsonNode соответствующий обрабатываему объекту
+     * @param result   обрабатываемый объект
+     */
+    private void checkAuditIgnorable(ObjectNode jsonNode, Object result) {
+        List<Field> ignorableFields = FieldUtils.getFieldsListWithAnnotation(result.getClass(), AuditIgnorable.class);
         if (!CollectionUtils.isEmpty(ignorableFields)) {
             ignorableFields.forEach(field -> {
                 try {
+                    JsonNode fieldJson = jsonNode.get(field.getName());
                     if (TypeUtils.isAssignable(field.getType(), Collection.class)) {
-                        Collection<Object> collection = (Collection<Object>) FieldUtils.readField(field, object, true);
-                        collection.forEach(this::setAuditIgnore);
+                        checkAuditIgnoreCollection(jsonNode, result, field);
                     } else if (field.getType().isArray()) {
-                        Object array = FieldUtils.readField(field, object, true);
-                        int length = Array.getLength(array);
-                        for (int i = 0; i < length; i++) {
-                            setAuditIgnore(Array.get(array, i));
-                        }
+                        checkAuditIgnoreArray(fieldJson, result, field);
                     } else {
-                        setAuditIgnore(FieldUtils.readField(field, object, true));
+                        Object fieldObject = FieldUtils.readField(field, result, true);
+                        if (fieldJson.isObject()) {
+                            checkAuditIgnore((ObjectNode) fieldJson, fieldObject);
+                        } else if (!fieldJson.isNull()) {
+                            log.info(result.getClass().getName() + ": AuditIgnorable annotation scanning." +
+                                    "Probably @AuditIgnorable used on primitive field.");
+                        }
                     }
-                } catch (Exception e) {
+                } catch (IllegalAccessException e) {
                     log.error("Error in AuditIgnorable annotation scanning", e);
                 }
             });
         }
     }
 
+    /**
+     * Нахождение полей с аннотацией {@link AuditIgnore} в коллекции
+     *
+     * @param jsonNode        JsonNode объекта в котором находится коллекция
+     * @param result          объект в котором находится коллекция
+     * @param collectionField поле result объекта в котором находится коллекция
+     * @throws IllegalAccessException Если поле недоступно из-за области видимости. В данном методе это исключение не должно выбрасываться.
+     */
+    private void checkAuditIgnoreCollection(ObjectNode jsonNode, Object result, Field collectionField)
+            throws IllegalAccessException {
+        Collection<Object> collection = (Collection<Object>) FieldUtils.readField(collectionField, result, true);
+        if (collection != null) {
+            ArrayNode collectionNode = mapper.createArrayNode();
+            collection.forEach(object -> {
+                ObjectNode objectNode = mapper.valueToTree(object);
+                checkAuditIgnore(objectNode, object);
+                collectionNode.add(objectNode);
+            });
+            jsonNode.replace(collectionField.getName(), collectionNode);
+        }
+    }
+
+    /**
+     * Нахождение полей с аннотацией {@link AuditIgnore} в массиве
+     *
+     * @param arrayJson JsonNode массива
+     * @param result    объект в котором находится массив
+     * @param field     поле result объекта в котором находится массив
+     * @throws IllegalAccessException Если поле недоступно из-за области видимости. В данном методе это исключение не должно выбрасываться.
+     */
+    private void checkAuditIgnoreArray(JsonNode arrayJson, Object result, Field field)
+            throws IllegalAccessException {
+        Object array = FieldUtils.readField(field, result, true);
+        if (array != null) {
+            int length = Array.getLength(array);
+            for (int i = 0; i < length; i++) {
+                Object object = Array.get(array, i);
+                JsonNode objectNode = arrayJson.get(i);
+                if (objectNode.isObject()) {
+                    checkAuditIgnore((ObjectNode) objectNode, object);
+                } else if (!objectNode.isNull()) {
+                    log.info(result.getClass().getName() + ": AuditIgnorable annotation scanning." +
+                            "Probably @AuditIgnorable used on primitive field.");
+                }
+            }
+        }
+    }
+
+    /**
+     * Установка userId и username в {@link AuditClientRequest}
+     *
+     * @param request изменяемый {@link AuditClientRequest}
+     */
     private void setUser(AuditClientRequest request) {
         CurrentAuthUser authUser = UserContext.getAuthUser();
         if (authUser != null) {
@@ -153,6 +245,13 @@ public class AuditAspect {
         }
     }
 
+    /**
+     * Устновка objectType и objectId в {@link AuditClientRequest}
+     *
+     * @param request изменяемый {@link AuditClientRequest}
+     * @param object  параметр object из аннотации {@link Audit}
+     * @param result  объект используемый для заполнения контекста
+     */
     private void setObject(AuditClientRequest request, String object, Object result) {
         String objectName;
         if (StringUtils.isNotEmpty(object)) {
@@ -171,5 +270,4 @@ public class AuditAspect {
             request.setObjectId(result.getClass().getSimpleName());
         }
     }
-
 }
