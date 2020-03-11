@@ -2,16 +2,19 @@ package ru.i_novus.ms.audit.client.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.n2oapp.platform.i18n.UserException;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 @Slf4j
 @Getter
+@ToString
+@EqualsAndHashCode
 public class AuditClientRequest {
 
     @Setter
@@ -90,34 +93,5 @@ public class AuditClientRequest {
                 throw new UserException("audit.clientException.invalidContext");
             }
         }
-    }
-
-    @Override
-    public String toString() {
-        final String formatted = ", %s{value='%s', args=%s}";
-        return "AuditClientRequest{" +
-                "eventDate=" + eventDate +
-                String.format(formatted, "eventType", paramValueToString(eventType), paramArgsToString(eventType)) +
-                String.format(formatted, "objectType", paramValueToString(objectType), paramArgsToString(objectType)) +
-                String.format(formatted, "objectId", paramValueToString(objectId), paramArgsToString(objectId)) +
-                String.format(formatted, "objectName", paramValueToString(objectName), paramArgsToString(objectName)) +
-                String.format(formatted, "userId", paramValueToString(userId), paramArgsToString(userId)) +
-                String.format(formatted, "username", paramValueToString(username), paramArgsToString(username)) +
-                String.format(formatted, "sourceWorkstation", paramValueToString(sourceWorkstation), paramArgsToString(sourceWorkstation)) +
-                String.format(formatted, "sourceApplication", paramValueToString(sourceApplication), paramArgsToString(sourceApplication)) +
-                ", context='" + context + "\'" +
-                String.format(formatted, "hostname", paramValueToString(hostname), paramArgsToString(hostname)) +
-                ", auditType='" + auditType + "\'" +
-                String.format(formatted, "sender", paramValueToString(sender), paramArgsToString(sender)) +
-                String.format(formatted, "receiver", paramValueToString(receiver), paramArgsToString(receiver)) +
-                "}";
-    }
-
-    private String paramValueToString(AuditClientRequestParam param) {
-        return param == null ? null : param.getValue();
-    }
-
-    private String paramArgsToString(AuditClientRequestParam param) {
-        return param == null ? null : Arrays.toString(param.getArgs());
     }
 }
