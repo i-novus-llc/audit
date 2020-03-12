@@ -17,12 +17,12 @@
                         </a>
                     </button>
                 </toolbar>
-                <filters search-buttons="false">
+                <filters>
                     <row>
                         <date-interval id="period" label="Дата и время" required="true" time-format="HH:mm:ss" date-format="DD.MM.YYYY">
                             <default-value begin="{moment().subtract(30, 'days').format('YYYY-MM-DDTHH:mm:ss')}"
                                            end="{moment().format('YYYY-MM-DDTHH:mm:ss')}"/>
-                            <validations white-list="checkDate"/>
+                            <validations white-list="checkDate,checkNegativeDateInterval"/>
                         </date-interval>
                         <input-select id="sender" label="Отправитель" type="multi"
                                       query-id="auditSourceApplication"
