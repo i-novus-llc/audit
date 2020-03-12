@@ -4,6 +4,7 @@ services:
 
   audit-service:
     environment:
+      SPRING_CLOUD_CONSUL_CONFIG_PREFIX: audit
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/audit
       JAVA_OPTS: -Xmx200m
       LOGGING_LEVEL_ROOT: ERROR
