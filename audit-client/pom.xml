@@ -9,6 +9,10 @@
 
     <artifactId>audit-client</artifactId>
 
+    <properties>
+        <jacoco.skip>false</jacoco.skip>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>ru.i-novus.ms.audit</groupId>
