@@ -7,7 +7,9 @@
         <region place="single">
             <table id="audit_table" query-id="auditAction" size="10" name="Аудит Данных">
                 <toolbar>
-                    <button id="export" label="Выгрузить" icon="fa fa-download" model="filter">
+                    <button id="export" label="Выгрузить" icon="fa fa-download" model="filter"
+                            enabling-condition="typeof period.begin != 'undefined' &amp;&amp; !!period.begin &amp;&amp;
+                            typeof period.end != 'undefined' &amp;&amp; !!period.end">
                         <a href="${audit.export.url}/audit/export" target="newWindow">
                             <query-param name="auditType" value="1"/>
                             <query-param name="eventDateFrom" value="{moment(period.begin, 'YYYY-MM-DDTHH:mm:ss').format('YYYY-MM-DDTHH:mm:ss')}"/>
