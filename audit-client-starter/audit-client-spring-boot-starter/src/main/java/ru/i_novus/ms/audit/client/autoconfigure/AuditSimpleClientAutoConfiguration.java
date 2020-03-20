@@ -1,5 +1,6 @@
 package ru.i_novus.ms.audit.client.autoconfigure;
 
+import net.n2oapp.platform.jaxrs.autoconfigure.EnableJaxRsProxyClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,7 @@ import ru.i_novus.ms.audit.service.api.AuditRest;
 
 @Configuration
 @ComponentScan({"ru.i_novus.ms.audit.client.impl", "ru.i_novus.ms.audit.client.util.json"})
+@EnableJaxRsProxyClient(classes = AuditRest.class, address = "${audit.service.url}")
 public class AuditSimpleClientAutoConfiguration {
 
     @Bean
