@@ -5,10 +5,10 @@
         <field id="name" domain="string" name="Наименование"/>
         <field id="eventDate" domain="localdatetime" name="Дата события"/>
         <field id="auditEventTypes" domain="string" name="Тип события"/>
-        <field id="objectType" name="Тип объекта" />
-        <field id="objectName" name="Тип объекта" />
-        <field id="auditObjects" name="Объект" />
-        <field id="auditSourceApplications" name="Название системы" />
+        <field id="objectType" name="Тип объекта"/>
+        <field id="objectName" name="Наименование объекта"/>
+        <field id="auditObjects" name="Объект"/>
+        <field id="auditSourceApplications" name="Название системы"/>
         <field id="sourceWorkstation" domain="string" name="Рабочая станция"/>
         <field id="objectId" domain="string" name="Идентификатор объекта"/>
         <field id="userId" domain="string" name="Идентификатор пользователя"/>
@@ -45,6 +45,11 @@
                    }
               })()
              ]]>
+        </condition>
+        <condition id="periodRequired" severity="danger" on="period"
+                   message="Поле обязательно для заполнения">
+                    typeof period.begin != 'undefined' &amp;&amp; period.begin != null &amp;&amp;
+                    typeof period.end != 'undefined' &amp;&amp; period.end != null
         </condition>
     </validations>
 
