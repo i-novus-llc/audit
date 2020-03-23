@@ -15,4 +15,8 @@ public class UserContext {
     public static void setAuthUser(CurrentAuthUser user) {
         AUTH_USER.set(user);
     }
+
+    public static void removeAuthUser() {
+        AUTH_USER.remove();
+    }
 }
