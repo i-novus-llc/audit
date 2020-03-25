@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface AuditRepository extends JpaRepository<AuditEntity, UUID>, QuerydslPredicateExecutor<AuditEntity> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM audit.audit WHERE event_date<now() AND event_date>now()-interval '31' day and id=:id")
-    Optional<AuditEntity> searchEntityBylastMonth(@Param("id") UUID id);
+    Optional<AuditEntity> searchEntityByLastMonth(@Param("id") UUID id);
 
     Optional<AuditEntity> findFirstByAuditTypeIdAndAuditSourceApplicationOrderByEventDateDesc(Short auditType,
                                                                                               String auditSourceApplication);
