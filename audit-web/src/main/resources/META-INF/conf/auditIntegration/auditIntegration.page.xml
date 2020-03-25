@@ -5,7 +5,10 @@
         <region place="single">
             <table id="audit_table" query-id="auditIntegration" size="10">
                 <toolbar>
-                    <button id="export" label="Выгрузить" icon="fa fa-download" model="filter">
+                    <button id="export" label="Выгрузить" icon="fa fa-download" model="filter"
+                            enabling-condition="typeof period.begin != 'undefined' &amp;&amp; !!period.begin &amp;&amp;
+                            typeof period.end != 'undefined' &amp;&amp; !!period.end"
+                            description="Выгрузить данные за указанный период">
                         <a href="${audit.export.url}/audit/export" target="newWindow">
                             <query-param name="auditType" value="2"/>
                             <query-param name="eventDateFrom" value="{moment(period.begin, 'YYYY-MM-DDTHH:mm:ss').format('YYYY-MM-DDTHH:mm:ss')}"/>
@@ -17,12 +20,12 @@
                         </a>
                     </button>
                 </toolbar>
-                <filters search-buttons="false">
+                <filters>
                     <row>
                         <date-interval id="period" label="Дата и время" required="true" time-format="HH:mm:ss" date-format="DD.MM.YYYY">
                             <default-value begin="{moment().subtract(30, 'days').format('YYYY-MM-DDTHH:mm:ss')}"
                                            end="{moment().format('YYYY-MM-DDTHH:mm:ss')}"/>
-                            <validations white-list="checkDate"/>
+                            <validations white-list="periodRequired,checkDate,checkNegativeDateInterval"/>
                         </date-interval>
                         <input-select id="sender" label="Отправитель" type="multi"
                                       query-id="auditSourceApplication"

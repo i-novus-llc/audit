@@ -16,7 +16,10 @@ import ru.i_novus.ms.audit.model.AuditForm;
 import ru.i_novus.ms.audit.repository.AuditRepository;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -108,7 +111,7 @@ public class AuditServiceTest {
 
     @Test
     public void testGetByIdEmpty() {
-        doReturn(Optional.empty()).when(auditRepository).searchEntityBylastMonth(any());
+        doReturn(Optional.empty()).when(auditRepository).searchEntityByLastMonth(any());
         doReturn(Optional.empty()).when(auditRepository).findById(any());
         Optional<AuditEntity> entity = service.getById(UUID.randomUUID());
 
@@ -118,7 +121,7 @@ public class AuditServiceTest {
 
     @Test
     public void testGetById() {
-        doReturn(Optional.of(AuditEntity.class)).when(auditRepository).searchEntityBylastMonth(any());
+        doReturn(Optional.of(AuditEntity.class)).when(auditRepository).searchEntityByLastMonth(any());
         Optional<AuditEntity> entity = service.getById(UUID.randomUUID());
 
         assertNotEquals(entity, Optional.empty());

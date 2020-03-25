@@ -38,7 +38,7 @@ public class AuditService {
     private AuditTypeService auditTypeService;
 
     public Optional<AuditEntity> getById(UUID id) {
-        Optional<AuditEntity> optional = auditRepository.searchEntityBylastMonth(id);
+        Optional<AuditEntity> optional = auditRepository.searchEntityByLastMonth(id);
         return optional.isEmpty() ? auditRepository.findById(id) : optional;
     }
 

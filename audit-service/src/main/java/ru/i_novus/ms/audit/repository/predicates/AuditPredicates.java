@@ -6,7 +6,6 @@ import com.querydsl.core.types.dsl.Expressions;
 import ru.i_novus.ms.audit.entity.QAuditEntity;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public final class AuditPredicates {
 
@@ -14,15 +13,15 @@ public final class AuditPredicates {
     }
 
     public static BooleanExpression isIdContains(String value) {
-        return QAuditEntity.auditEntity.id.eq(UUID.fromString(value.trim()));
+        return QAuditEntity.auditEntity.idAsText.containsIgnoreCase(value);
     }
 
     public static BooleanExpression isEventDateAfterOrEquals(LocalDateTime from) {
-        return QAuditEntity.auditEntity.eventDate.after(from).or(QAuditEntity.auditEntity.eventDate.eq(from));
+        return QAuditEntity.auditEntity.eventDate.goe(from);
     }
 
     public static BooleanExpression isEventDateBeforeOrEquals(LocalDateTime to) {
-        return QAuditEntity.auditEntity.eventDate.before(to).or(QAuditEntity.auditEntity.eventDate.eq(to));
+        return QAuditEntity.auditEntity.eventDate.loe(to);
     }
 
     public static BooleanExpression isEventDateBetween(LocalDateTime from, LocalDateTime to) {
