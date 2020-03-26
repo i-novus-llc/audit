@@ -5,8 +5,7 @@ import org.junit.Test;
 
 import java.time.LocalDateTime;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * Тестирование класса AuditClientRequest
@@ -33,5 +32,32 @@ public class AuditClientRequestTest extends BaseAuditClientRequestTest {
     @Test
     public void auditClientRequestToStringTest() {
         assertEquals(REQUEST_TO_STRING, auditClientRequest.toString());
+    }
+
+    @Test
+    public void auditClientRequestEqualsHashTest() {
+        AuditClientRequest request = cloning();
+        assertEquals(request, auditClientRequest);
+        assertEquals(request.hashCode(), auditClientRequest.hashCode());
+    }
+
+    private AuditClientRequest cloning() {
+        AuditClientRequest request = new AuditClientRequest();
+        request.setEventType(EVENT_TYPE);
+        request.setObjectType(OBJECT_TYPE);
+        request.setObjectId(OBJECT_ID);
+        request.setObjectName(OBJECT_NAME);
+        request.setUserId(USER_ID);
+        request.setUsername(USERNAME);
+        request.setSourceWorkstation(SOURCE_WORKSTATION);
+        request.setSourceApplication(SOURCE_APPLICATION);
+        request.setHostname(HOSTNAME);
+        request.setContext(CONTEXT);
+        request.setAuditType(AUDIT_TYPE);
+        request.setSender(SENDER);
+        request.setReceiver(RECEIVER);
+        request.setEventDate(EVENT_DATE);
+
+        return request;
     }
 }
