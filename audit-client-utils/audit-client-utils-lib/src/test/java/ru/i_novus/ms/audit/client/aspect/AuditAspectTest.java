@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import net.n2oapp.platform.jaxrs.RestPage;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -52,11 +53,19 @@ public class AuditAspectTest {
     ArgumentCaptor<AuditClientRequest> captor;
 
     private static TestedModelExtended testedModel;
+    private static RestPage<TestedModelExtended> testedPage;
+    private static List<TestedModelExtended> testedList;
+    private static String testedString;
 
     private static final String EXPECTED_MODEL_JSON = "{\"id\":1,\"object\":{\"id\":1}," +
             "\"array\":[{\"id\":1},{\"id\":2}],\"list\":[{\"id\":1},{\"id\":2}]}";
     private static final String EXPECTED_EMPTY_MODEL_JSON = "{\"id\":1,\"object\":null,\"array\":null,\"list\":null}";
     private static final String EXPECTED_EMPTY_COLLECTION_ARRAY_MODEL_JSON = "{\"id\":1,\"object\":null,\"array\":[],\"list\":[]}";
+    private static final String EXPECTED_PAGE_LIST_MODEL_JSON =
+            "[{\"id\":1,\"object\":{\"id\":1},\"array\":[{\"id\":1},{\"id\":2}],\"list\":[{\"id\":1},{\"id\":2}]}," +
+                    "{\"id\":1,\"object\":{\"id\":1},\"array\":[{\"id\":1},{\"id\":2}],\"list\":[{\"id\":1},{\"id\":2}]}]";
+    private static final String EXPECTED_EMPTY_PAGE_LIST_MODEL_JSON = "[]";
+    private static final String EXPECTED_STRING_JSON = "\"Tested string\"";
 
     @Before
     public void beforeEach() {
@@ -74,6 +83,10 @@ public class AuditAspectTest {
         testedModel.setObject(testedObject1);
         testedModel.setArray(Arrays.array(testedObject1, testedObject2));
         testedModel.setList(List.of(testedObject1, testedObject2));
+
+        testedPage = new RestPage<>(List.of(testedModel, testedModel));
+        testedList = List.of(testedModel, testedModel);
+        testedString = "Tested string";
     }
 
     @Test
@@ -106,6 +119,50 @@ public class AuditAspectTest {
         verify(mockedAuditClient).add(captor.capture());
 
         assertEquals(EXPECTED_EMPTY_COLLECTION_ARRAY_MODEL_JSON, captor.getValue().getContext());
+    }
+
+    @Test
+    public void AuditPageSuccessful() {
+        auditAspect.audit(mockedJoinPoint, testedPage);
+        verify(mockedAuditClient).add(captor.capture());
+
+        assertEquals(EXPECTED_PAGE_LIST_MODEL_JSON, captor.getValue().getContext());
+    }
+
+    @Test
+    public void AuditListSuccessful() {
+        auditAspect.audit(mockedJoinPoint, testedList);
+        verify(mockedAuditClient).add(captor.capture());
+
+        assertEquals(EXPECTED_PAGE_LIST_MODEL_JSON, captor.getValue().getContext());
+    }
+
+    @Test
+    public void AuditEmptyPageSuccessful() {
+        testedPage = new RestPage<>();
+
+        auditAspect.audit(mockedJoinPoint, testedPage);
+        verify(mockedAuditClient).add(captor.capture());
+
+        assertEquals(EXPECTED_EMPTY_PAGE_LIST_MODEL_JSON, captor.getValue().getContext());
+    }
+
+    @Test
+    public void AuditEmptyListSuccessful() {
+        testedList = List.of();
+
+        auditAspect.audit(mockedJoinPoint, testedList);
+        verify(mockedAuditClient).add(captor.capture());
+
+        assertEquals(EXPECTED_EMPTY_PAGE_LIST_MODEL_JSON, captor.getValue().getContext());
+    }
+
+    @Test
+    public void AuditStringSuccessful() {
+        auditAspect.audit(mockedJoinPoint, testedString);
+        verify(mockedAuditClient).add(captor.capture());
+
+        assertEquals(EXPECTED_STRING_JSON, captor.getValue().getContext());
     }
 }
 

@@ -16,11 +16,19 @@ public class ServerContext {
         return SERVER_NAME.get();
     }
 
+    public static void removeServerName() {
+        SERVER_NAME.remove();
+    }
+
     public static void setSourceWorkStation(String serverName) {
         SOURCE_WORKSTATION.set(serverName);
     }
 
     public static String getSourceWorkStation() {
         return SOURCE_WORKSTATION.get();
+    }
+
+    public static void removeSourceWorkstation() {
+        SOURCE_WORKSTATION.remove();
     }
 }

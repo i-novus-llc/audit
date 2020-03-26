@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.domain.Page;
 import org.springframework.util.CollectionUtils;
 import ru.i_novus.ms.audit.client.AuditClient;
 import ru.i_novus.ms.audit.client.annotation.Audit;
@@ -72,7 +73,7 @@ public class AuditAspect {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method targetMethod = methodSignature.getMethod();
         Audit audit = targetMethod.getAnnotation(Audit.class);
-        if (audit != null) {
+        if (audit != null && result != null) {
             audit(audit.action(), audit.object(), result);
         }
     }
@@ -98,7 +99,9 @@ public class AuditAspect {
         setObject(request, object, result);
 
         request.setHostname(ServerContext.getServerName());
+        ServerContext.removeServerName();
         request.setSourceWorkstation(ServerContext.getSourceWorkStation());
+        ServerContext.removeSourceWorkstation();
         request.setContext(getAuditContext(result));
         try {
             request.setEventType(messageSourceAccessor.getMessage(action));
@@ -119,19 +122,58 @@ public class AuditAspect {
      * результат {@link Object#toString()} в ином случае.
      */
     private String getAuditContext(Object result) {
-        List<Field> fields = FieldUtils.getAllFieldsList(result.getClass());
-        if (CollectionUtils.isEmpty(fields)) {
-            return null;
+        JsonNode resultNode;
+
+        if (result instanceof Page) {
+            resultNode = getCollectionContext(((Page<Object>) result).getContent());
+        } else if (result instanceof Collection) {
+            resultNode = getCollectionContext((Collection<Object>) result);
+        } else {
+            resultNode = getObjectContext(result);
         }
-        ObjectNode contextJson = mapper.valueToTree(result);
-        checkAuditIgnore(contextJson, result);
 
         try {
-            return mapper.writeValueAsString(contextJson);
+            return mapper.writeValueAsString(resultNode);
         } catch (JsonProcessingException e) {
             log.error("Error set context", e);
             return result.toString();
         }
+    }
+
+    /**
+     * Формирование контекста из {@link Collection}
+     *
+     * @param collection аудируемая коллекция
+     * @return нода для заполнения контекста аудита
+     */
+    private ArrayNode getCollectionContext(Collection<Object> collection) {
+        ArrayNode collectionNode = mapper.createArrayNode();
+        if (collection != null) {
+            collection.forEach(o -> collectionNode.add(getObjectContext(o)));
+        }
+
+        return collectionNode;
+    }
+
+
+    /**
+     * Формирование контекста из {@link Object}
+     *
+     * @param result аудируемый объект
+     * @return нода для заполнения контекста аудита
+     */
+    private JsonNode getObjectContext(Object result) {
+        List<Field> fields = FieldUtils.getAllFieldsList(result.getClass());
+        if (CollectionUtils.isEmpty(fields)) {
+            return null;
+        }
+
+        JsonNode objectNode = mapper.valueToTree(result);
+        if (objectNode.isObject()) {
+            checkAuditIgnore((ObjectNode) objectNode, result);
+        }
+
+        return objectNode;
     }
 
     /**
@@ -236,6 +278,7 @@ public class AuditAspect {
      */
     private void setUser(AuditClientRequest request) {
         CurrentAuthUser authUser = UserContext.getAuthUser();
+        UserContext.removeAuthUser();
         if (authUser != null) {
             request.setUserId(authUser.getUserId());
             request.setUsername(authUser.getUsername());
@@ -266,7 +309,7 @@ public class AuditAspect {
         try {
             request.setObjectId(result.getClass().getMethod("getId").invoke(result).toString());
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            log.error("Error set objectId", e);
+            log.info("Object doesn't have id field getter", e);
             request.setObjectId(result.getClass().getSimpleName());
         }
     }

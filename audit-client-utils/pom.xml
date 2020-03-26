@@ -10,13 +10,8 @@
         <version>2.4.9-SNAPSHOT</version>
     </parent>
 
-
     <artifactId>audit-client-utils</artifactId>
     <packaging>pom</packaging>
-
-    <properties>
-        <jacoco.skip>false</jacoco.skip>
-    </properties>
 
     <modules>
         <module>audit-client-utils-lib</module>
