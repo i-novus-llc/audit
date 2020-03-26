@@ -1,8 +1,6 @@
 package ru.i_novus.ms.audit.client.security.context;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -12,7 +10,6 @@ import static org.junit.Assert.assertNull;
  *
  * @author akuznetcov
  **/
-@RunWith(MockitoJUnitRunner.class)
 public class ServerContextTest {
 
     private static final String SERVER_NAME_VALUE = "SERVER_NAME";

@@ -2,8 +2,6 @@ package ru.i_novus.ms.audit.client.security.context;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 import ru.i_novus.ms.audit.client.security.model.CurrentAuthUser;
 
 import static org.junit.Assert.*;
@@ -13,7 +11,6 @@ import static org.junit.Assert.*;
  *
  * @author akuznetcov
  **/
-@RunWith(MockitoJUnitRunner.class)
 public class UserContextTest {
 
     private static final String USER_NAME = "USER_NAME";
