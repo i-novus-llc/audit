@@ -1,6 +1,5 @@
 package ru.i_novus.ms.audit.client.autoconfigure;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,7 +9,6 @@ import org.springframework.jms.annotation.EnableJms;
 import ru.i_novus.ms.audit.client.AuditClient;
 import ru.i_novus.ms.audit.client.impl.AsyncAuditClientImpl;
 import ru.i_novus.ms.audit.client.impl.queue.Producer;
-import ru.i_novus.ms.audit.service.api.AuditRest;
 
 @EnableJms
 @Configuration
@@ -26,9 +24,7 @@ public class AuditAsyncClientAutoConfiguration {
 
     @Bean
     @ConditionalOnProperty(prefix = "audit.client", name = "enabled", havingValue = "true", matchIfMissing = true)
-    public AuditClient asyncAuditClient(@Qualifier("auditRestJaxRsProxyClient") AuditRest auditRest) {
-        AsyncAuditClientImpl asyncAuditClient = new AsyncAuditClientImpl();
-        asyncAuditClient.setAuditRest(auditRest);
-        return asyncAuditClient;
+    public AuditClient asyncAuditClient() {
+        return new AsyncAuditClientImpl();
     }
 }
