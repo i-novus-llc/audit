@@ -86,6 +86,9 @@ public Case createCase(CaseForm caseForm) {
 
 В данном случае в контекст аудита не попадут поля id классов User и Case.
 
+Есть возможность заполнения пользователя и IP-адреса кастомными значениями.
+Для этого в запросе в headers "userHeader" и "sourceWorkStationHeader" необходимо передать соответствующие значения.
+
 == audit-client-utils-spring-boot-starter
 
 Подключение:
