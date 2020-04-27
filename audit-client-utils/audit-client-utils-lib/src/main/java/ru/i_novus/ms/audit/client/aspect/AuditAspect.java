@@ -99,9 +99,7 @@ public class AuditAspect {
         setObject(request, object, result);
 
         request.setHostname(ServerContext.getServerName());
-        ServerContext.removeServerName();
         request.setSourceWorkstation(ServerContext.getSourceWorkStation());
-        ServerContext.removeSourceWorkstation();
         request.setContext(getAuditContext(result));
         try {
             request.setEventType(messageSourceAccessor.getMessage(action));
@@ -278,7 +276,6 @@ public class AuditAspect {
      */
     private void setUser(AuditClientRequest request) {
         CurrentAuthUser authUser = UserContext.getAuthUser();
-        UserContext.removeAuthUser();
         if (authUser != null) {
             request.setUserId(authUser.getUserId());
             request.setUsername(authUser.getUsername());
