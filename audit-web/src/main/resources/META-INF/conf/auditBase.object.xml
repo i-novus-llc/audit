@@ -33,7 +33,7 @@
              ]]>
         </condition>
         <condition id="checkNegativeDateInterval" severity="danger" on="period"
-                   message="Дата начала интервала не может быть больше даты конца">
+                   message="Дата окончания периода не может быть раньше даты начала">
             <![CDATA[(function(){
                     if (typeof period !== 'undefined' && period !== null) {
                         var begin = moment(period.begin, ["YYYY-MM-DD'T'HH:mm:ss"]);
