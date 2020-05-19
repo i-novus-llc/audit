@@ -9,7 +9,9 @@
                 <toolbar>
                     <button id="export" label="Выгрузить" icon="fa fa-download" model="filter"
                             enabling-condition="typeof period.begin != 'undefined' &amp;&amp; !!period.begin &amp;&amp;
-                            typeof period.end != 'undefined' &amp;&amp; !!period.end"
+                            typeof period.end != 'undefined' &amp;&amp; !!period.end &amp;&amp;
+                            moment(period.end, [&quot;YYYY-MM-DD'T'HH:mm:ss&quot;]).subtract(31, 'days').diff(moment(period.begin, [&quot;YYYY-MM-DD'T'HH:mm:ss&quot;])) &lt;= 0 &amp;&amp;
+                            moment(period.begin, [&quot;YYYY-MM-DD'T'HH:mm:ss&quot;]).diff(moment(period.end, [&quot;YYYY-MM-DD'T'HH:mm:ss&quot;])) &lt;= 0"
                             description="Выгрузить данные за указанный период">
                         <a href="${audit.export.url}/audit/export" target="newWindow">
                             <query-param name="auditType" value="1"/>
