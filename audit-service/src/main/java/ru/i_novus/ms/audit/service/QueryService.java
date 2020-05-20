@@ -1,13 +1,11 @@
 package ru.i_novus.ms.audit.service;
 
-import com.google.common.collect.Lists;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.data.domain.Sort;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import ru.i_novus.ms.audit.criteria.AuditCriteria;
 import ru.i_novus.ms.audit.criteria.AuditEventTypeCriteria;
 import ru.i_novus.ms.audit.criteria.AuditObjectCriteria;
@@ -35,8 +33,9 @@ public class QueryService {
                 where.and(isEventDateBeforeOrEquals(criteria.getEventDateTo()));
             }
         }
-        if (criteria.getEventType() != null) {
-            where.and(isEventTypeEquals(criteria.getEventType()));
+
+        if (ArrayUtils.isNotEmpty(criteria.getAuditEventType())) {
+            where.and(inEventTypeNames(criteria.getAuditEventType()));
         }
 
         return where.getValue();
@@ -120,28 +119,6 @@ public class QueryService {
         return where.getValue();
     }
 
-    static Sort toSort(AuditCriteria criteria) {
-        if (!CollectionUtils.isEmpty(criteria.getOrders())) {
-            return Sort.by(criteria.getOrders());
-        }
-
-        Sort.Order order;
-        if (criteria.getSortingColumn() == null) {
-            order = new Sort.Order(Sort.Direction.fromString("DESC"), "eventDate");
-        } else {
-            order = new Sort.Order(
-                    Sort.Direction.fromString(criteria.getSortingOrder() == null ? "ASC" : criteria.getSortingOrder()),
-                    criteria.getSortingColumn());
-        }
-        criteria.setOrders(Lists.newArrayList(order));
-
-        return Sort.by(criteria.getOrders());
-    }
-
-    static Sort sort(Sort.Order order) {
-        return new Sort(order.getDirection(), order.getProperty());
-    }
-
     static Predicate toPredicate(AuditEventTypeCriteria criteria) {
         BooleanBuilder where = new BooleanBuilder();
         if (criteria.getAuditTypeId() != null) {
@@ -164,8 +141,11 @@ public class QueryService {
 
     static Predicate toPredicate(AuditObjectCriteria criteria) {
         BooleanBuilder where = new BooleanBuilder();
-        if (criteria.getName() != null) {
-            where.and(QAuditObjectEntity.auditObjectEntity.name.containsIgnoreCase(criteria.getName().trim()));
+        if (StringUtils.isNotBlank(criteria.getTypeOrName())) {
+            String str = criteria.getTypeOrName().trim();
+            where
+                .and(QAuditObjectEntity.auditObjectEntity.type.containsIgnoreCase(str))
+                .or(QAuditObjectEntity.auditObjectEntity.name.containsIgnoreCase(str));
         }
 
         return where.getValue();

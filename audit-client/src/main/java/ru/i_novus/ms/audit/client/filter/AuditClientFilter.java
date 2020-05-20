@@ -46,7 +46,8 @@ public class AuditClientFilter implements Filter {
         auditClientRequest.setObjectType(OBJECT_TYPE);
         auditClientRequest.setObjectId(cachedRequest.getRequestURL() == null ? null : cachedRequest.getRequestURL().toString());
         auditClientRequest.setObjectName(OBJECT_NAME);
-        auditClientRequest.setSourceWorkstation(cachedRequest.getHeader("User-Agent"));
+        String ipAddressXFF = cachedRequest.getHeader("X-Forwarded-For");
+        auditClientRequest.setSourceWorkstation((ipAddressXFF == null) ? cachedRequest.getRemoteAddr() : ipAddressXFF);
         auditClientRequest.setAuditType(AUDIT_TYPE);
         auditClientRequest.setHostname(cachedRequest.getServerName());
 

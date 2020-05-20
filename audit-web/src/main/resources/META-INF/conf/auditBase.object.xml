@@ -5,10 +5,10 @@
         <field id="name" domain="string" name="Наименование"/>
         <field id="eventDate" domain="localdatetime" name="Дата события"/>
         <field id="auditEventTypes" domain="string" name="Тип события"/>
-        <field id="objectType" name="Тип объекта" />
-        <field id="objectName" name="Тип объекта" />
-        <field id="auditObjects" name="Объект" />
-        <field id="auditSourceApplications" name="Название системы" />
+        <field id="objectType" name="Тип объекта"/>
+        <field id="objectName" name="Наименование объекта"/>
+        <field id="auditObjects" name="Объект"/>
+        <field id="auditSourceApplications" name="Название системы"/>
         <field id="sourceWorkstation" domain="string" name="Рабочая станция"/>
         <field id="objectId" domain="string" name="Идентификатор объекта"/>
         <field id="userId" domain="string" name="Идентификатор пользователя"/>
@@ -17,5 +17,40 @@
         <field id="hostname" domain="string" name="Сервер"/>
         <field id="auditTypeId" domain="integer" name="тип"/>
     </fields>
+
+    <validations>
+        <condition id="checkDate" severity="danger" on="period"
+                   message="Максимальный интервал поиска не может превышать 31 дня">
+            <![CDATA[(function(){
+                    if (typeof period !== 'undefined' && period !== null) {
+                        var min_begin = moment(period.end, ["YYYY-MM-DD'T'HH:mm:ss"]).subtract(31, 'days');
+                        var begin = moment(period.begin, ["YYYY-MM-DD'T'HH:mm:ss"]);
+                        return min_begin.diff(begin) <= 0;
+                   } else {
+                        return false;
+                   }
+              })()
+             ]]>
+        </condition>
+        <condition id="checkNegativeDateInterval" severity="danger" on="period"
+                   message="Дата окончания периода не может быть раньше даты начала">
+            <![CDATA[(function(){
+                    if (typeof period !== 'undefined' && period !== null) {
+                        var begin = moment(period.begin, ["YYYY-MM-DD'T'HH:mm:ss"]);
+                        var end = moment(period.end, ["YYYY-MM-DD'T'HH:mm:ss"]);
+
+                        return begin.diff(end) <= 0;
+                   } else {
+                        return false;
+                   }
+              })()
+             ]]>
+        </condition>
+        <condition id="periodRequired" severity="danger" on="period"
+                   message="Поле обязательно для заполнения">
+                    typeof period.begin != 'undefined' &amp;&amp; period.begin != null &amp;&amp;
+                    typeof period.end != 'undefined' &amp;&amp; period.end != null
+        </condition>
+    </validations>
 
 </object>

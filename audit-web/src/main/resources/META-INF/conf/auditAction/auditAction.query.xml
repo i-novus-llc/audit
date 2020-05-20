@@ -13,7 +13,6 @@
 
         <field id="id" domain="string">
             <select/>
-            <sorting mapping="['direction']">sortingColumn=id&amp;sortingOrder={direction}</sorting>
             <filters>
                 <eq filter-id="id"/>
             </filters>
@@ -21,7 +20,7 @@
 
         <field id="eventDate" domain="localdatetime">
             <select/>
-            <sorting mapping="['direction']">sortingColumn=eventDate&amp;sortingOrder={direction}</sorting>
+            <sorting mapping="['direction']">sort=eventDate,{direction}</sorting>
             <filters>
                 <more filter-id="period.begin">eventDateFrom={period.begin}</more>
                 <less filter-id="period.end">eventDateTo={period.end}</less>
@@ -32,15 +31,11 @@
             <select/>
         </field>
 
-        <field id="auditEventTypes" domain="string">
+        <field id="auditEventTypes.name" domain="string">
             <select/>
             <filters>
                 <in filter-id="auditEventTypes*.name">eventType={auditEventTypes*.name}</in>
             </filters>
-        </field>
-
-        <field id="context" domain="string">
-            <select/>
         </field>
 
         <field id="sourceApplication" domain="string">
@@ -54,8 +49,12 @@
             <select/>
         </field>
 
-        <field id="auditObjects" domain="string">
-            <select/>
+        <field id="auditObjects.type" domain="string">
+            <filters>
+                <in filter-id="auditObjects*.type">objectType={auditObjects*.type}</in>
+            </filters>
+        </field>
+        <field id="auditObjects.name" domain="string">
             <filters>
                 <in filter-id="auditObjects*.name">objectName={auditObjects*.name}</in>
             </filters>

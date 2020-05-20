@@ -3,7 +3,6 @@ package ru.i_novus.ms.audit.service;
 import com.querydsl.core.types.Predicate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -16,7 +15,11 @@ import ru.i_novus.ms.audit.model.Audit;
 import ru.i_novus.ms.audit.model.AuditForm;
 import ru.i_novus.ms.audit.repository.AuditRepository;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,6 +30,7 @@ import static org.mockito.Mockito.*;
 public class AuditServiceTest {
 
     private static final String TEXT = "test";
+    private static final short AUDIT_TYPE_AUTHORIZATION = 3;
 
     @InjectMocks
     private AuditService service;
@@ -67,7 +71,7 @@ public class AuditServiceTest {
         doReturn(Optional.empty())
                 .when(auditRepository).findFirstByAuditTypeIdAndAuditSourceApplicationOrderByEventDateDesc(anyShort(), anyString());
 
-        Audit audit = service.getLastAudit((short) 1, "access");
+        Audit audit = service.getLastAudit(AUDIT_TYPE_AUTHORIZATION, "access");
 
         assertNull(audit);
     }
@@ -78,14 +82,36 @@ public class AuditServiceTest {
         doReturn(Optional.of(entity))
                 .when(auditRepository).findFirstByAuditTypeIdAndAuditSourceApplicationOrderByEventDateDesc(anyShort(), anyString());
 
-        Audit audit = service.getLastAudit((short) 1, "access");
+        Audit audit = service.getLastAudit(AUDIT_TYPE_AUTHORIZATION, "access");
 
         assertNotNull(audit);
     }
 
     @Test
+    public void testGetAuditExists() {
+        doReturn(true)
+                .when(auditRepository).existsByAuditTypeIdAndEventDateAndEventTypeAndUserIdAndAuditSourceApplicationAndContext
+                (anyShort(), any(LocalDateTime.class), anyString(), anyString(), anyString(), anyString());
+
+        boolean auditExists = service.auditExists(AUDIT_TYPE_AUTHORIZATION, LocalDateTime.now(), "eventType", "user", "access", "context");
+
+        assertTrue(auditExists);
+    }
+
+    @Test
+    public void testGetAuditNotExists() {
+        doReturn(false)
+                .when(auditRepository).existsByAuditTypeIdAndEventDateAndEventTypeAndUserIdAndAuditSourceApplicationAndContext
+                (anyShort(), any(LocalDateTime.class), anyString(), anyString(), anyString(), anyString());
+
+        boolean auditExists = service.auditExists(AUDIT_TYPE_AUTHORIZATION, LocalDateTime.now(), "eventType", "user", "access", "context");
+
+        assertFalse(auditExists);
+    }
+
+    @Test
     public void testGetByIdEmpty() {
-        doReturn(Optional.empty()).when(auditRepository).searchEntityBylastMonth(any());
+        doReturn(Optional.empty()).when(auditRepository).searchEntityByLastMonth(any());
         doReturn(Optional.empty()).when(auditRepository).findById(any());
         Optional<AuditEntity> entity = service.getById(UUID.randomUUID());
 
@@ -95,7 +121,7 @@ public class AuditServiceTest {
 
     @Test
     public void testGetById() {
-        doReturn(Optional.of(AuditEntity.class)).when(auditRepository).searchEntityBylastMonth(any());
+        doReturn(Optional.of(AuditEntity.class)).when(auditRepository).searchEntityByLastMonth(any());
         Optional<AuditEntity> entity = service.getById(UUID.randomUUID());
 
         assertNotEquals(entity, Optional.empty());

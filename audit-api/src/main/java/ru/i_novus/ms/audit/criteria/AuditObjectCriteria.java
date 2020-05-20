@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import net.n2oapp.platform.jaxrs.RestCriteria;
 
 import javax.ws.rs.QueryParam;
 
@@ -13,8 +12,8 @@ import javax.ws.rs.QueryParam;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuditObjectCriteria extends RestCriteria {
-    @ApiParam("Наименование")
-    @QueryParam("name")
-    private String name;
+public class AuditObjectCriteria extends AuditRestCriteria {
+    @ApiParam("Тип/Наименование")
+    @QueryParam("typeOrName")
+    private String typeOrName;
 }

@@ -1,11 +1,9 @@
 package ru.i_novus.ms.audit.criteria;
 
 import io.swagger.annotations.ApiParam;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import net.n2oapp.platform.jaxrs.RestCriteria;
+import org.springframework.data.domain.Sort;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
@@ -13,11 +11,9 @@ import javax.ws.rs.QueryParam;
 import java.time.LocalDateTime;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 @Setter
 @Validated
-public class AuditCriteria extends RestCriteria {
+public class AuditCriteria extends AuditRestCriteria {
 
     @QueryParam("id")
     private String id;
@@ -31,10 +27,6 @@ public class AuditCriteria extends RestCriteria {
     @QueryParam("eventDateTo")
     @NotNull
     private LocalDateTime eventDateTo;
-
-    @ApiParam("Тип события")
-    @QueryParam("eventType")
-    private String eventType;
 
     @ApiParam(value = "Объект")
     @QueryParam("objectType")
@@ -89,11 +81,8 @@ public class AuditCriteria extends RestCriteria {
     @QueryParam("receiver")
     private String[] receiver;
 
-    @ApiParam("Поле сортировки")
-    @QueryParam("sortingColumn")
-    private String sortingColumn;
-
-    @ApiParam(value = "Порядок сортировки", allowableValues = "DESC, ASC")
-    @QueryParam("sortingOrder")
-    private String sortingOrder;
+    @SuppressWarnings("squid:S2637")
+    public AuditCriteria() {
+        defaultOrders.add(new Sort.Order(Sort.Direction.DESC, "eventDate"));
+    }
 }

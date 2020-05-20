@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>audit-client-utils</artifactId>
+        <groupId>ru.i-novus.ms.audit</groupId>
+        <version>2.4.12-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+        <jacoco.skip>false</jacoco.skip>
+    </properties>
+
+    <artifactId>audit-client-utils-lib</artifactId>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>net.n2oapp.platform</groupId>
+            <artifactId>n2o-platform-starter-ms</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.i-novus.ms.audit</groupId>
+            <artifactId>audit-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.n2oapp.platform</groupId>
+            <artifactId>n2o-platform-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>

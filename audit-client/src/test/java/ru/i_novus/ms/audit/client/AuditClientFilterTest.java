@@ -40,6 +40,7 @@ public class AuditClientFilterTest {
     private static final String REQUEST_USER_AGENT = "test/5.0";
     private static final String REQUEST_CONTENT_TYPE = "application/json";
     private static final String REQUEST_SERVER_NAME = "http://test.org";
+    private static final String IP_ADDRESS = "127.0.0.1";
 
     //Параметры которые берутся из респонса
     private static final int RESPONSE_STATUS_CODE = 200;
@@ -66,6 +67,7 @@ public class AuditClientFilterTest {
         when(request.getHeaderNames()).thenReturn(Collections.enumeration(Arrays.asList(HEADER_USER_AGENT, HEADER_CONTENT_TYPE)));
         when(request.getHeader(HEADER_USER_AGENT)).thenReturn(REQUEST_USER_AGENT);
         when(request.getHeader(HEADER_CONTENT_TYPE)).thenReturn(REQUEST_CONTENT_TYPE);
+        when(request.getRemoteAddr()).thenReturn(IP_ADDRESS);
 
         when(response.getStatus()).thenReturn(RESPONSE_STATUS_CODE);
         when(response.getHeaderNames()).thenReturn(Arrays.asList(HEADER_USER_AGENT, HEADER_CONTENT_TYPE));
@@ -76,7 +78,7 @@ public class AuditClientFilterTest {
         auditClientRequest.setObjectType(OBJECT_TYPE);
         auditClientRequest.setObjectId(REQUEST_URL);
         auditClientRequest.setObjectName(OBJECT_NAME);
-        auditClientRequest.setSourceWorkstation(REQUEST_USER_AGENT);
+        auditClientRequest.setSourceWorkstation(IP_ADDRESS);
         auditClientRequest.setAuditType(AUDIT_TYPE);
         auditClientRequest.setHostname(REQUEST_SERVER_NAME);
         auditClientRequest.setContext(CONTEXT);

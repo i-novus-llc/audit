@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.n2oapp.platform.jaxrs.MapperConfigurer;
 import org.springframework.stereotype.Component;
 import ru.i_novus.ms.audit.model.Audit;
+import ru.i_novus.ms.audit.model.AuditForm;
 
 @Component
 public class AuditMapperConfigurer implements MapperConfigurer {
     @Override
     public void configure(ObjectMapper objectMapper) {
         objectMapper.addMixIn(Audit.class, AuditMixIn.class);
+        objectMapper.addMixIn(AuditForm.class, AuditFormMixIn.class);
     }
 }

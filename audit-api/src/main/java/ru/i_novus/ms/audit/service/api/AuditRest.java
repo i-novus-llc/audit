@@ -25,13 +25,24 @@ public interface AuditRest {
     @GET
     @Path("/{id}")
     @ApiOperation("Поиск события по идентификатору")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "sort", value = "Сортировка, sort=<код атрибута>, <asc|desc>", dataType = "string", paramType = "query")
+    })
     Audit getById(@ApiParam("Идентификатор события") @PathParam("id") UUID id);
 
     @GET
     @ApiOperation("Поиск событий")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "sort", value = "Сортировка, sort=<код атрибута>, <asc|desc>", dataType = "string", paramType = "query")
+    })
     Page<Audit> search(@BeanParam @Valid AuditCriteria criteria);
 
     @POST
     @ApiOperation("Добавить событие")
     Audit add(@ApiParam("Событие") @Valid AuditForm request);
+
+    @POST
+    @Path("/sso-events-synchronize")
+    @ApiOperation("Синхронизация журнала авторизаций")
+    void startEventsSynchronize();
 }

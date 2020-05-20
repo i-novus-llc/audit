@@ -1,0 +1,105 @@
+:toc:
+:toc-title: Содержание
+
+Вспомогательная библиотека для подключения аудирования к приложению.
+Состоит из двух модулей, самой библиотеки audit-client-utils-lib и стартера audit-client-utils-spring-boot-starter.
+
+== audit-client-utils-lib
+
+Подключение:
+
+[source,xml]
+----
+<dependency>
+    <groupId>ru.i-novus.ms.audit</groupId>
+    <artifactId>audit-client-utils-lib</artifactId>
+    <version>${version}</version>
+</dependency>
+----
+
+Содержит аннотации с помощью которых указываются методы сервиса которые необходимо аудировать и игнорируемые поля.
+Стоит использовать отдельно от стартера <<_audit_client_utils_spring_boot_starter, audit-client-utils-spring-boot-starter>> для использования аннотаций в неисполняемых модулях(например api),
+в остальных случаях можно использовать стартер.
+
+@Audit - аннотация которая указывается на аудируемых методах.
+Возвращаемый методом объект будет преобразован в json ObjectMapper'ом и помещен в поле context аудита. +
+Значение параметра action подставляется в поле eventType аудита.
+Параметр принимает коды локализованных сообщений (MessageSource). +
+Значение параметра object используется для заполнение полей objectType, objectName аудита.
+В objectType подставляется значение переданное параметром object, objectName подбирается из properties по префиксу audit.object и значению параметра object.
+Если object не был указан, тогда будет подставлено название класса аудируемого объекта. +
+Пример: +
+
+message.properties
+
+[source,properties]
+----
+audit.action.create=Создание
+----
+
+application.properties
+
+[source,properties]
+----
+audit.object.Case=Дело
+----
+
+Аннотация
+
+[source,java]
+----
+@Audit(action = "audit.action.create", object = "Case")
+----
+
+@AuditIgnore - аннотация для игнорирования полей аудируемого объекта.
+
+@AuditIgnorable - аннотация для поиска игнорируемых полей внутри объекта.
+
+Пример:
+
+[source,java]
+----
+@Getter
+@Setter
+public class User {
+    @AuditIgnore
+    private Integer id;
+
+    private String name;
+}
+
+@Getter
+@Setter
+public class Case {
+    @AuditIgnore
+    private Integer id;
+
+    @AuditIgnorable
+    private User name;
+}
+
+@Audit(action = "audit.action.create", object = "Case")
+public Case createCase(CaseForm caseForm) {
+    //Реализация
+}
+----
+
+В данном случае в контекст аудита не попадут поля id классов User и Case.
+
+Есть возможность заполнения пользователя и IP-адреса кастомными значениями.
+Для этого в запросе в headers "userHeader" и "sourceWorkStationHeader" необходимо передать соответствующие значения.
+
+== audit-client-utils-spring-boot-starter
+
+Подключение:
+
+[source,xml]
+----
+<dependency>
+    <groupId>ru.i-novus.ms.audit</groupId>
+    <artifactId>audit-client-utils-lib</artifactId>
+    <version>${version}</version>
+</dependency>
+----
+
+Стартер для подключения вспомогательной библиотеки. Для своей работы требует подключение link:../audit-client-starter/README.adoc[клиента] аудита.

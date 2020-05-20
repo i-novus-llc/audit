@@ -56,8 +56,14 @@ audit.security.oauth2.client-id=
 audit.security.oauth2.client-secret=
 ----
 * Адрес до realm, с которого будет происходить получение логов событий (например http://localhost:8080/auth/admin/realms/master)
+*** При использовании расширения keycloak для получения событий,
+ требуется переопределить url(например http://localhost:8080/auth/realms/master), т.е. в данном примере не используется модуль admin
 ----
 audit.security.oauth2.events-url=
+----
+Активация режима использования расширения keycloak для получения событий
+----
+ audit.security.oauth2.use-events-extension=true #default false
 ----
 * Код подсистемы, которая будет сохраняться в аудит(например security)
 ----

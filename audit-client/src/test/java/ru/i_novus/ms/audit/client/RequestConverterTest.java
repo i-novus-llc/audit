@@ -1,14 +1,15 @@
 package ru.i_novus.ms.audit.client;
 
 import net.n2oapp.platform.i18n.Messages;
-import net.n2oapp.platform.i18n.UserException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.i_novus.ms.audit.client.app.TestedRequestConverter;
-import ru.i_novus.ms.audit.client.model.AuditClientRequest;
+import ru.i_novus.ms.audit.client.model.BaseAuditClientRequestTest;
 import ru.i_novus.ms.audit.client.model.User;
 import ru.i_novus.ms.audit.model.AuditForm;
+
+import javax.validation.ConstraintViolationException;
 
 import java.time.LocalDateTime;
 
@@ -16,30 +17,9 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class RequestConverterTest {
-
-    private static final String EVENT_TYPE = "EventType";
-    private static final String OBJECT_TYPE = "ObjectType";
-    private static final String OBJECT_ID = "ObjectId";
-    private static final String OBJECT_NAME = "ObjectName";
-    private static final String USER_ID = "UserId";
-    private static final String USER_ID_PARAMETRIZED = "Parametrized userId";
-    private static final String USERNAME = "username";
-    private static final String USERNAME_PARAMETRIZED = "Parametrized username";
-    private static final String SOURCE_WORKSTATION = "Workstation";
-    private static final String SOURCE_WORKSTATION_PARAMETRIZED = "Parametrized workstation";
-    private static final String SOURCE_APPLICATION = "Application";
-    private static final String SOURCE_APPLICATION_PARAMETRIZED = "Parametrized application";
-    private static final String HOSTNAME = "Hostname";
-    private static final String CONTEXT = "{\"field\": \"name\", \"value\": \"Значение\"}";
-    private static final short AUDIT_TYPE = 1;
-    private static final String SENDER = "Sender";
-    private static final String RECEIVER = "Receiver";
+public class RequestConverterTest extends BaseAuditClientRequestTest {
 
     private static TestedRequestConverter requestConverter;
-
-    private static AuditClientRequest auditClientRequest;
-
     private static Messages messages = mock(Messages.class);
 
     @BeforeClass
@@ -70,21 +50,7 @@ public class RequestConverterTest {
 
     @Before
     public void beforeEach() {
-        auditClientRequest = new AuditClientRequest();
         auditClientRequest.setEventDate(LocalDateTime.now().withNano(0));
-        auditClientRequest.setEventType(EVENT_TYPE);
-        auditClientRequest.setObjectType(OBJECT_TYPE);
-        auditClientRequest.setObjectId(OBJECT_ID);
-        auditClientRequest.setObjectName(OBJECT_NAME);
-        auditClientRequest.setUserId(USER_ID);
-        auditClientRequest.setUsername(USERNAME);
-        auditClientRequest.setSourceWorkstation(SOURCE_WORKSTATION);
-        auditClientRequest.setSourceApplication(SOURCE_APPLICATION);
-        auditClientRequest.setHostname(HOSTNAME);
-        auditClientRequest.setContext(CONTEXT);
-        auditClientRequest.setAuditType(AUDIT_TYPE);
-        auditClientRequest.setSender(SENDER);
-        auditClientRequest.setReceiver(RECEIVER);
     }
 
     @Test
@@ -132,21 +98,21 @@ public class RequestConverterTest {
         assertEquals(auditClientRequest.getReceiver().getValue(), auditForm.getReceiver());
     }
 
-    @Test(expected = UserException.class)
+    @Test(expected = ConstraintViolationException.class)
     public void invalidEventTypeTest() {
         auditClientRequest.setEventType(null);
 
         requestConverter.toAuditRequest(auditClientRequest);
     }
 
-    @Test(expected = UserException.class)
+    @Test(expected = ConstraintViolationException.class)
     public void invalidContextTest() {
         auditClientRequest.setContext(null);
 
         requestConverter.toAuditRequest(auditClientRequest);
     }
 
-    @Test(expected = UserException.class)
+    @Test(expected = ConstraintViolationException.class)
     public void invalidAuditTypeTest() {
         auditClientRequest.setAuditType(null);
 

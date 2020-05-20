@@ -22,13 +22,17 @@
     <version>${version}</version>
 </dependency>
 ----
+Асинхронный клиент работает с сервисом аудита через брокер сообщений, поэтому нужно убедиться что клиент и сервис
+аудита настроены на единый activeMQ(проперти *spring.activemq.broker-url*) и очередь(*audit.client.queue* значение по умолчанию *audit.queue*)
 
 .Для работы клиента следует добавить следующую запись в properties: +
 * audit.service.url = URL где расположен сервис аудита +
+* spring.activemq.broker-url = адрес activeMQ на который настроен сервис аудита(только для асинхронного клиента)
 
 .Дополнительные параметры: +
 * audit.client.enabled = При значении false вместо AuditClient будет возвращена заглушка (StubAuditClientImpl). +
-* audit.client.sourceApplication= Идентификатор системы откуда происходит запись(sourceApplication). Если в запросе будет передан sourceApplication, то значение этой настройки будет игнорироваться. +
+* audit.client.sourceApplication= Идентификатор системы откуда происходит запись(sourceApplication). Если в запросе
+будет передан sourceApplication, то значение этой настройки будет игнорироваться. +
 
 Для отправки запроса в аудит используется AuditClientRequest
 [source]
@@ -106,11 +110,14 @@ public class TestClass {
     <version>${version}</version>
 </dependency>
 ----
+Асинхронный клиент работает с сервисом аудита через брокер сообщений, поэтому нужно убедиться что клиент и сервис
+аудита настроены на единый activeMQ(проперти *spring.activemq.broker-url*) и очередь(*audit.client.queue* значение по умолчанию *audit.queue*)
 
 .Для работы клиента следует добавить следующие записи в properties: +
 * audit.service.url = URL где расположен сервис аудита +
 * audit.client.filter-url-pattern = паттерн, запросы по которому будут обрабатываться фильтром клиента (вероятнее всего /n2o/data/*) +
 * audit.client.sourceApplication = Наименование системы откуда происходит запись(значения для ЛКБ LKB-BANK /LKB-DOMRF) +
+* spring.activemq.broker-url = адрес activeMQ на который настроен сервис аудита(только для асинхронного клиента)
 
 
 .Дополнительные параметры: +

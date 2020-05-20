@@ -19,6 +19,7 @@ public class OpenIdProperties {
     private String code;
     private String eventsUrl;
     private String eventsSchedule;
+    private Boolean useEventsExtension;
 
     public String getAccessTokenUri() {
         return concatServer(accessTokenUri);

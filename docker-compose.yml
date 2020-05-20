@@ -4,8 +4,12 @@ services:
 
   audit-service:
     environment:
+      SPRING_CLOUD_CONSUL_CONFIG_PREFIX: audit
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/audit
       JAVA_OPTS: -Xmx200m
+      LOGGING_LEVEL_ROOT: ERROR
+      SERVER_PORT: 8080
+      SPRING_ACTIVEMQ_BROKERURL: tcp://docker.one:8913
     ports:
       - 8080
     deploy:
@@ -28,9 +32,12 @@ services:
 
   audit-webapp:
     environment:
+      SPRING_CLOUD_CONSUL_CONFIG_PREFIX: audit
       AUDIT_BACKEND_URL: http://audit-service:8080/api
       AUDIT_EXPORT_URL: ${audit_export_url}
       JAVA_OPTS: -Xmx300m
+      LOGGING_LEVEL_ROOT: ERROR
+      SERVER_PORT: 8080
     ports:
       - 8080
     deploy:

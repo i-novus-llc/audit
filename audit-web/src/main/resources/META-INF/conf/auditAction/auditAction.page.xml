@@ -7,14 +7,19 @@
         <region place="single">
             <table id="audit_table" query-id="auditAction" size="10" name="Аудит Данных">
                 <toolbar>
-                    <button id="export" label="Выгрузить" icon="fa fa-download" model="filter">
+                    <button id="export" label="Выгрузить" icon="fa fa-download" model="filter"
+                            enabling-condition="typeof period.begin != 'undefined' &amp;&amp; !!period.begin &amp;&amp;
+                            typeof period.end != 'undefined' &amp;&amp; !!period.end &amp;&amp;
+                            moment(period.end, [&quot;YYYY-MM-DD'T'HH:mm:ss&quot;]).subtract(31, 'days').diff(moment(period.begin, [&quot;YYYY-MM-DD'T'HH:mm:ss&quot;])) &lt;= 0 &amp;&amp;
+                            moment(period.begin, [&quot;YYYY-MM-DD'T'HH:mm:ss&quot;]).diff(moment(period.end, [&quot;YYYY-MM-DD'T'HH:mm:ss&quot;])) &lt;= 0"
+                            description="Выгрузить данные за указанный период">
                         <a href="${audit.export.url}/audit/export" target="newWindow">
                             <query-param name="auditType" value="1"/>
-                            <query-param name="eventDateFrom" value="{moment(period.begin, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DDTHH:mm')}"/>
-                            <query-param name="eventDateTo" value="{moment(period.end, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DDTHH:mm')}"/>
+                            <query-param name="eventDateFrom" value="{moment(period.begin, 'YYYY-MM-DDTHH:mm:ss').format('YYYY-MM-DDTHH:mm:ss')}"/>
+                            <query-param name="eventDateTo" value="{moment(period.end, 'YYYY-MM-DDTHH:mm:ss').format('YYYY-MM-DDTHH:mm:ss')}"/>
                             <query-param name="sourceApplication" value="{auditSourceApplications*.code}"/>
                             <query-param name="eventType" value="{auditEventTypes*.name}"/>
-                            <query-param name="objectType" value="{auditObjects*.name}"/>
+                            <query-param name="objectType" value="{auditObjects*.type}"/>
                             <query-param name="objectId" value="{objectId}"/>
                             <query-param name="username" value="{username}"/>
                         </a>
@@ -22,20 +27,16 @@
                 </toolbar>
                 <filters>
                     <row>
-                        <date-interval id="period" label="Дата и время" required="true" time-format="HH:mm">
-                            <default-value begin="{moment().subtract(31, 'days').format('DD.MM.YYYY HH:mm:ss')}"
-                                           end="{moment().format('DD.MM.YYYY HH:mm:ss')}"/>
-                            <validations>
-                                <condition id="checkDate" severity="danger" side="client,server" server-moment="before-query"
-                                           message="Укажите даты с интервалом не более 31 дня"
-                                           src="/META-INF/js/validation.js"/>
-                            </validations>
+                        <date-interval id="period" label="Дата и время" required="true" time-format="HH:mm:ss" date-format="DD.MM.YYYY">
+                            <default-value begin="{moment().subtract(30, 'days').format('YYYY-MM-DDTHH:mm:ss')}"
+                                           end="{moment().format('YYYY-MM-DDTHH:mm:ss')}"/>
+                            <validations white-list="periodRequired,checkDate,checkNegativeDateInterval"/>
                         </date-interval>
                         <input-select id="auditSourceApplications" label="Система/Модуль" type="multi"
                                       query-id="auditSourceApplication"
-                                      label-field-id="code"/>
+                                      label-field-id="code" search-field-id="code"/>
                         <input-select id="auditEventTypes" label="Тип события" type="multi" query-id="auditEventType"
-                                      label-field-id="name">
+                                      label-field-id="name" search-field-id="name">
                             <pre-filters>
                                 <eq field-id="auditTypeId" value="1"/>
                             </pre-filters>
@@ -43,22 +44,15 @@
                     </row>
                     <row>
                         <input-select id="auditObjects" label="Объект" type="multi" query-id="auditObject"
-                                      label-field-id="name"/>
+                                      label-field-id="typeAndName" search-field-id="typeAndName"/>
                         <input-text id="objectId" label="Идентификатор объекта" domain="string"/>
                         <input-text id="username" label="Пользователь" domain="string"/>
                     </row>
-                    <hidden id="days_count">
-                        <dependencies>
-                            <set-value on="period">
-                                var period_begin = moment(period.begin, ["DD.MM.YYYY HH:mm:ss"]);
-                                var period_end = moment(period.end, ["DD.MM.YYYY HH:mm:ss"]);
-                                return period_end.diff(period_begin, 'days');
-                            </set-value>
-                        </dependencies>
-                    </hidden>
                 </filters>
                 <columns>
-                    <column text-field-id="eventDate" label="Дата и время"/>
+                    <column text-field-id="eventDate" label="Дата и время">
+                        <text format="date DD.MM.YYYY HH:mm:ss"/>
+                    </column>
                     <column text-field-id="sourceApplication" label="Система/Модуль"/>
                     <column text-field-id="sourceWorkstation" label="Рабочая станция"/>
                     <column text-field-id="hostname" sorting-field-id="hostname" sorting-direction="desc"
