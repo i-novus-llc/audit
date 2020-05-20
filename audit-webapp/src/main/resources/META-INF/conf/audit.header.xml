@@ -7,4 +7,5 @@
             <page page-id="auditAuthorization" label="Журнал авторизаций, сессий и неудачных попыток входа"/>
         </sub-menu>
     </nav>
+    <extra-menu ref-id="user"/>
 </header>

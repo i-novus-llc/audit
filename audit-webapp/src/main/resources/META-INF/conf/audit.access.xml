@@ -1,0 +1,19 @@
+<access xmlns="http://n2oapp.net/framework/config/schema/access-2.0">
+
+    <permission id="audit.userAction.read">
+        <object-access object-id="auditBase"/>
+        <page-access page-id="auditAction"/>
+    </permission>
+
+    <permission id="audit.integration.read">
+        <object-access object-id="auditBase"/>
+        <page-access page-id="auditIntegration"/>
+    </permission>
+
+    <permission id="audit.authorization.read">
+        <object-access object-id="auditBase"/>
+        <page-access page-id="auditAuthorization"/>
+    </permission>
+
+
+</access>

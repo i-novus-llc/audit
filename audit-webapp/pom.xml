@@ -11,6 +11,7 @@
     <properties>
         <maven.deploy.skip>true</maven.deploy.skip>
         <jacoco.skip>false</jacoco.skip>
+        <security-admin.version>4.0-SNAPSHOT</security-admin.version>
     </properties>
 
     <artifactId>audit-webapp</artifactId>
@@ -35,19 +36,39 @@
         </dependency>
 
         <dependency>
-            <groupId>net.n2oapp.framework</groupId>
-            <artifactId>n2o-spring-boot-starter</artifactId>
+            <groupId>net.n2oapp.platform</groupId>
+            <artifactId>n2o-platform-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>net.n2oapp.platform</groupId>
             <artifactId>n2o-platform-starter-ms</artifactId>
         </dependency>
-
         <dependency>
             <groupId>net.n2oapp.platform</groupId>
             <artifactId>n2o-platform-jaxrs-commons</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>net.n2oapp.framework.security</groupId>
+            <artifactId>security-auth-oauth2</artifactId>
+            <version>${security-admin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.n2oapp.framework.security</groupId>
+            <artifactId>security-auth-oauth2-gateway</artifactId>
+            <version>${security-admin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.n2oapp.framework.security</groupId>
+            <artifactId>security-admin-rest-client</artifactId>
+            <version>${security-admin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.n2oapp.framework.security</groupId>
+            <artifactId>security-admin-web</artifactId>
+            <version>${security-admin.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
