@@ -28,6 +28,14 @@ services:
       MANAGEMENT_HEALTH_CONSUL_ENABLED: "false"
       JAVA_OPTS: -Xmx300m
       LOGGING_LEVEL_ROOT: INFO
+      SECURITY_OAUTH2_AUTH_SERVER_URI: https://epmp.master.i-novus.ru/auth
+      SECURITY_OAUTH2_ACCESS_TOKEN_URI: https://epmp.master.i-novus.ru/auth/oauth/token
+      SECURITY_OAUTH2_CLIENT_ID: audit
+      SECURITY_OAUTH2_CLIENT_SECRET: 17767efb-9cb8-4f70-821e-79533d518195
+      SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI: https://epmp.master.i-novus.ru/auth/oauth/authorize
+      SECURITY_OAUTH2_RESOURCE_USER_INFO_URI: https://epmp.master.i-novus.ru/auth/userinfo
+      SECURITY_OAUTH2_SSO_LOGOUT_URI: https://epmp.master.i-novus.ru/auth/logout?redirect_uri=http://localhost:8950/
+      ACCESS_SERVICE_URL: https://epmp.master.i-novus.ru/auth/api
     ports:
       - 8080
     healthcheck:
