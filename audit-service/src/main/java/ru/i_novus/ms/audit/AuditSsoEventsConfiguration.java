@@ -36,19 +36,19 @@ public class AuditSsoEventsConfiguration extends WebSecurityConfigurerAdapter {
         return new OAuth2RestTemplate(resource, new DefaultOAuth2ClientContext(new DefaultAccessTokenRequest()));
     }
 
-    @Bean
-    AbstractSsoEventsService ssoEventsService(OpenIdProperties openIdProperties) throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        log.debug("Settings: \n" + mapper.writeValueAsString(openIdProperties));
-
-        if (Boolean.TRUE.equals(openIdProperties.getUseEventsExtension())) {
-            log.debug("Create ExtendedSsoEventsService.class");
-            return new ExtendedSsoEventsService(openIdProperties);
-        }
-
-        log.debug("Create BaseSsoEventsService.class");
-        return new BaseSsoEventsService(openIdProperties);
-    }
+//    @Bean
+//    AbstractSsoEventsService ssoEventsService(OpenIdProperties openIdProperties) throws Exception {
+//        ObjectMapper mapper = new ObjectMapper();
+//        log.debug("Settings: \n" + mapper.writeValueAsString(openIdProperties));
+//
+//        if (Boolean.TRUE.equals(openIdProperties.getUseEventsExtension())) {
+//            log.debug("Create ExtendedSsoEventsService.class");
+//            return new ExtendedSsoEventsService(openIdProperties);
+//        }
+//
+//        log.debug("Create BaseSsoEventsService.class");
+//        return new BaseSsoEventsService(openIdProperties);
+//    }
 
     @Bean
     String getScheduleCronSyntax(OpenIdProperties openIdProperties) {

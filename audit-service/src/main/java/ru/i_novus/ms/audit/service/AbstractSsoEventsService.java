@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import ru.i_novus.ms.audit.OpenIdProperties;
 import ru.i_novus.ms.audit.client.AuditClient;
@@ -25,6 +26,7 @@ import static org.springframework.http.HttpMethod.GET;
 
 @EnableScheduling
 @Slf4j
+@Service
 public abstract class AbstractSsoEventsService {
     @Autowired
     protected AuditClient asyncAuditClient;
