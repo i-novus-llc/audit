@@ -1,7 +1,6 @@
 package ru.i_novus.ms.audit.service;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import ru.i_novus.ms.audit.OpenIdProperties;
 import ru.i_novus.ms.audit.model.Audit;
