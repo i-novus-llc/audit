@@ -10,7 +10,6 @@ import ru.i_novus.ms.audit.model.OpenIdEventLog;
 import java.time.ZoneId;
 import java.util.List;
 
-@Service
 public class ExtendedSsoEventsService extends AbstractSsoEventsService {
 
     private Long lastEventDateTime;

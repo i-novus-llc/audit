@@ -24,7 +24,6 @@ import java.util.List;
 
 import static org.springframework.http.HttpMethod.GET;
 
-@Service
 @EnableScheduling
 @Slf4j
 public abstract class AbstractSsoEventsService {

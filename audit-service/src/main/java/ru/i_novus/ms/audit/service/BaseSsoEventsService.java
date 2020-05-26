@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
-@Service
 public class BaseSsoEventsService extends AbstractSsoEventsService {
 
     public BaseSsoEventsService(OpenIdProperties openIdProperties) {
