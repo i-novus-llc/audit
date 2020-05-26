@@ -1,5 +1,7 @@
 package ru.i_novus.ms.audit;
 
+import lombok.extern.slf4j.Slf4j;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +17,7 @@ import ru.i_novus.ms.audit.service.AbstractSsoEventsService;
 import ru.i_novus.ms.audit.service.BaseSsoEventsService;
 import ru.i_novus.ms.audit.service.ExtendedSsoEventsService;
 
+@Slf4j
 @SpringBootConfiguration
 @EnableConfigurationProperties(OpenIdProperties.class)
 public class AuditSsoEventsConfiguration extends WebSecurityConfigurerAdapter {
@@ -34,7 +37,10 @@ public class AuditSsoEventsConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    AbstractSsoEventsService ssoEventsService(OpenIdProperties openIdProperties) {
+    AbstractSsoEventsService ssoEventsService(OpenIdProperties openIdProperties) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        log.debug("Settings: \n" + mapper.writeValueAsString(openIdProperties));
+
         if (Boolean.TRUE.equals(openIdProperties.getUseEventsExtension())) {
             return new ExtendedSsoEventsService(openIdProperties);
         }
