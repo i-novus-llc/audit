@@ -5,6 +5,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
@@ -20,6 +21,7 @@ import ru.i_novus.ms.audit.service.ExtendedSsoEventsService;
 @Slf4j
 @SpringBootConfiguration
 @EnableConfigurationProperties(OpenIdProperties.class)
+@EnableScheduling
 public class AuditSsoEventsConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -36,19 +38,19 @@ public class AuditSsoEventsConfiguration extends WebSecurityConfigurerAdapter {
         return new OAuth2RestTemplate(resource, new DefaultOAuth2ClientContext(new DefaultAccessTokenRequest()));
     }
 
-//    @Bean
-//    AbstractSsoEventsService ssoEventsService(OpenIdProperties openIdProperties) throws Exception {
-//        ObjectMapper mapper = new ObjectMapper();
-//        log.debug("Settings: \n" + mapper.writeValueAsString(openIdProperties));
-//
-//        if (Boolean.TRUE.equals(openIdProperties.getUseEventsExtension())) {
-//            log.debug("Create ExtendedSsoEventsService.class");
-//            return new ExtendedSsoEventsService(openIdProperties);
-//        }
-//
-//        log.debug("Create BaseSsoEventsService.class");
-//        return new BaseSsoEventsService(openIdProperties);
-//    }
+    @Bean
+    AbstractSsoEventsService ssoEventsService(OpenIdProperties openIdProperties) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        log.debug("Settings: \n" + mapper.writeValueAsString(openIdProperties));
+
+        if (Boolean.TRUE.equals(openIdProperties.getUseEventsExtension())) {
+            log.debug("Create ExtendedSsoEventsService.class");
+            return new ExtendedSsoEventsService(openIdProperties);
+        }
+
+        log.debug("Create BaseSsoEventsService.class");
+        return new BaseSsoEventsService(openIdProperties);
+    }
 
     @Bean
     String getScheduleCronSyntax(OpenIdProperties openIdProperties) {
