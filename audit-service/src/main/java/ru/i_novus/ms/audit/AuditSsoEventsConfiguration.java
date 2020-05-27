@@ -18,6 +18,10 @@ import ru.i_novus.ms.audit.service.AbstractSsoEventsService;
 import ru.i_novus.ms.audit.service.BaseSsoEventsService;
 import ru.i_novus.ms.audit.service.ExtendedSsoEventsService;
 
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
+
+
 @Slf4j
 @SpringBootConfiguration
 @EnableConfigurationProperties(OpenIdProperties.class)
@@ -35,7 +39,10 @@ public class AuditSsoEventsConfiguration extends WebSecurityConfigurerAdapter {
         resource.setAccessTokenUri(properties.getAccessTokenUri());
         resource.setClientId(properties.getClientId());
         resource.setClientSecret(properties.getClientSecret());
-        return new OAuth2RestTemplate(resource, new DefaultOAuth2ClientContext(new DefaultAccessTokenRequest()));
+        OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(resource, new DefaultOAuth2ClientContext(new DefaultAccessTokenRequest()));
+        restTemplate.setRequestFactory(requestFactory());
+
+        return restTemplate;
     }
 
     @Bean
@@ -55,5 +62,9 @@ public class AuditSsoEventsConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     String getScheduleCronSyntax(OpenIdProperties openIdProperties) {
         return StringUtils.isEmpty(openIdProperties.getEventsSchedule()) ? "-" : openIdProperties.getEventsSchedule();
+    }
+
+    private ClientHttpRequestFactory requestFactory() {
+        return new OkHttp3ClientHttpRequestFactory();
     }
 }
