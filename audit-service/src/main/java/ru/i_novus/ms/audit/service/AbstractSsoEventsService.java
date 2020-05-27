@@ -67,8 +67,13 @@ public abstract class AbstractSsoEventsService {
     protected List<OpenIdEventLog> doGetEvents(int pageNumber) {
         String url = getUrl(pageNumber);
 
+        log.debug("Start get events form Keycloak");
         ResponseEntity<List<OpenIdEventLog>> response =
                 restTemplate.exchange(url, GET, null, new ParameterizedTypeReference<List<OpenIdEventLog>>() {});
+        log.debug("Finish get events form Keycloak");
+        int responseCount = response.hasBody() ? response.getBody().size() : 0;
+        log.debug("Event counts = " + responseCount);
+        log.debug("Get Events form Keycloak.\n" + "Response: " + response != null ? response.toString() : "null");
         return response.hasBody() ? response.getBody() : Collections.emptyList();
     }
 
