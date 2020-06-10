@@ -50,9 +50,8 @@ public class AuditAspect {
     private AuditClient auditClient;
     @Autowired
     private MessageSourceAccessor messageSourceAccessor;
-    @Autowired
-    private ObjectMapper mapper;
 
+    private final ObjectMapper mapper = new ObjectMapper();
     private AuditProperties properties;
 
     private static final String UNKNOWN_USER = "UNKNOWN";
@@ -286,7 +285,7 @@ public class AuditAspect {
     }
 
     /**
-     * Устновка objectType и objectId в {@link AuditClientRequest}
+     * Установка objectType и objectId в {@link AuditClientRequest}
      *
      * @param request изменяемый {@link AuditClientRequest}
      * @param object  параметр object из аннотации {@link Audit}
