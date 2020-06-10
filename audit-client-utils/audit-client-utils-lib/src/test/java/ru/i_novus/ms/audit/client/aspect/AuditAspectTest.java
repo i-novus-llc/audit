@@ -1,6 +1,5 @@
 package ru.i_novus.ms.audit.client.aspect;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.context.support.MessageSourceAccessor;
 import ru.i_novus.ms.audit.client.AuditClient;
@@ -40,8 +38,6 @@ public class AuditAspectTest {
     private static MethodSignature mockedMethodSignature;
     @Mock
     private static AuditProperties mockedAuditProperties;
-    @Spy
-    private static ObjectMapper mockedObjectMapper;
     @Mock
     private static AuditClient mockedAuditClient;
     @Mock
