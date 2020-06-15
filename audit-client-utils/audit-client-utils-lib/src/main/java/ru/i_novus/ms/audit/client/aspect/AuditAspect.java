@@ -1,10 +1,13 @@
 package ru.i_novus.ms.audit.client.aspect;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -59,6 +62,9 @@ public class AuditAspect {
 
     public AuditAspect(AuditProperties properties) {
         this.properties = properties;
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
     /**
@@ -197,26 +203,28 @@ public class AuditAspect {
     private void checkAuditIgnorable(ObjectNode jsonNode, Object result) {
         List<Field> ignorableFields = FieldUtils.getFieldsListWithAnnotation(result.getClass(), AuditIgnorable.class);
         if (!CollectionUtils.isEmpty(ignorableFields)) {
-            ignorableFields.forEach(field -> {
-                try {
-                    JsonNode fieldJson = jsonNode.get(field.getName());
-                    if (TypeUtils.isAssignable(field.getType(), Collection.class)) {
-                        checkAuditIgnoreCollection(jsonNode, result, field);
-                    } else if (field.getType().isArray()) {
-                        checkAuditIgnoreArray(fieldJson, result, field);
-                    } else {
-                        Object fieldObject = FieldUtils.readField(field, result, true);
-                        if (fieldJson.isObject()) {
-                            checkAuditIgnore((ObjectNode) fieldJson, fieldObject);
-                        } else if (!fieldJson.isNull()) {
-                            log.info(result.getClass().getName() + ": AuditIgnorable annotation scanning." +
-                                    "Probably @AuditIgnorable used on primitive field.");
+            ignorableFields.stream()
+                    .filter(field -> jsonNode.get(field.getName()) != null)
+                    .forEach(field -> {
+                        try {
+                            JsonNode fieldJson = jsonNode.get(field.getName());
+                            if (TypeUtils.isAssignable(field.getType(), Collection.class)) {
+                                checkAuditIgnoreCollection(jsonNode, result, field);
+                            } else if (field.getType().isArray()) {
+                                checkAuditIgnoreArray(fieldJson, result, field);
+                            } else {
+                                Object fieldObject = FieldUtils.readField(field, result, true);
+                                if (fieldJson.isObject()) {
+                                    checkAuditIgnore((ObjectNode) fieldJson, fieldObject);
+                                } else if (!fieldJson.isNull()) {
+                                    log.info(result.getClass().getName() + ": AuditIgnorable annotation scanning." +
+                                            "Probably @AuditIgnorable used on primitive field.");
+                                }
+                            }
+                        } catch (IllegalAccessException e) {
+                            log.error("Error in AuditIgnorable annotation scanning", e);
                         }
-                    }
-                } catch (IllegalAccessException e) {
-                    log.error("Error in AuditIgnorable annotation scanning", e);
-                }
-            });
+                    });
         }
     }
 

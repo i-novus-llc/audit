@@ -1,5 +1,6 @@
 package ru.i_novus.ms.audit.client.aspect;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +24,9 @@ import ru.i_novus.ms.audit.client.annotation.AuditIgnore;
 import ru.i_novus.ms.audit.client.model.AuditClientRequest;
 import ru.i_novus.ms.audit.client.security.properties.AuditProperties;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -55,13 +59,15 @@ public class AuditAspectTest {
 
     private static final String EXPECTED_MODEL_JSON = "{\"id\":1,\"object\":{\"id\":1}," +
             "\"array\":[{\"id\":1},{\"id\":2}],\"list\":[{\"id\":1},{\"id\":2}]}";
-    private static final String EXPECTED_EMPTY_MODEL_JSON = "{\"id\":1,\"object\":null,\"array\":null,\"list\":null}";
-    private static final String EXPECTED_EMPTY_COLLECTION_ARRAY_MODEL_JSON = "{\"id\":1,\"object\":null,\"array\":[],\"list\":[]}";
+    private static final String EXPECTED_EMPTY_MODEL_JSON = "{\"id\":1}";
+    private static final String EXPECTED_EMPTY_COLLECTION_ARRAY_MODEL_JSON = "{\"id\":1,\"array\":[],\"list\":[]}";
     private static final String EXPECTED_PAGE_LIST_MODEL_JSON =
             "[{\"id\":1,\"object\":{\"id\":1},\"array\":[{\"id\":1},{\"id\":2}],\"list\":[{\"id\":1},{\"id\":2}]}," +
                     "{\"id\":1,\"object\":{\"id\":1},\"array\":[{\"id\":1},{\"id\":2}],\"list\":[{\"id\":1},{\"id\":2}]}]";
     private static final String EXPECTED_EMPTY_PAGE_LIST_MODEL_JSON = "[]";
     private static final String EXPECTED_STRING_JSON = "\"Tested string\"";
+    private static final String EXPECTED_MODEL_WITH_DATES_JSON = "{\"id\":1,\"date\":\"2020-05\"," +
+            "\"time\":\"12:30:50.000000045\",\"dateTime\":\"2020-05-10T12:30:35.00000004\"}";
 
     @Before
     public void beforeEach() {
@@ -160,6 +166,20 @@ public class AuditAspectTest {
 
         assertEquals(EXPECTED_STRING_JSON, captor.getValue().getContext());
     }
+
+    @Test
+    public void AuditWithDatesSuccessful() {
+        testedModel = new TestedModelExtended();
+        testedModel.setId(1);
+        testedModel.setDate(LocalDate.of(2020, 5, 10));
+        testedModel.setTime(LocalTime.of(12, 30, 50, 45));
+        testedModel.setDateTime(LocalDateTime.of(2020, 5, 10, 12, 30, 35, 40));
+
+        auditAspect.audit(mockedJoinPoint, testedModel);
+        verify(mockedAuditClient).add(captor.capture());
+
+        assertEquals(EXPECTED_MODEL_WITH_DATES_JSON, captor.getValue().getContext());
+    }
 }
 
 class TestedClass {
@@ -179,6 +199,13 @@ class TestedModel {
 
     @AuditIgnorable
     private TestedObject object;
+
+    @JsonFormat(pattern = "yyyy-MM")
+    private LocalDate date;
+
+    private LocalTime time;
+
+    private LocalDateTime dateTime;
 }
 
 @Getter
