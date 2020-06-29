@@ -34,9 +34,9 @@
                         </date-interval>
                         <input-select id="auditSourceApplications" label="Система/Модуль" type="multi"
                                       query-id="auditSourceApplication"
-                                      label-field-id="code" search-field-id="code"/>
+                                      label-field-id="code" search-filter-id="code"/>
                         <input-select id="auditEventTypes" label="Тип события" type="multi" query-id="auditEventType"
-                                      label-field-id="name" search-field-id="name">
+                                      label-field-id="name" search-filter-id="name">
                             <pre-filters>
                                 <eq field-id="auditTypeId" value="1"/>
                             </pre-filters>
@@ -44,7 +44,7 @@
                     </row>
                     <row>
                         <input-select id="auditObjects" label="Объект" type="multi" query-id="auditObject"
-                                      label-field-id="typeAndName" search-field-id="typeAndName"/>
+                                      label-field-id="typeAndName" search-filter-id="typeAndName"/>
                         <input-text id="objectId" label="Идентификатор объекта" domain="string"/>
                         <input-text id="username" label="Пользователь" domain="string"/>
                     </row>

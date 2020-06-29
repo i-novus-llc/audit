@@ -11,7 +11,7 @@
     <properties>
         <maven.deploy.skip>true</maven.deploy.skip>
         <jacoco.skip>false</jacoco.skip>
-        <security-admin.version>4.0-SNAPSHOT</security-admin.version>
+        <security-admin.version>4.10</security-admin.version>
     </properties>
 
     <artifactId>audit-webapp</artifactId>
@@ -51,7 +51,7 @@
         <dependency>
             <groupId>net.n2oapp.framework.security</groupId>
             <artifactId>security-auth-oauth2</artifactId>
-            <version>4.10</version>
+            <version>${security-admin.version}</version>
         </dependency>
         <dependency>
             <groupId>net.n2oapp.framework.security</groupId>
