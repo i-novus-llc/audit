@@ -23,7 +23,7 @@ public class SourceApplicationService {
     public Page<AuditSourceApplication> search(AuditSourceApplicationCriteria criteria) {
         return auditSourceApplicationRepository.findAll(
                         QueryService.toPredicate(criteria),
-                        PageRequest.of(criteria.getPageNumber(), criteria.getPageSize(), Sort.by(criteria.getOrdersOrDefault())))
+                        PageRequest.of(criteria.getPageNumber(), criteria.getPageSize(), Sort.by(criteria.getDefaultOrders())))
                 .map(AuditSourceApplicationBuilder::buildByEntity);
     }
 

@@ -29,15 +29,15 @@
                         </date-interval>
                         <input-select id="sender" label="Отправитель" type="multi"
                                       query-id="auditSourceApplication"
-                                      label-field-id="code" search-field-id="code"/>
+                                      label-field-id="code" search-filter-id="code"/>
                         <input-select id="receiver" label="Получатель" type="multi"
                                       query-id="auditSourceApplication"
-                                      label-field-id="code" search-field-id="code"/>
+                                      label-field-id="code" search-filter-id="code"/>
                     </row>
                     <row>
                         <input-text id="id" label="Идентификатор сообщения" domain="string"/>
                         <input-select id="auditEventTypes" label="Действие" type="multi" query-id="auditEventType"
-                                      label-field-id="name" search-field-id="name">
+                                      label-field-id="name" search-filter-id="name">
                             <pre-filters>
                                 <eq field-id="auditTypeId" value="2"/>
                             </pre-filters>

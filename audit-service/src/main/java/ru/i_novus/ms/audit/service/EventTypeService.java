@@ -24,7 +24,7 @@ public class EventTypeService {
 
         return eventTypeRepository.findAll(
                         QueryService.toPredicate(criteria),
-                        PageRequest.of(criteria.getPageNumber(), criteria.getPageSize(), Sort.by(criteria.getOrdersOrDefault()))
+                        PageRequest.of(criteria.getPageNumber(), criteria.getPageSize(), Sort.by(criteria.getDefaultOrders()))
         ).map(AuditEventTypeBuilder::buildByEntity);
     }
 

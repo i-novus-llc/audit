@@ -66,7 +66,7 @@ public class AuditService {
     }
 
     private Page<AuditEntity> searchEntity(AuditCriteria criteria) {
-        Pageable pageable = PageRequest.of(criteria.getPageNumber(), criteria.getPageSize(), Sort.by(criteria.getOrdersOrDefault()));
+        Pageable pageable = PageRequest.of(criteria.getPageNumber(), criteria.getPageSize(), Sort.by(criteria.getDefaultOrders()));
 
         return auditRepository.findAll(QueryService.toPredicate(criteria), pageable);
     }
