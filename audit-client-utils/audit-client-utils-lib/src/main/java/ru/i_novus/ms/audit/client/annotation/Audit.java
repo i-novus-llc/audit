@@ -11,4 +11,6 @@ public @interface Audit {
     String action() default "unknown";
 
     String object() default "";
+
+    String objectIdMethod() default "";
 }

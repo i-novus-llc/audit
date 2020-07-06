@@ -57,6 +57,7 @@ public class AuditAspectTest {
     private static List<TestedModelExtended> testedList;
     private static String testedString;
 
+    private static final String IGNORED_STRING = "test";
     private static final String EXPECTED_MODEL_JSON = "{\"id\":1,\"object\":{\"id\":1}," +
             "\"array\":[{\"id\":1},{\"id\":2}],\"list\":[{\"id\":1},{\"id\":2}]}";
     private static final String EXPECTED_EMPTY_MODEL_JSON = "{\"id\":1}";
@@ -81,7 +82,7 @@ public class AuditAspectTest {
 
         testedModel = new TestedModelExtended();
         testedModel.setId(1);
-        testedModel.setIgnoredString("test");
+        testedModel.setIgnoredString(IGNORED_STRING);
         testedModel.setObject(testedObject1);
         testedModel.setArray(Arrays.array(testedObject1, testedObject2));
         testedModel.setList(List.of(testedObject1, testedObject2));
@@ -180,11 +181,27 @@ public class AuditAspectTest {
 
         assertEquals(EXPECTED_MODEL_WITH_DATES_JSON, captor.getValue().getContext());
     }
+
+    @Test
+    public void AuditObjectIdMethodSuccessful() {
+        when(mockedMethodSignature.getMethod())
+                .thenReturn(MethodUtils.getMatchingMethod(TestedClass.class, "auditedObjectIdMethod"));
+
+        auditAspect.audit(mockedJoinPoint, testedModel);
+        verify(mockedAuditClient).add(captor.capture());
+
+        assertEquals(IGNORED_STRING, captor.getValue().getObjectId().getValue());
+    }
 }
 
 class TestedClass {
     @Audit(object = "object", action = "action")
     public void auditedMethod() {
+        //for annotation testing, do nothing
+    }
+
+    @Audit(object = "object", action = "action", objectIdMethod = "getIgnoredString")
+    public void auditedObjectIdMethod() {
         //for annotation testing, do nothing
     }
 }

@@ -79,7 +79,7 @@ public class AuditAspect {
         Method targetMethod = methodSignature.getMethod();
         Audit audit = targetMethod.getAnnotation(Audit.class);
         if (audit != null && result != null) {
-            audit(audit.action(), audit.object(), result);
+            audit(audit.action(), audit.object(), audit.objectIdMethod(), result);
         }
     }
 
@@ -90,7 +90,7 @@ public class AuditAspect {
      * @param object параметр object из аннотации {@link Audit}. Используется для заполнения полей objectType, objectName аудита.
      * @param result объект возвращаемый методом с аннотацией {@link Audit}
      */
-    private void audit(String action, String object, Object result) {
+    private void audit(String action, String object, String objectIdMethod, Object result) {
         if (result instanceof Response) {
             try {
                 result = ((Response) result).getHeaders().get("auditObject").get(0);
@@ -102,6 +102,7 @@ public class AuditAspect {
         AuditClientRequest request = new AuditClientRequest();
         setUser(request);
         setObject(request, object, result);
+        setObjectId(request, objectIdMethod, result);
 
         request.setHostname(ServerContext.getServerName());
         request.setSourceWorkstation(ServerContext.getSourceWorkStation());
@@ -109,7 +110,7 @@ public class AuditAspect {
         try {
             request.setEventType(messageSourceAccessor.getMessage(action));
         } catch (NoSuchMessageException e) {
-            log.error("Error set eventType", e);
+            log.error("Error setting eventType", e);
             request.setEventType(action);
         }
         request.setEventDate(LocalDateTime.now());
@@ -293,7 +294,7 @@ public class AuditAspect {
     }
 
     /**
-     * Установка objectType и objectId в {@link AuditClientRequest}
+     * Установка objectType и objectName в {@link AuditClientRequest}
      *
      * @param request изменяемый {@link AuditClientRequest}
      * @param object  параметр object из аннотации {@link Audit}
@@ -309,11 +310,24 @@ public class AuditAspect {
             objectName = properties.getObject().get(result.getClass().getSimpleName());
         }
         request.setObjectName(StringUtils.isNotEmpty(objectName) ? objectName : result.getClass().getSimpleName());
+    }
 
+    /**
+     * Установка objectId в {@link AuditClientRequest}
+     *
+     * @param request        изменяемый {@link AuditClientRequest}
+     * @param objectIdMethod параметр objectIdMethod из аннотации {@link Audit}
+     * @param result         объект используемый для заполнения контекста
+     */
+    private void setObjectId(AuditClientRequest request, String objectIdMethod, Object result) {
         try {
-            request.setObjectId(result.getClass().getMethod("getId").invoke(result).toString());
+            if (StringUtils.isEmpty(objectIdMethod)) {
+                request.setObjectId(result.getClass().getMethod("getId").invoke(result).toString());
+            } else {
+                request.setObjectId(result.getClass().getMethod(objectIdMethod).invoke(result).toString());
+            }
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            log.info("Object doesn't have id field getter", e);
+            log.info("Object doesn't have expected method for setting objectId", e);
             request.setObjectId(result.getClass().getSimpleName());
         }
     }
