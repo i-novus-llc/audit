@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="AUDIT-171_create_audit_insert_function" author="agaifutdinov" dbms="postgresql" runOnChange="true">
+        <createProcedure>
+            CREATE OR REPLACE FUNCTION audit.audit_insert_trigger()
+            RETURNS TRIGGER AS $$
+            DECLARE
+                audit_type int2;
+                partition_date TEXT;
+                partition_name TEXT;
+                period_start TEXT;
+                period_end TEXT;
+            BEGIN
+                audit_type := NEW.audit_type_id;
+                partition_date := to_char(NEW.event_date,'YYYY_MM');
+                partition_name := format('audit_%s_%s', partition_date, audit_type);
+                period_start := to_char((NEW.event_date),'YYYY-MM') || '-01';
+            IF
+                (extract(MONTH from NEW.event_date))::integer = 12
+            THEN
+                period_end := (extract(YEAR from (NEW.event_date)) + 1)::text || '-01-01';
+            ELSE
+                period_end := to_char((NEW.event_date),'YYYY-') || lpad((to_char(NEW.event_date, 'MM')::integer + 1)::text, 2, '0')  || '-01';
+            END IF;
+
+            IF NOT EXISTS
+                (SELECT 1
+                FROM information_schema.tables
+                WHERE table_schema = 'audit' AND table_name = partition_name)
+            THEN
+                EXECUTE format('CREATE TABLE audit.%I
+                (CHECK (date_trunc(''day'', event_date) >= ''%s'' AND date_trunc(''day'', event_date) &lt; ''%s''),
+                CHECK (audit_type_id = ''%s''))
+                INHERITS (audit.audit)', partition_name, period_start, period_end, audit_type);
+            END IF;
+            EXECUTE format('INSERT INTO audit.%I (id, event_date, event_type, object_id, user_id, username,
+            source_workstation, context, creation_date, hostname, object_type, object_name, source_application,
+            audit_type_id, sender_id, receiver_id)
+            VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)', partition_name)
+            using NEW.id, NEW.event_date, NEW.event_type, NEW.object_id, NEW.user_id, NEW.username,
+            NEW.source_workstation, NEW.context, NEW.creation_date, NEW.hostname, NEW.object_type, NEW.object_name,
+            NEW.source_application, NEW.audit_type_id, NEW.sender_id, NEW.receiver_id;
+            RETURN NULL;
+            END
+            $$
+            LANGUAGE plpgsql;
+        </createProcedure>
+        <rollback>
+            <sql>
+                DROP FUNCTION IF EXISTS audit.audit_insert_trigger();
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-171_create_audit_insert_trigger" author="agaifutdinov" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="f">
+                select exists(select 1 from pg_trigger where tgname='audit_insert_trigger');
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            CREATE TRIGGER audit_insert_trigger
+            BEFORE INSERT ON audit.audit
+            FOR EACH ROW EXECUTE PROCEDURE audit.audit_insert_trigger();
+        </sql>
+        <rollback>
+            DROP TRIGGER IF EXISTS audit_insert_trigger;
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

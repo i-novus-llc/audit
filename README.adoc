@@ -79,24 +79,72 @@ audit.security.oauth2.events-schedule=
 Действуют такие же ограничения по периоду выборки, т.е. 31 день.
 Выгрузка происходит в csv формате.
 
-
-Настройки
+== Настройки
 Доступность по адресу задается переменной
+----
 audit.export.url = #example http://localhost:8951/api
+----
 
 Доступны для переопределения некоторые настройки
-# Замена null начений на заданное
-export.config.if-null-value = #default null
-# Формат даты для поля даты события
-export.config.date-format = #default dd.MM.yyyy HH:mm:ss
-# Имя файла, формируемого при выгрузке
-export.config.file-name = #default audit_export
 
-# Принудительный лимит при получении строк журналов, 0 для игнорирования настройки
+* Замена null значений на заданное
+----
+export.config.if-null-value = #default null
+----
+* Формат даты для поля даты события
+----
+export.config.date-format = #default dd.MM.yyyy HH:mm:ss
+----
+* Имя файла, формируемого при выгрузке
+----
+export.config.file-name = #default audit_export
+----
+* Принудительный лимит при получении строк журналов, 0 для игнорирования настройки
+----
 export.query.limit-select-row = #default 0
-# Возможно требует уточнение на сервере, в зависимости от ресурсов
+----
+* Возможно требует уточнение на сервере, в зависимости от ресурсов
+----
 export.query.hint-fetch-size = #default 10
-# Разделитель значений
-export.csv.field-delimiter =  #default ,
-# Признак вывода в файл заголовкой полей
+----
+* Разделитель значений
+----
+export.csv.field-delimiter =  #default
+----
+* Признак вывода в файл заголовков полей
+----
 export.csv.print-field-name = #default true
+----
+
+== Переход на версию 2.4.18 и выше
+Вместо pg_pathman, партицирование таблиц реализовано триггерами.
+
+.При переходе на версию 2.4.18 и выше необходимо создать новую пустую БД (если накатывать на существующую БД, то упадут ликубейз скрипты при накате)!. Для миграции понадобится удалить партицирование в старой БД, поэтому настоятельно рекомендуется сделать бэкап базы.
+
+*1.* Прогнать скрипт удаляющий партиции на старой БД. По умолчанию таблицы аудита находятся в схеме "audit", а функции расширения pg_pathman в схеме "public", если они расположены иначе измените значения переменных audit_schema и function_schema соответственно.
+----
+DO $$
+DECLARE
+	r record;
+	audit_schema varchar := 'audit';
+	function_schema varchar := 'public';
+BEGIN
+	FOR r IN SELECT * FROM information_schema.tables WHERE table_schema  = audit_schema AND table_name LIKE 'audit\_____\___'
+	LOOP
+		EXECUTE 'SELECT ' || function_schema || '.drop_partitions(''' || audit_schema || '.' || r.table_name ||''', false)';
+	END LOOP;
+	EXECUTE 'select ' || function_schema || '.drop_partitions(''' || audit_schema || '.audit'', false)';
+	EXECUTE 'select ' || function_schema || '.drop_partitions(''' || audit_schema || '.audit_event_type'', false)';
+END$$;
+----
+
+*2.* Снять дамп со старой БД схема audit (только данные --data-only)
+----
+pg_dump --data-only --schema=audit audit > C:\Users\elibragimova\Desktop\dump_audit.sql
+----
+*3.* Поднять приложение (сервисы), чтобы накатились ликубейз скрипты
+
+*4.* Развернуть дамп на новой БД
+----
+psql -d audit -f C:\Users\elibragimova\Desktop\dump_audit.sql
+----

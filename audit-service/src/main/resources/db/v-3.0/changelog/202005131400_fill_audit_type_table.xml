@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+
+    <changeSet id="AUDIT-171_audit_type_table_insert_user_action_journal" author="agaifutdinov" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="f">
+                SELECT EXISTS (SELECT 1 FROM audit.audit_type WHERE id = 1 AND name = 'Журнал действий пользователей');
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="audit_type" schemaName="audit">
+            <column name="id" value="1"/>
+            <column name="name" value="Журнал действий пользователей"/>
+        </insert>
+        <rollback>
+            <delete tableName="audit_type" schemaName="audit">
+                <where>
+                    id = 1 AND name = 'Журнал действий пользователей'
+                </where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-171_audit_type_table_insert_integration_service_journal" author="agaifutdinov" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="f">
+                SELECT EXISTS (SELECT 1 FROM audit.audit_type WHERE id = 2 AND name = 'Журнал работы интеграционных сервисов');
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="audit_type" schemaName="audit">
+            <column name="id" value="2"/>
+            <column name="name" value="Журнал работы интеграционных сервисов"/>
+        </insert>
+        <rollback>
+            <delete tableName="audit_type" schemaName="audit">
+                <where>
+                    id = 2 AND name = 'Журнал работы интеграционных сервисов'
+                </where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="AUDIT-171_audit_type_table_insert_authorization_journal" author="agaifutdinov" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="f">
+                SELECT EXISTS (SELECT 1 FROM audit.audit_type WHERE id = 3 AND name = 'Журнал авторизаций, сессий и неудачных попыток авторизации');
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="audit_type" schemaName="audit">
+            <column name="id" value="3"/>
+            <column name="name" value="Журнал авторизаций, сессий и неудачных попыток авторизации"/>
+        </insert>
+        <rollback>
+            <delete tableName="audit_type" schemaName="audit">
+                <where>
+                    id = 3 AND name = 'Журнал авторизаций, сессий и неудачных попыток авторизации'
+                </where>
+            </delete>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

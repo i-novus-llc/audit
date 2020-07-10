@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="AUDIT-171_create_audit_event_type_table" author="agaifutdinov">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="audit_event_type" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <createTable tableName="audit_event_type" schemaName="audit" remarks="Справочник типов событий">
+            <column name="id" type="uuid" remarks="Идентификатор типа события">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar" remarks="Наименование типа события">
+                <constraints nullable="false"/>
+            </column>
+            <column name="audit_type_id" type="int2" remarks="Идентификатор типа журнала">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="audit_event_type" schemaName="audit" columnNames="name, audit_type_id"/>
+        <rollback>
+            <dropTable tableName="audit_event_type" schemaName="audit"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

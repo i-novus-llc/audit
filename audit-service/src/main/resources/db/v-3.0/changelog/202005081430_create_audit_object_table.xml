@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="AUDIT-171_create_audit_object_table" author="agaifutdinov">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="audit_object" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <createTable tableName="audit_object" schemaName="audit" remarks="Справочник объектов">
+            <column name="id" type="serial" remarks="Идентификатор объекта">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="type" type="varchar" remarks="Тип объекта">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar" remarks="Наименование объекта"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="audit_object" schemaName="audit"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
