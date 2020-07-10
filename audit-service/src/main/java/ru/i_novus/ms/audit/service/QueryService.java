@@ -12,7 +12,6 @@ import ru.i_novus.ms.audit.criteria.AuditObjectCriteria;
 import ru.i_novus.ms.audit.criteria.AuditSourceApplicationCriteria;
 import ru.i_novus.ms.audit.entity.QAuditObjectEntity;
 import ru.i_novus.ms.audit.entity.QAuditSourceApplicationEntity;
-import ru.i_novus.ms.audit.model.AuditTypeCode;
 import ru.i_novus.ms.audit.repository.predicates.EventTypePredicates;
 
 import static ru.i_novus.ms.audit.repository.predicates.AuditPredicates.*;
@@ -92,10 +91,6 @@ public class QueryService {
 
         if (criteria.getAuditTypeId() != null) {
             where.and(isAuditTypeIdEquals(criteria.getAuditTypeId()));
-            String code = AuditTypeCode.getCodeAuditType(criteria.getAuditTypeId());
-            if (code != null) {
-                where.and(isAuditTypeCodeEquals(code));
-            }
         }
 
         if (ArrayUtils.isNotEmpty(criteria.getSender())) {
