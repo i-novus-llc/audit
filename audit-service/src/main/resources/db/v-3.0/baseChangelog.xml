@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <include file="changelog/202005081400_create_schema.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/202005081405_create_audit_event_type_table.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/202005081430_create_audit_object_table.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/202005081530_create_audit_source_application_table.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/202005081600_create_audit_table.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/202005081700_create_audit_type_table.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/202005120900_create_audit_event_type_trigger.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/202005121300_create_audit_trigger.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/202005131400_fill_audit_type_table.xml" relativeToChangelogFile="true"/>
+
+
+</databaseChangeLog>

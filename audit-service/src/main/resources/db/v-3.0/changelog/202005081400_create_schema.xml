@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="AUDIT-171_create_schema_audit" author="agaifutdinov" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="f">
+                select exists(select from information_schema.schemata WHERE schema_name = 'audit');
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            CREATE SCHEMA audit;
+        </sql>
+        <rollback>
+            DROP SCHEMA audit;
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

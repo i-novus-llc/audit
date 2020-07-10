@@ -1,6 +1,7 @@
 package ru.i_novus.ms.audit.entity;
 
 import lombok.*;
+import org.hibernate.annotations.SQLInsert;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString()
+@SQLInsert(sql = "insert into audit.audit_event_type (audit_type_id, name, id) values(?, ?, ?)")
 public class AuditEventTypeEntity {
     @Id
     @Access(AccessType.PROPERTY)

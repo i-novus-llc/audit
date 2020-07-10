@@ -2,6 +2,7 @@ package ru.i_novus.ms.audit.entity;
 
 import lombok.*;
 import org.hibernate.annotations.ColumnTransformer;
+import org.hibernate.annotations.SQLInsert;
 
 import javax.persistence.*;
 import java.time.Clock;
@@ -16,6 +17,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString()
+@SQLInsert(sql = "insert into audit.audit (object_name, object_type, source_application, audit_type_id, context, " +
+        "creation_date, event_date, event_type, hostname, object_id, receiver_id, sender_id, source_workstation, " +
+        "user_id, username, id) " +
+        "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 public class AuditEntity {
     @Id
     @Access(AccessType.PROPERTY)
