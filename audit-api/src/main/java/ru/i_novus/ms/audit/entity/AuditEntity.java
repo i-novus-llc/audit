@@ -67,9 +67,8 @@ public class AuditEntity {
     @Column(name = "hostname")
     private String hostname;
 
-    @ManyToOne()
-    @JoinColumn(name = "audit_type_id", referencedColumnName = "id", nullable = false)
-    private AuditTypeEntity auditType;
+    @Column(name = "audit_type_id")
+    private Short auditTypeId;
 
     @Column(name = "sender_id")
     private String senderId;
