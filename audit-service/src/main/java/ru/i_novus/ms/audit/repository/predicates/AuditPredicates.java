@@ -73,11 +73,7 @@ public final class AuditPredicates {
     }
 
     public static BooleanExpression isAuditTypeIdEquals(Short value) {
-        return QAuditEntity.auditEntity.auditType.id.eq(value);
-    }
-
-    public static BooleanExpression isAuditTypeCodeEquals(String value) {
-        return QAuditEntity.auditEntity.auditType.code.equalsIgnoreCase(value);
+        return QAuditEntity.auditEntity.auditTypeId.eq(value);
     }
 
     public static BooleanExpression inSenders(String[] value) {

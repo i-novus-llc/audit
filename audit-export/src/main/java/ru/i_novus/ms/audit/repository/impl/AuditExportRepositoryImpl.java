@@ -5,21 +5,23 @@ import org.hibernate.jpa.QueryHints;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Repository;
-import ru.i_novus.ms.audit.properties.QueryProperties;
 import ru.i_novus.ms.audit.criteria.AuditCriteria;
 import ru.i_novus.ms.audit.entity.AuditEntity;
+import ru.i_novus.ms.audit.properties.QueryProperties;
 import ru.i_novus.ms.audit.repository.AuditExportRepository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
 
 @Repository
 @EnableConfigurationProperties(QueryProperties.class)
@@ -53,7 +55,7 @@ public class AuditExportRepositoryImpl implements AuditExportRepository {
         }
         if (auditCriteria.getObjectId() != null) {
             predicates.add(criteriaBuilder.like(criteriaBuilder.lower(auditEntityRoot.get("objectId")),
-                String.format("%%%s%%", auditCriteria.getObjectId().trim().toLowerCase())));
+                    String.format("%%%s%%", auditCriteria.getObjectId().trim().toLowerCase())));
         }
         if (auditCriteria.getUserId() != null) {
             predicates.add(criteriaBuilder.equal(auditEntityRoot.get("userId"), auditCriteria.getUserId()));
@@ -71,7 +73,7 @@ public class AuditExportRepositoryImpl implements AuditExportRepository {
             predicates.add(criteriaBuilder.equal(auditEntityRoot.get("hostname"), auditCriteria.getHostname()));
         }
         if (auditCriteria.getAuditTypeId() != null) {
-            predicates.add(criteriaBuilder.equal(auditEntityRoot.get("auditType"), auditCriteria.getAuditTypeId()));
+            predicates.add(criteriaBuilder.equal(auditEntityRoot.get("auditTypeId"), auditCriteria.getAuditTypeId()));
         }
         if (ArrayUtils.isNotEmpty(auditCriteria.getSender())) {
             predicates.add(auditEntityRoot.get("senderId").in(Arrays.asList(auditCriteria.getSender())));

@@ -3,7 +3,6 @@ package ru.i_novus.ms.audit.builder.entity;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.i_novus.ms.audit.entity.AuditEntity;
-import ru.i_novus.ms.audit.entity.AuditTypeEntity;
 import ru.i_novus.ms.audit.model.AuditForm;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -22,10 +21,7 @@ public class AuditEntityBuilder {
                 .objectId(form.getObjectId())
                 .sourceWorkstation(form.getSourceWorkstation())
                 .hostname(form.getHostname())
-                .auditType(
-                        AuditTypeEntity.builder()
-                                .id(form.getAuditType())
-                                .build())
+                .auditTypeId(form.getAuditType())
                 .senderId(form.getSender())
                 .receiverId(form.getReceiver())
                 .build();

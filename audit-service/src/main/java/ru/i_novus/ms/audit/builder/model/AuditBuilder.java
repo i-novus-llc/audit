@@ -23,7 +23,7 @@ public class AuditBuilder {
                 .userId(entity.getUserId())
                 .hostname(entity.getHostname())
                 .username(entity.getUsername())
-                .auditType(entity.getAuditType() != null ? entity.getAuditType().getId() : null)
+                .auditType(entity.getAuditTypeId())
                 .sender(entity.getSenderId())
                 .receiver(entity.getReceiverId())
                 .build();
