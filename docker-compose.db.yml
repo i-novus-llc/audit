@@ -2,11 +2,10 @@ version: "3.6"
 
 services:
   db:
+    volumes:
+      - audit-db-data:/pg/12/data
     ports:
       - 5432
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
     deploy:
       resources:
         limits:
@@ -14,3 +13,6 @@ services:
       placement:
         constraints:
           - node.labels.type == db
+
+volumes:
+  audit-db-data:
