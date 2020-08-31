@@ -9,7 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <maven.deploy.skip>true</maven.deploy.skip>
+        <maven.deploy.skip>false</maven.deploy.skip>
         <jacoco.skip>false</jacoco.skip>
         <security-admin.version>4.10</security-admin.version>
     </properties>
@@ -84,22 +84,6 @@
                         </goals>
                         <phase>package</phase>
                         <configuration>
-                            <classifier>original</classifier>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>deploy-file</goal>
-                        </goals>
-                        <phase>deploy</phase>
-                        <configuration>
-                            <file>${project.build.directory}/audit-webapp-original.jar</file>
                             <classifier>original</classifier>
                         </configuration>
                     </execution>
