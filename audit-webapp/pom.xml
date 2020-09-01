@@ -9,7 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <maven.deploy.skip>false</maven.deploy.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
         <jacoco.skip>false</jacoco.skip>
         <security-admin.version>4.10</security-admin.version>
     </properties>
@@ -75,21 +75,6 @@
         <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <phase>package</phase>
-                        <configuration>
-                            <classifier>original</classifier>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
@@ -97,6 +82,16 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>deploy-webapp</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <maven.deploy.skip>false</maven.deploy.skip>
+                <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
+            </properties>
+        </profile>
         <profile>
             <id>docker-dev</id>
             <activation>
