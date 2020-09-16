@@ -4,6 +4,28 @@
 * Интеграционных сервисов
 * Авторизации и сессий, а также неудачных попыток доступа
 
+== Требования
+
+- Openjdk 11
+- Для версии 2.4.17 и ниже: PostgreSQL 11 с расширением pg_pathman 1.5.9 (https://github.com/postgrespro/pg_pathman)
+- Для версии 2.4.18 и выше: PostgreSQL 12
+- Apache ActiveMQ
+- N2O Security Admin 4
+- Keycloack версий 3-10
+- Опционально: Расширение для Keycloack (https://git.i-novus.ru/external-systems/keycloak-api-extension)
+
+== Стек технологий
+
+- Java 11
+- JDBC
+- JMS
+- Spring Boot 2.1
+- Apache CXF 3.3
+- Querydsl 4.2
+- Liquibase 3.6.2
+- N2O Platform 3
+- N2O UI Framework 7
+
 == Локальный запуск модуля в докере
 * Если были изменения в модулях audit-api, audit-web
 ----
