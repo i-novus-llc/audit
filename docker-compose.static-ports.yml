@@ -8,8 +8,8 @@ services:
 
   audit-service:
     ports:
-      - 8951:8080
+      - 8948:8080
 
   audit-webapp:
     ports:
-      - 8950:8080
+      - 8947:8080

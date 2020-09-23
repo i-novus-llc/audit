@@ -49,8 +49,8 @@ docker rmi audit_db audit_audit-service audit_audit-webapp
 ----
 После выполнения docker-compose:up будет поднято три контейнера: +
 audit_db_1 контейнер с бд, подключение к постгресу доступно по порту 8949 +
-audit_audit-service_1 контейнер с бэкендом, доступен по порту 8951 +
-audit_audit-webapp_1 контейнер с вебприложением, доступен по порту 8950
+audit_audit-service_1 контейнер с бэкендом, доступен по порту 8948 +
+audit_audit-webapp_1 контейнер с вебприложением, доступен по порту 8947
 
 
 == Настройки запуска сервиса для получения логов событий Keycloak по расписанию
@@ -104,7 +104,7 @@ audit.security.oauth2.events-schedule=
 == Настройки
 Доступность по адресу задается переменной
 ----
-audit.export.url = #example http://localhost:8951/api
+audit.export.url = #example http://localhost:8948/api
 ----
 
 Доступны для переопределения некоторые настройки
