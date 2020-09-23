@@ -4,7 +4,7 @@ services:
 
   db:
     ports:
-      - 8952:5432
+      - 8949:5432
 
   audit-service:
     ports:
