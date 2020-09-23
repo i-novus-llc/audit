@@ -48,7 +48,7 @@ mvn -pl audit-webapp docker-compose:down -P docker-dev
 docker rmi audit_db audit_audit-service audit_audit-webapp
 ----
 После выполнения docker-compose:up будет поднято три контейнера: +
-audit_db_1 контейнер с бд, подключение к постгресу доступно по порту 8952 +
+audit_db_1 контейнер с бд, подключение к постгресу доступно по порту 8949 +
 audit_audit-service_1 контейнер с бэкендом, доступен по порту 8951 +
 audit_audit-webapp_1 контейнер с вебприложением, доступен по порту 8950
 
