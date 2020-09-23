@@ -42,7 +42,7 @@ services:
       SECURITY_OAUTH2_CLIENT_SECRET: 17767efb-9cb8-4f70-821e-79533d518195
       SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI: https://epmp.master.i-novus.ru/auth/oauth/authorize
       SECURITY_OAUTH2_RESOURCE_USER_INFO_URI: https://epmp.master.i-novus.ru/auth/userinfo
-      SECURITY_OAUTH2_SSO_LOGOUT_URI: https://epmp.master.i-novus.ru/auth/logout?redirect_uri=https://docker.one:8950/
+      SECURITY_OAUTH2_SSO_LOGOUT_URI: https://epmp.master.i-novus.ru/auth/logout?redirect_uri=https://docker.one:8947/
       ACCESS_SERVICE_URL: https://epmp.master.i-novus.ru/auth/api
     ports:
       - 8080
