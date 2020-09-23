@@ -17,8 +17,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 300s
-    depends_on:
-      - db
 
   audit-webapp:
     environment:
