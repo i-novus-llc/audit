@@ -36,6 +36,7 @@ public class CustomServletRequestListenerTest {
     private static final String TEST_ADDR = "testAddr";
     private static final String USER_ID = "UserId";
     private static final String USERNAME = "username";
+    private static final String ORG_CODE ="orgСode";
     private static final String TEST_SERVER_NAME = "testServerName";
     private static ServletRequestEvent requestEvent;
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -83,17 +84,18 @@ public class CustomServletRequestListenerTest {
 
     @Test
     public void requestInitializedWithUserTest() {
-        doReturn(encodeUser(buildCurrentAuthUser(USER_ID, USERNAME))).when(mockedRequest).getHeader("userHeader");
+        doReturn(encodeUser(buildCurrentAuthUser(USER_ID, USERNAME, ORG_CODE))).when(mockedRequest).getHeader("userHeader");
         listener.requestInitialized(requestEvent);
         assertNotNull(UserContext.getAuthUser());
         assertEquals(USER_ID, UserContext.getAuthUser().getUserId());
         assertEquals(USERNAME, UserContext.getAuthUser().getUsername());
+        assertEquals(ORG_CODE, UserContext.getAuthUser().getOrgCode());
     }
 
     @Test
     public void requestInitializedWithUserAuthorizationTest() {
 
-        doReturn("Bearer blablabla." + encodeUser(buildCurrentAuthUser(null, USERNAME)))
+        doReturn("Bearer blablabla." + encodeUser(buildCurrentAuthUser(null, USERNAME, null)))
                 .when(mockedRequest).getHeader("Authorization");
         listener.requestInitialized(requestEvent);
         assertNotNull(UserContext.getAuthUser());
@@ -104,12 +106,23 @@ public class CustomServletRequestListenerTest {
     @Test
     public void requestInitializedWithUserAuthTest() {
 
-        doReturn("Bearer blablabla." + encodeUser(buildCurrentAuthUser(USER_ID, null)))
+        doReturn("Bearer blablabla." + encodeUser(buildCurrentAuthUser(USER_ID, null, null)))
                 .when(mockedRequest).getHeader("Authorization");
         listener.requestInitialized(requestEvent);
         assertNotNull(UserContext.getAuthUser());
         assertNull(UserContext.getAuthUser().getUsername());
         assertEquals(USER_ID, UserContext.getAuthUser().getUserId());
+    }
+
+    @Test
+    public void requestInitializedWithOrgCodeTest() {
+
+        doReturn("Bearer blablabla." + encodeUser(buildCurrentAuthUser(null, null, ORG_CODE)))
+                .when(mockedRequest).getHeader("Authorization");
+        listener.requestInitialized(requestEvent);
+        assertNotNull(UserContext.getAuthUser());
+        assertNull(UserContext.getAuthUser().getUsername());
+        assertEquals(ORG_CODE, UserContext.getAuthUser().getOrgCode());
     }
 
     @Test
@@ -138,7 +151,7 @@ public class CustomServletRequestListenerTest {
         return null;
     }
 
-    private CurrentAuthUser buildCurrentAuthUser(String id, String name) {
-        return CurrentAuthUser.builder().userId(id).username(name).build();
+    private CurrentAuthUser buildCurrentAuthUser(String id, String name, String orgCode) {
+        return CurrentAuthUser.builder().userId(id).username(name).orgCode(orgCode).build();
     }
 }

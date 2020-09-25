@@ -74,15 +74,17 @@ public class CustomServletRequestListener implements ServletRequestListener {
         }
 
         JsonNode usernameNode = jwtBodyNode.get("username");
+        JsonNode orgCodeNode = jwtBodyNode.get("orgCode");
         JsonNode userIdNode = jwtBodyNode.has("email") ? jwtBodyNode.get("email") : jwtBodyNode.get("userId");
 
-        if (userIdNode.isNull() && usernameNode.isNull()) {
+        if (userIdNode.isNull() && usernameNode.isNull() && orgCodeNode.isNull()) {
             return null;
         }
 
         return CurrentAuthUser.builder()
                 .userId(userIdNode.isNull() ? null : userIdNode.asText())
                 .username(usernameNode.isNull() ? null : usernameNode.asText())
+                .orgCode(orgCodeNode.isNull() ? null : orgCodeNode.asText())
                 .build();
     }
 

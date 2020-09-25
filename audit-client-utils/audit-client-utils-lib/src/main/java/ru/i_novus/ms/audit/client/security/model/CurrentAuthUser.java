@@ -9,4 +9,5 @@ import lombok.*;
 public class CurrentAuthUser {
     private String username;
     private String userId;
+    private String orgCode;
 }
