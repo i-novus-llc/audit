@@ -12,7 +12,7 @@
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
         <jacoco.skip>false</jacoco.skip>
-        <security-admin.version>4.10</security-admin.version>
+        <security-admin.version>4.17</security-admin.version>
     </properties>
 
     <artifactId>audit-webapp</artifactId>
@@ -62,11 +62,6 @@
         <dependency>
             <groupId>net.n2oapp.framework.security</groupId>
             <artifactId>security-admin-rest-client</artifactId>
-            <version>${security-admin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.n2oapp.framework.security</groupId>
-            <artifactId>security-admin-web</artifactId>
             <version>${security-admin.version}</version>
         </dependency>
 
