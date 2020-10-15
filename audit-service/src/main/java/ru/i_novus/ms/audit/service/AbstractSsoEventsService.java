@@ -1,3 +1,20 @@
+/*
+ *    Copyright 2020 I-Novus
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *
+ */
+
 package ru.i_novus.ms.audit.service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -6,7 +23,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
@@ -69,11 +85,11 @@ public abstract class AbstractSsoEventsService {
 
         log.debug("Start get events form Keycloak");
         ResponseEntity<List<OpenIdEventLog>> response =
-                restTemplate.exchange(url, GET, null, new ParameterizedTypeReference<List<OpenIdEventLog>>() {});
+                restTemplate.exchange(url, GET, null, new ParameterizedTypeReference<>() {});
         log.debug("Finish get events form Keycloak");
         int responseCount = response.hasBody() ? response.getBody().size() : 0;
         log.debug("Event counts = " + responseCount);
-        log.debug("Get Events form Keycloak.\n" + "Response: " + response != null ? response.toString() : "null");
+        log.debug("Get Events form Keycloak.\n" + "Response: " + response.toString());
         return response.hasBody() ? response.getBody() : Collections.emptyList();
     }
 

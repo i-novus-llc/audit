@@ -7,5 +7,9 @@
             <page page-id="auditAuthorization" label="Журнал авторизаций, сессий и неудачных попыток входа"/>
         </sub-menu>
     </nav>
-    <extra-menu ref-id="user"/>
+    <extra-menu>
+        <sub-menu label="#{userShortName}" icon="fa fa-user">
+            <a label="Выход" href="logout" target="self" icon="fa fa-sign-out"/>
+        </sub-menu>
+    </extra-menu>
 </header>

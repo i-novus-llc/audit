@@ -1,0 +1,223 @@
+link:README.adoc[English version]
+
+Модуль "Аудит" (или Подсистема журналирования) предназначен для журналирования:
+
+* Действий пользователей
+* Интеграционных сервисов
+* Авторизации и сессий, а также неудачных попыток доступа
+
+image:https://img.shields.io/hexpm/l/plug.svg?style=flat[link="http://www.apache.org/licenses/LICENSE-2.0",title="License: Apache License 2"]
+
+== Требования
+
+* Openjdk 11
+* Для версии 2.4.17 и ниже: PostgreSQL 11 с расширением pg_pathman 1.5.9 (https://github.com/postgrespro/pg_pathman)
+* Для версии 2.4.18 и выше: PostgreSQL 12
+* Apache ActiveMQ
+* N2O Security Admin 4
+* Keycloak версий 3-10
+* Опционально: https://github.com/i-novus-llc/keycloak-api-extension[Расширение для Keycloak]
+
+== Стек технологий
+
+* Java 11
+* JDBC
+* JMS
+* Spring Boot 2.1
+* Apache CXF 3.3
+* Querydsl 4.2
+* Liquibase 3.6.2
+* N2O Platform 3
+* N2O UI Framework 7
+
+== Локальный запуск модуля в докере
+
+* Если были изменения в модулях audit-api, audit-web
+
+----
+mvn -pl audit-api,audit-web clean install
+----
+
+* Для формирования jar файлов в модулях audit-service, audit-webapp
+
+----
+mvn -pl audit-service,audit-webapp clean package
+----
+
+* Для создания образов и запуска контейнеров необходимо запустить плагин docker-compose:up в модуле audit-webapp
+
+----
+mvn -pl audit-webapp docker-compose:up -P docker-dev
+----
+
+* Для остановки и удаления контейнеров нужно прогнать плагин docker-compose:down в модуле audit-webapp
+
+----
+mvn -pl audit-webapp docker-compose:down -P docker-dev
+----
+
+* Для удаления созданных образов можно выполнить в консоли
+
+----
+docker rmi audit_db audit_audit-service audit_audit-webapp
+----
+
+После выполнения docker-compose:up будет поднято три контейнера: +
+audit_db_1 контейнер с бд, подключение к постгресу доступно по порту 8949 +
+audit_audit-service_1 контейнер с бэкендом, доступен по порту 8948 +
+audit_audit-webapp_1 контейнер с вебприложением, доступен по порту 8947
+
+== Настройки запуска сервиса для получения логов событий Keycloak по расписанию
+
+Предварительно в Keycloak необходимо включить логирование событий. +
+Для работы сервиса следует добавить следующие настройки в properties:
+
+* URL где расположен сервис бэкенда
+
+----
+audit.service.url
+----
+
+* Базовый адрес сервиса аутентификации(например http://localhost:8080/auth/realms/master/protocol/openid-connect)
+
+----
+audit.security.oauth2.auth-server-uri=
+----
+
+* Адрес сервиса получения токена аутентификации(например /token)
+
+----
+audit.security.oauth2.access-token-uri=
+----
+
+* Идентификатор клиента OAuth2 OpenId Connect
+
+----
+audit.security.oauth2.client-id=
+----
+
+* Секретный ключ клиента OAuth2 OpenId Connect
+
+----
+audit.security.oauth2.client-secret=
+----
+
+* Адрес до realm, с которого будет происходить получение логов событий (например http://localhost:8080/auth/admin/realms/master)
+** При использовании расширения keycloak для получения событий, требуется переопределить url(например http://localhost:8080/auth/realms/master), т.е. в данном примере не используется модуль admin
+
+----
+audit.security.oauth2.events-url=
+----
+
+Активация режима использования расширения keycloak для получения событий
+
+----
+ audit.security.oauth2.use-events-extension=true #default false
+----
+
+* Код подсистемы, которая будет сохраняться в аудит(например security)
+
+----
+audit.security.oauth2.code=
+----
+
+* Крон выражение расписания получения логов событий из OAuth2 (если не указана или указано "-", то сервис не будет запущен)
+
+----
+audit.security.oauth2.events-schedule=
+----
+
+== Сервис экспорта журналов audit-export в зависимости у audit-service
+
+Выгружает записи с соответствующими полями для каждого из журналов, согласно примененной фильтрации.
+Действуют такие же ограничения по периоду выборки, т.е. 31 день.
+Выгрузка происходит в csv формате.
+
+== Настройки
+
+Доступность по адресу задается переменной
+
+----
+audit.export.url = #example http://localhost:8948/api
+----
+
+Доступны для переопределения некоторые настройки
+
+* Замена null значений на заданное
+
+----
+export.config.if-null-value = #default null
+----
+
+* Формат даты для поля даты события
+
+----
+export.config.date-format = #default dd.MM.yyyy HH:mm:ss
+----
+
+* Имя файла, формируемого при выгрузке
+
+----
+export.config.file-name = #default audit_export
+----
+
+* Принудительный лимит при получении строк журналов, 0 для игнорирования настройки
+
+----
+export.query.limit-select-row = #default 0
+----
+
+* Возможно требует уточнение на сервере, в зависимости от ресурсов
+
+----
+export.query.hint-fetch-size = #default 10
+----
+
+* Разделитель значений
+
+----
+export.csv.field-delimiter =  #default
+----
+
+* Признак вывода в файл заголовков полей
+
+----
+export.csv.print-field-name = #default true
+----
+
+== Переход на версию 2.4.18 и выше
+
+Вместо pg_pathman, партицирование таблиц реализовано триггерами.
+
+.При переходе на версию 2.4.18 и выше необходимо создать новую пустую БД (если накатывать на существующую БД, то упадут ликубейз скрипты при накате)!. Для миграции понадобится удалить партицирование в старой БД, поэтому настоятельно рекомендуется сделать бэкап базы.
+*1.* Прогнать скрипт удаляющий партиции на старой БД. По умолчанию таблицы аудита находятся в схеме "audit", а функции расширения pg_pathman в схеме "public", если они расположены иначе измените значения переменных audit_schema и function_schema соответственно.
+
+----
+DO $$
+DECLARE
+	r record;
+	audit_schema varchar := 'audit';
+	function_schema varchar := 'public';
+BEGIN
+	FOR r IN SELECT * FROM information_schema.tables WHERE table_schema  = audit_schema AND table_name LIKE 'audit\_____\___'
+	LOOP
+		EXECUTE 'SELECT ' || function_schema || '.drop_partitions(''' || audit_schema || '.' || r.table_name ||''', false)';
+	END LOOP;
+	EXECUTE 'select ' || function_schema || '.drop_partitions(''' || audit_schema || '.audit'', false)';
+	EXECUTE 'select ' || function_schema || '.drop_partitions(''' || audit_schema || '.audit_event_type'', false)';
+END$$;
+----
+
+*2.* Снять дамп со старой БД схема audit (только данные --data-only)
+
+----
+pg_dump --data-only --schema=audit audit > C:\Users\elibragimova\Desktop\dump_audit.sql
+----
+
+*3.* Поднять приложение (сервисы), чтобы накатились ликубейз скрипты
+
+*4.* Развернуть дамп на новой БД
+
+----
+psql -d audit -f C:\Users\elibragimova\Desktop\dump_audit.sql
+----

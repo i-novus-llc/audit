@@ -1,3 +1,20 @@
+/*
+ *    Copyright 2020 I-Novus
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *
+ */
+
 package ru.i_novus.ms.audit.filter;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -161,16 +178,9 @@ public class AuditFilter implements Filter {
             return null;
         }
 
-        StringBuilder errorMessage = new StringBuilder("{\"errors\":[");
-        for (String value : errors) {
-            errorMessage.append(value);
-            errorMessage.append(",");
-        }
-        //Удаление лишней запятой
-        errorMessage.setLength(errorMessage.length() - 1);
-        errorMessage.append("]}");
-
-        return errorMessage.toString();
+        return "{\"errors\":[" +
+                String.join(",", errors) +
+                "]}";
     }
 
     /**
