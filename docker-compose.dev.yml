@@ -2,43 +2,14 @@ version: '3.6'
 
 services:
 
-  audit-service:
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/audit
-      SERVER_PORT: 8080
-      MANAGEMENT_HEALTH_CONSUL_ENABLED: "false"
-      JAVA_OPTS: -Xmx200m
-      LOGGING_LEVEL_ROOT: INFO
+  activemq:
+    image: "rmohr/activemq:5.15.9"
     ports:
-      - 8080
-    healthcheck:
-      test: curl -f http://localhost:8080/monitoring/health | grep -io '^{"status":"UP"' || exit 1
-      interval: 1m
-      timeout: 10s
-      retries: 3
-      start_period: 300s
-
-  audit-webapp:
-    environment:
-      AUDIT_BACKEND_URL: http://audit-service:8080/api
-      AUDIT_EXPORT_URL: http://localhost:8948/api
-      SERVER_PORT: 8080
-      MANAGEMENT_HEALTH_CONSUL_ENABLED: "false"
-      JAVA_OPTS: -Xmx300m
-      LOGGING_LEVEL_ROOT: INFO
-      SECURITY_OAUTH2_AUTH_SERVER_URI: https://epmp.master.i-novus.ru/auth
-      SECURITY_OAUTH2_ACCESS_TOKEN_URI: https://epmp.master.i-novus.ru/auth/oauth/token
-      SECURITY_OAUTH2_CLIENT_ID: audit
-      SECURITY_OAUTH2_CLIENT_SECRET: 17767efb-9cb8-4f70-821e-79533d518195
-      SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI: https://epmp.master.i-novus.ru/auth/oauth/authorize
-      SECURITY_OAUTH2_RESOURCE_USER_INFO_URI: https://epmp.master.i-novus.ru/auth/userinfo
-      SECURITY_OAUTH2_SSO_LOGOUT_URI: https://epmp.master.i-novus.ru/auth/logout?redirect_uri=http://localhost:8947/
-      ACCESS_SERVICE_URL: https://epmp.master.i-novus.ru/auth/api
-    ports:
-      - 8080
-    healthcheck:
-      test: curl -f http://localhost:8080/monitoring/health | grep -io '^{"status":"UP"' || exit 1
-      interval: 1m
-      timeout: 10s
-      retries: 3
-      start_period: 300s
+      - 61616
+      - 8161
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+      restart_policy:
+        max_attempts: 3

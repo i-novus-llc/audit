@@ -102,9 +102,9 @@
                         <version>2.5.1</version>
                         <configuration>
                             <composeFiles>
-                                <composeFile>${project.basedir}/../docker-compose.dev.yml</composeFile>
+                                <composeFile>${project.basedir}/../docker-compose.local.yml</composeFile>
                                 <composeFile>${project.basedir}/../docker-compose.build.yml</composeFile>
-                                <composeFile>${project.basedir}/../docker-compose.db.dev.yml</composeFile>
+                                <composeFile>${project.basedir}/../docker-compose.db.local.yml</composeFile>
                                 <composeFile>${project.basedir}/../docker-compose.static-ports.yml</composeFile>
                             </composeFiles>
                             <detachedMode>false</detachedMode>
