@@ -9,6 +9,7 @@
     </nav>
     <extra-menu>
         <sub-menu label="#{userShortName}" icon="fa fa-user">
+            <page page-id="auditProfile" route="/profile" label="Профиль"/>
             <a label="Выход" href="logout" target="self" icon="fa fa-sign-out"/>
         </sub-menu>
     </extra-menu>
