@@ -1,4 +1,5 @@
 language: java
+jdk: openjdk14
 
 
 # blocklist
@@ -15,4 +16,4 @@ install:
 
 ## Build and release to maven central
 script:
-        mvn --settings .maven.xml clean deploy -Prelease -B -U
+        mvn --settings .maven.xml clean deploy -Prelease,deploy-webapp -B -U
