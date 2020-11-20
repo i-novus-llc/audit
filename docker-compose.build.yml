@@ -5,15 +5,19 @@ services:
   db:
     build:
       context: "audit-db"
+      args:
+        DOCKER_REGISTRY: ${DOCKER_REGISTRY}
 
   audit-service:
     build:
       context: .
       args:
+        DOCKER_REGISTRY: ${DOCKER_REGISTRY}
         JAR_FILE: audit-service/target/audit-service.jar
 
   audit-webapp:
     build:
       context: .
       args:
+        DOCKER_REGISTRY: ${DOCKER_REGISTRY}
         JAR_FILE: audit-webapp/target/audit-webapp.jar

@@ -1,4 +1,5 @@
-FROM inovus/openjdk:14-jdk
+ARG DOCKER_REGISTRY
+FROM ${DOCKER_REGISTRY}/openjdk:14-jdk
 
 EXPOSE 8080
 
