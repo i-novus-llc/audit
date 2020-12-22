@@ -24,7 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 import ru.i_novus.ms.audit.model.Audit;
 import ru.i_novus.ms.audit.service.api.AuditRest;
 
-import java.io.IOException;
 import java.util.UUID;
 
 /**
@@ -51,7 +50,7 @@ public class AuditN2oController {
             }
 
             ctx = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.info("Context parsing error", e);
             ctx = audit.getContext();
         }
