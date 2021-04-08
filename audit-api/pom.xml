@@ -10,7 +10,6 @@
     <artifactId>audit-api</artifactId>
 
     <properties>
-        <java.version>11</java.version>
         <jacoco.skip>false</jacoco.skip>
     </properties>
 
@@ -45,6 +44,11 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
         </dependency>
 
     </dependencies>

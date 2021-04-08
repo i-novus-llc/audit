@@ -17,8 +17,8 @@
 
 package ru.i_novus.ms.audit;
 
-import net.n2oapp.framework.security.auth.oauth2.gateway.GatewayPrincipalExtractor;
-import net.n2oapp.security.auth.oauth2.OpenIdSecurityConfigurerAdapter;
+import net.n2oapp.security.auth.OpenIdSecurityConfigurerAdapter;
+import net.n2oapp.security.auth.common.GatewayPrincipalExtractor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
