@@ -4,7 +4,7 @@
 
     <groupId>ru.i-novus.ms.audit</groupId>
     <artifactId>audit</artifactId>
-    <version>2.4.26-SNAPSHOT</version>
+    <version>2.4.26</version>
     <packaging>pom</packaging>
 
     <parent>
@@ -28,7 +28,7 @@
         <connection>scm:git:https://git.i-novus.ru/microservices/audit.git</connection>
         <url>https://git.i-novus.ru/microservices/audit</url>
         <developerConnection>scm:git:https://git.i-novus.ru/microservices/audit.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>2.4.26</tag>
     </scm>
 
     <properties>
