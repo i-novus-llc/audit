@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="AUDIT-200_create_audit_object_id_seq" author="agaifutdinov" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="audit_object_id_seq" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="audit_object_id_seq" schemaName="audit" dataType="int"/>
+        <sql>
+            ALTER TABLE audit.audit_object ALTER COLUMN id SET DEFAULT nextval('audit.audit_object_id_seq');
+            ALTER SEQUENCE audit.audit_object_id_seq OWNED BY audit.audit_object.id;
+        </sql>
+    </changeSet>
+
+    <changeSet id="AUDIT-200_create_audit_source_application_id_seq" author="agaifutdinov" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="audit_source_application_id_seq" schemaName="audit"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="audit_source_application_id_seq" schemaName="audit" dataType="int"/>
+        <sql>
+            ALTER TABLE audit.audit_source_application ALTER COLUMN id SET DEFAULT nextval('audit.audit_source_application_id_seq');
+            ALTER SEQUENCE audit.audit_source_application_id_seq OWNED BY audit.audit_source_application.id;
+        </sql>
+    </changeSet>
+</databaseChangeLog>
