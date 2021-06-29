@@ -53,7 +53,7 @@ public class CustomServletRequestListenerTest {
     private static final String TEST_ADDR = "testAddr";
     private static final String USER_ID = "UserId";
     private static final String USERNAME = "username";
-    private static final String ORG_CODE ="orgСode";
+    private static final String ORG_CODE ="orgCode";
     private static final String TEST_SERVER_NAME = "testServerName";
     private static ServletRequestEvent requestEvent;
     private static final ObjectMapper MAPPER = new ObjectMapper();
