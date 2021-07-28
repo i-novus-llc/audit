@@ -138,7 +138,7 @@ audit.security.oauth2.events-schedule=
 Доступность по адресу задается переменной
 
 ----
-audit.export.url = #example http://localhost:8948/api
+audit.export.url = #example http://localhost:8948/api/audit/export
 ----
 
 Доступны для переопределения некоторые настройки

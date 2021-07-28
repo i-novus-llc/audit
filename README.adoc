@@ -131,7 +131,7 @@ Audit-export exports records accordingly to the applied filtering in csv.
 Export service URL
 
 ----
-audit.export.url = #example http://localhost:8948/api
+audit.export.url = #example http://localhost:8948/api/audit/export
 ----
 
 * Replacing null values with a given one

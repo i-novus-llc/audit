@@ -9,7 +9,7 @@
                             enabling-condition="typeof period.begin != 'undefined' &amp;&amp; !!period.begin &amp;&amp;
                             typeof period.end != 'undefined' &amp;&amp; !!period.end"
                             description="Выгрузить данные за указанный период">
-                        <a href="${audit.export.url}/audit/export" target="newWindow">
+                        <a href="/audit/export" target="newWindow">
                             <query-param name="auditType" value="2"/>
                             <query-param name="eventDateFrom" value="{moment(period.begin, 'YYYY-MM-DDTHH:mm:ss').format('YYYY-MM-DDTHH:mm:ss')}"/>
                             <query-param name="eventDateTo" value="{moment(period.end, 'YYYY-MM-DDTHH:mm:ss').format('YYYY-MM-DDTHH:mm:ss')}"/>

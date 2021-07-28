@@ -13,7 +13,7 @@
                             moment(period.end, [&quot;YYYY-MM-DD'T'HH:mm:ss&quot;]).subtract(31, 'days').diff(moment(period.begin, [&quot;YYYY-MM-DD'T'HH:mm:ss&quot;])) &lt;= 0 &amp;&amp;
                             moment(period.begin, [&quot;YYYY-MM-DD'T'HH:mm:ss&quot;]).diff(moment(period.end, [&quot;YYYY-MM-DD'T'HH:mm:ss&quot;])) &lt;= 0"
                             description="Выгрузить данные за указанный период">
-                        <a href="${audit.export.url}/audit/export" target="newWindow">
+                        <a href="/audit/export" target="newWindow">
                             <query-param name="auditType" value="1"/>
                             <query-param name="eventDateFrom" value="{moment(period.begin, 'YYYY-MM-DDTHH:mm:ss').format('YYYY-MM-DDTHH:mm:ss')}"/>
                             <query-param name="eventDateTo" value="{moment(period.end, 'YYYY-MM-DDTHH:mm:ss').format('YYYY-MM-DDTHH:mm:ss')}"/>
