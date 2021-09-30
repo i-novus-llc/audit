@@ -18,7 +18,10 @@
 package ru.i_novus.ms.audit.service;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.Expressions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
@@ -144,11 +147,12 @@ public class QueryService {
     }
 
     static Predicate toPredicate(AuditSourceApplicationCriteria criteria) {
-        BooleanBuilder where = new BooleanBuilder();
         if (criteria.getCode() != null) {
+            BooleanBuilder where = new BooleanBuilder();
             where.and(QAuditSourceApplicationEntity.auditSourceApplicationEntity.code.containsIgnoreCase(criteria.getCode().trim()));
+            return where.getValue();
         }
-        return where.getValue();
+        return Expressions.asBoolean(true).isTrue();
     }
 
     static Predicate toPredicate(AuditObjectCriteria criteria) {
