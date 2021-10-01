@@ -18,8 +18,6 @@
 package ru.i_novus.ms.audit.service;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.Expressions;
 import lombok.AccessLevel;
@@ -40,7 +38,7 @@ import static ru.i_novus.ms.audit.repository.predicates.AuditPredicates.*;
 public class QueryService {
 
     private static Predicate getAuditEventPredicate(AuditCriteria criteria) {
-        BooleanBuilder where = new BooleanBuilder();
+        BooleanBuilder where = new BooleanBuilder().and(Expressions.TRUE);
 
         if (criteria.getEventDateFrom() != null && criteria.getEventDateTo() != null) {
             where.and(isEventDateBetween(criteria.getEventDateFrom(), criteria.getEventDateTo()));
@@ -61,7 +59,7 @@ public class QueryService {
     }
 
     private static Predicate getAuditObjectPredicate(AuditCriteria criteria) {
-        BooleanBuilder where = new BooleanBuilder();
+        BooleanBuilder where = new BooleanBuilder().and(Expressions.TRUE);
 
         if (ArrayUtils.isNotEmpty(criteria.getObjectType())) {
             where.and(inObjectTypeNames(criteria.getObjectType()));
@@ -79,7 +77,7 @@ public class QueryService {
     }
 
     private static Predicate getAuditPredicate(AuditCriteria criteria) {
-        BooleanBuilder where = new BooleanBuilder();
+        BooleanBuilder where = new BooleanBuilder().and(Expressions.TRUE);
 
         if (criteria.getId() != null) {
             where.and(isIdContains(criteria.getId()));
@@ -135,7 +133,7 @@ public class QueryService {
     }
 
     static Predicate toPredicate(AuditEventTypeCriteria criteria) {
-        BooleanBuilder where = new BooleanBuilder();
+        BooleanBuilder where = new BooleanBuilder().and(Expressions.TRUE);
         if (criteria.getAuditTypeId() != null) {
             where.and(EventTypePredicates.eqAuditTypeId(criteria.getAuditTypeId()));
         }
@@ -147,16 +145,16 @@ public class QueryService {
     }
 
     static Predicate toPredicate(AuditSourceApplicationCriteria criteria) {
+        BooleanBuilder where = new BooleanBuilder().and(Expressions.TRUE);
         if (criteria.getCode() != null) {
-            BooleanBuilder where = new BooleanBuilder();
             where.and(QAuditSourceApplicationEntity.auditSourceApplicationEntity.code.containsIgnoreCase(criteria.getCode().trim()));
-            return where.getValue();
         }
-        return Expressions.asBoolean(true).isTrue();
+
+        return where.getValue();
     }
 
     static Predicate toPredicate(AuditObjectCriteria criteria) {
-        BooleanBuilder where = new BooleanBuilder();
+        BooleanBuilder where = new BooleanBuilder().and(Expressions.TRUE);
         if (StringUtils.isNotBlank(criteria.getTypeOrName())) {
             String str = criteria.getTypeOrName().trim();
             where
