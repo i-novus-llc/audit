@@ -18,6 +18,7 @@
 package ru.i_novus.ms.audit.service;
 
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.Expressions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -69,7 +70,7 @@ public class AuditObjectServiceTest {
     public void testSearchEmpty() {
         AuditObjectCriteria criteria = beforeSearch();
         doReturn(Page.empty()).when(repository)
-                .findAll((Predicate) isNull(), any(Pageable.class));
+                .findAll(any(Predicate.class), any(Pageable.class));
         Page<AuditObject> page = service.search(criteria);
 
         assertEquals(0, page.getTotalElements());
