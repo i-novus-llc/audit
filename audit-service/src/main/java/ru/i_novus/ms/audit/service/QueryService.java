@@ -31,7 +31,7 @@ import ru.i_novus.ms.audit.criteria.AuditSourceApplicationCriteria;
 import ru.i_novus.ms.audit.entity.QAuditObjectEntity;
 import ru.i_novus.ms.audit.entity.QAuditSourceApplicationEntity;
 import ru.i_novus.ms.audit.repository.predicates.EventTypePredicates;
-
+import static ru.i_novus.ms.audit.repository.predicates.AuditObjectPredicates.inAuditObjectTypes;
 import static ru.i_novus.ms.audit.repository.predicates.AuditPredicates.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -153,7 +153,7 @@ public class QueryService {
         return where.getValue() != null ? where.getValue() : Expressions.asBoolean(true).isTrue();
     }
 
-    static Predicate toPredicate(AuditObjectCriteria criteria) {
+    static Predicate toPredicate(AuditObjectCriteria criteria, String... auditObjectTypes) {
         BooleanBuilder where = new BooleanBuilder();
         if (StringUtils.isNotBlank(criteria.getTypeOrName())) {
             String str = criteria.getTypeOrName().trim();
@@ -161,6 +161,7 @@ public class QueryService {
                 .and(QAuditObjectEntity.auditObjectEntity.type.containsIgnoreCase(str))
                 .or(QAuditObjectEntity.auditObjectEntity.name.containsIgnoreCase(str));
         }
+        if (ArrayUtils.isNotEmpty(auditObjectTypes)) where.and(inAuditObjectTypes(auditObjectTypes));
 
         return where.getValue() != null ? where.getValue() : Expressions.asBoolean(true).isTrue();
     }

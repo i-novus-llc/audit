@@ -44,7 +44,11 @@
                     </row>
                     <row>
                         <input-select id="auditObjects" label="Объект" type="multi" query-id="auditObject"
-                                      label-field-id="typeAndName" search-filter-id="typeAndName"/>
+                                      label-field-id="typeAndName" search-filter-id="typeAndName">
+                            <pre-filters>
+                                <eq field-id="auditTypeId" value="1"/>
+                            </pre-filters>
+                        </input-select>
                         <input-text id="objectId" label="Идентификатор объекта" domain="string"/>
                         <input-text id="username" label="Пользователь" domain="string"/>
                     </row>

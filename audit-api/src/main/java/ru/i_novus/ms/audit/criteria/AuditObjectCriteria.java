@@ -35,6 +35,10 @@ public class AuditObjectCriteria extends AuditRestCriteria {
     @QueryParam("typeOrName")
     private String typeOrName;
 
+    @ApiParam("Идентификатор типа журнала")
+    @QueryParam("auditTypeId")
+    private Short auditTypeId;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
