@@ -14,6 +14,11 @@
         <field id="name" domain="string">
             <select/>
         </field>
+        <field id="auditTypeId">
+            <filters>
+                <eq filter-id="auditTypeId" domain="short">auditTypeId={auditTypeId}</eq>
+            </filters>
+        </field>
         <field id="typeAndName" domain="string">
             <select mapping="['type'] + ' ' + ['name']" normalize="#this.replace('null', '')"/>
             <sorting mapping="['typeAndNameDirection']">sort=type,{typeAndNameDirection}&amp;sort=name,{typeAndNameDirection}&amp;sort=id,{typeAndNameDirection}</sorting>

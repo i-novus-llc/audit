@@ -32,8 +32,10 @@ import ru.i_novus.ms.audit.criteria.AuditObjectCriteria;
 import ru.i_novus.ms.audit.entity.AuditObjectEntity;
 import ru.i_novus.ms.audit.model.AuditObject;
 import ru.i_novus.ms.audit.repository.AuditObjectRepository;
+import ru.i_novus.ms.audit.repository.AuditRepository;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,6 +51,8 @@ public class AuditObjectServiceTest {
 
     @Mock
     private AuditObjectRepository repository;
+    @Mock
+    private AuditRepository auditRepository;
     @InjectMocks
     private AuditObjectService service;
 
@@ -71,6 +75,7 @@ public class AuditObjectServiceTest {
         AuditObjectCriteria criteria = beforeSearch();
         doReturn(Page.empty()).when(repository)
                 .findAll(any(Predicate.class), any(Pageable.class));
+        doReturn(Collections.emptyList()).when(auditRepository).findAll(any(Predicate.class));
         Page<AuditObject> page = service.search(criteria);
 
         assertEquals(0, page.getTotalElements());
@@ -87,6 +92,7 @@ public class AuditObjectServiceTest {
 
         doReturn(new PageImpl<>(entityList)).when(repository)
                 .findAll(ArgumentCaptor.forClass(Predicate.class).capture(), ArgumentCaptor.forClass(Pageable.class).capture());
+        doReturn(Collections.emptyList()).when(auditRepository).findAll(any(Predicate.class));
         Page<AuditObject> page = service.search(criteria);
 
         assertEquals(3, page.getTotalElements());
