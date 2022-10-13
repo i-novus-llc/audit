@@ -28,10 +28,9 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-@SequenceGenerator(name = "audit.audit_object_id_seq", allocationSize = 1)
 public class AuditObjectEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "audit.audit_object_id_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Access(AccessType.PROPERTY)
     @Column(name = "id", nullable = false)
     private Integer id;
