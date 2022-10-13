@@ -14,6 +14,5 @@
     <include file="changelog/202005120900_create_audit_event_type_trigger.xml" relativeToChangelogFile="true"/>
     <include file="changelog/202005121300_create_audit_trigger.xml" relativeToChangelogFile="true"/>
     <include file="changelog/202005131400_fill_audit_type_table.xml" relativeToChangelogFile="true"/>
-    <include file="changelog/202104191230_create_audit_object_audit_source_application_sequences.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
