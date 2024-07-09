@@ -5,7 +5,7 @@
 
     <regions>
         <region place="single">
-            <table id="audit_table" query-id="auditAction" size="10" name="Аудит Данных">
+            <table id="audit_table" query-id="auditAction" size="10" name="Аудит Данных" object-id="auditBase">
                 <toolbar>
                     <button id="export" label="Выгрузить" icon="fa fa-download" model="filter"
                             enabling-condition="typeof period.begin != 'undefined' &amp;&amp; !!period.begin &amp;&amp;
