@@ -3,7 +3,7 @@
 
     <regions>
         <region place="single">
-            <table id="audit_table" query-id="auditAuthorization" size="10">
+            <table id="audit_table" query-id="auditAuthorization" size="10" object-id="auditBase">
                 <toolbar>
                     <button id="export" label="Выгрузить" icon="fa fa-download" model="filter"
                             enabling-condition="typeof period.begin != 'undefined' &amp;&amp; !!period.begin &amp;&amp;
