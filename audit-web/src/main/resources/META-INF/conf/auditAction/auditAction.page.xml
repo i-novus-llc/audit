@@ -47,7 +47,12 @@
                                       label-field-id="typeAndName" search-filter-id="typeAndName">
                             <pre-filters>
                                 <eq field-id="auditTypeId" value="1"/>
+                                <more field-id="periodBegin" value="{period.begin}"/>
+                                <less field-id="periodEnd" value="{period.end}"/>
                             </pre-filters>
+                            <dependencies>
+                                <reset on="period" apply-on-init="false"/>
+                            </dependencies>
                         </input-select>
                         <input-text id="objectId" label="Идентификатор объекта" domain="string"/>
                         <input-text id="username" label="Пользователь" domain="string"/>
