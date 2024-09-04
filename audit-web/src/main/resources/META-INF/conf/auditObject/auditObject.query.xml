@@ -26,6 +26,18 @@
                 <eq filter-id="typeAndName">typeOrName={typeAndName}</eq>
             </filters>
         </field>
+
+        <field id="periodBegin" domain="localdatetime">
+            <filters>
+                <more filter-id="periodBegin">eventDateFrom={periodBegin}</more>
+            </filters>
+        </field>
+        <field id="periodEnd" domain="localdatetime">
+            <filters>
+                <less filter-id="periodEnd">eventDateTo={periodEnd}</less>
+            </filters>
+        </field>
+
     </fields>
 </query>
 

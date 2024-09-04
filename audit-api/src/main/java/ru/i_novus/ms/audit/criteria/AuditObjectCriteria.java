@@ -24,6 +24,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.ws.rs.QueryParam;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -39,17 +40,25 @@ public class AuditObjectCriteria extends AuditRestCriteria {
     @QueryParam("auditTypeId")
     private Short auditTypeId;
 
+    @ApiParam(value = "Дата события (от)", format = "yyyy-MM-ddTHH:mm:ss")
+    @QueryParam("eventDateFrom")
+    private LocalDateTime eventDateFrom;
+
+    @ApiParam(value = "Дата события (до)", format = "yyyy-MM-ddTHH:mm:ss")
+    @QueryParam("eventDateTo")
+    private LocalDateTime eventDateTo;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AuditObjectCriteria)) return false;
         if (!super.equals(o)) return false;
         AuditObjectCriteria that = (AuditObjectCriteria) o;
-        return Objects.equals(typeOrName, that.typeOrName);
+        return Objects.equals(typeOrName, that.typeOrName) && Objects.equals(auditTypeId, that.auditTypeId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), typeOrName);
+        return Objects.hash(super.hashCode(), typeOrName, auditTypeId);
     }
 }
