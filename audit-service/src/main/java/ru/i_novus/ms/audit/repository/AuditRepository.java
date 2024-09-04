@@ -24,6 +24,7 @@ import org.springframework.data.repository.query.Param;
 import ru.i_novus.ms.audit.entity.AuditEntity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,6 +32,10 @@ public interface AuditRepository extends JpaRepository<AuditEntity, UUID>, Query
 
     @Query(nativeQuery = true, value = "SELECT * FROM audit.audit WHERE event_date<now() AND event_date>now()-interval '31' day and id=:id")
     Optional<AuditEntity> searchEntityByLastMonth(@Param("id") UUID id);
+
+    @Query(nativeQuery = true, value = "SELECT distinct object_type FROM audit.audit WHERE audit_type_id=:auditTypeId AND " +
+            "object_type is not null AND event_date BETWEEN :from AND :to")
+    List<String> getAuditObjectTypes(@Param("auditTypeId") Short auditTypeId, @Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
 
     Optional<AuditEntity> findFirstByAuditTypeIdAndAuditSourceApplicationOrderByEventDateDesc(Short auditType,
                                                                                               String auditSourceApplication);
